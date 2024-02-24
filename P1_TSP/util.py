@@ -35,7 +35,17 @@ def generar_ciudades_con_distancias(n_cities: int):
     distancias = generar_distancias(ciudades)
     return ciudades, distancias
 
-def plotear_ruta(ciudades, ruta, mostrar_anotaciones=True):
+def calcular_ruta_total(ruta, distancias):
+    distancia_total = 0
+    # Sumar distancias entre ciudades consecutivas
+    for i in range(len(ruta)):
+        ciudad_actual = ruta[i]
+        ciudad_siguiente = ruta[(i + 1) % len(ruta)]  # Usar módulo para volver a la primera ciudad
+        distancia_total += distancias[(ciudad_actual, ciudad_siguiente)]
+    return distancia_total
+
+
+def plotear_ruta(ciudades, ruta, mostrar_anotaciones=True,distanciaTotal=0):
     # Extraer coordenadas de las ciudades
     coordenadas_x = [ciudades[ciudad][0] for ciudad in ruta]
     coordenadas_y = [ciudades[ciudad][1] for ciudad in ruta]
@@ -58,7 +68,7 @@ def plotear_ruta(ciudades, ruta, mostrar_anotaciones=True):
 
     plt.xlabel('Coordenada X')
     plt.ylabel('Coordenada Y')
-    plt.title('Ubicaciones de las Ciudades y Mejor Ruta')
+    plt.title(f"Distancia Total: {distanciaTotal:.2f} km")
     plt.legend()
     plt.grid(True)
     plt.show()
