@@ -4,6 +4,7 @@
 - **Nombre del grupo**: xxxxxx
 - **Integrantes del grupo**:
   * Diego Morales
-  * 
-
-- **Link**: [Planificación en ClickUp](https://app.clickup.com/xxxxxx)
+  * Carlos Jarrín
+  * Ángel Molina
+  * Fausto Yugcha 
+- **Link**: [Planificación en ClickUp](https://app.clickup.com/3025009/v/s/90030649457)
