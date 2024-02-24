@@ -1,9 +1,11 @@
 # WorkShop1-USFQ
 ## Taller 1 de inteligencia artificial
 
-- **Nombre del grupo**: xxxxxx
+- **Nombre del grupo**: G5
 - **Integrantes del grupo**:
-  * Estudiante 1
-  * Estudiante 2
+  * Felipe Toscano
+  * José Asitimbay
+  * Christian Hernadez
+  * Brayan Lechón
 
 - **Link**: [Planificación en ClickUp](https://app.clickup.com/xxxxxx)

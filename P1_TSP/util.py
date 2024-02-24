@@ -35,6 +35,16 @@ def generar_ciudades_con_distancias(n_cities: int):
     distancias = generar_distancias(ciudades)
     return ciudades, distancias
 
+def calcular_distancia_total(ruta, distancias):
+    distancia_total = 0
+    for i in range(len(ruta) - 1):
+        ciudad1 = ruta[i]
+        ciudad2 = ruta[i + 1]
+        distancia_total += distancias[(ciudad1, ciudad2)]
+    # Agregar la distancia de regreso a la ciudad de inicio
+    distancia_total += distancias[(ruta[-1], ruta[0])]
+    return distancia_total
+
 def plotear_ruta(ciudades, ruta, mostrar_anotaciones=True):
     # Extraer coordenadas de las ciudades
     coordenadas_x = [ciudades[ciudad][0] for ciudad in ruta]
