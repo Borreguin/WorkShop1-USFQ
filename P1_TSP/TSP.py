@@ -1,6 +1,7 @@
 from typing import List
+import itertools
+from util import generar_ciudades_con_distancias, plotear_ruta,calcular_distancia_total
 
-from P1_TSP.util import generar_ciudades_con_distancias, plotear_ruta
 
 
 class TSP:
@@ -9,8 +10,14 @@ class TSP:
         self.distancias = distancias
 
     def encontrar_la_ruta_mas_corta(self):
-        pass
-        # implementación aquí
+        mejor_ruta = None
+        mejor_distancia = float('inf')
+        for ruta in itertools.permutations(self.ciudades.keys()):
+            distancia_actual=calcular_distancia_total(ruta, self.distancias)
+            if distancia_actual < mejor_distancia:
+                mejor_distancia = distancia_actual
+                mejor_ruta = ruta
+        return list(mejor_ruta)
 
     def plotear_resultado(self, ruta: List[str], mostrar_anotaciones: bool = True):
         plotear_ruta(self.ciudades, ruta, mostrar_anotaciones)
@@ -20,16 +27,14 @@ def study_case_1():
     n_cities = 10
     ciudades, distancias = generar_ciudades_con_distancias(n_cities)
     tsp = TSP(ciudades, distancias)
-    ruta = ciudades.keys()
-    # ruta = tsp.encontrar_la_ruta_mas_corta()
+    ruta = tsp.encontrar_la_ruta_mas_corta()
     tsp.plotear_resultado(ruta)
 
 def study_case_2():
     n_cities = 100
     ciudades, distancias = generar_ciudades_con_distancias(n_cities)
     tsp = TSP(ciudades, distancias)
-    ruta = ciudades.keys()
-    # ruta = tsp.encontrar_la_ruta_mas_corta()
+    ruta = tsp.encontrar_la_ruta_mas_corta()
     tsp.plotear_resultado(ruta, False)
 
 
