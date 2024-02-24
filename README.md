@@ -3,7 +3,7 @@
 
 - **Nombre del grupo**: xxxxxx
 - **Integrantes del grupo**:
-  * Estudiante 1
-  * Estudiante 2
+  * Diego Morales
+  * 
 
 - **Link**: [Planificación en ClickUp](https://app.clickup.com/xxxxxx)

@@ -1,72 +1,57 @@
-import matplotlib.pyplot as plt
+from collections import deque
 
-class Estado:
-    def __init__(self, lado_granjero, lado_lobo, lado_cabra, lado_col):
-        self.lado_granjero = lado_granjero
-        self.lado_lobo = lado_lobo
-        self.lado_cabra = lado_cabra
-        self.lado_col = lado_col
+class State:
+    def __init__(self, farmer, wolf, sheep, lettuce):
+        self.farmer = farmer
+        self.wolf = wolf
+        self.sheep = sheep
+        self.lettuce = lettuce
 
-    def __eq__(self, otro_estado):
-        return (
-            self.lado_granjero == otro_estado.lado_granjero and
-            self.lado_lobo == otro_estado.lado_lobo and
-            self.lado_cabra == otro_estado.lado_cabra and
-            self.lado_col == otro_estado.lado_col
-        )
+    def is_valid(self):
+        if self.wolf == self.sheep and self.farmer != self.wolf:
+            return False
+        if self.sheep == self.lettuce and self.farmer != self.sheep:
+            return False
+        return True
+
+    def is_goal(self):
+        return self.farmer == 1 and self.wolf == 1 and self.sheep == 1 and self.lettuce == 1
+
+    def __eq__(self, other):
+        return self.farmer == other.farmer and self.wolf == other.wolf and self.sheep == other.sheep and self.lettuce == other.lettuce
 
     def __hash__(self):
-        return hash((self.lado_granjero, self.lado_lobo, self.lado_cabra, self.lado_col))
+        return hash((self.farmer, self.wolf, self.sheep, self.lettuce))
 
+    def __str__(self):
+        return f"Farmer: {'W' if self.farmer == 1 else 'E'}, Wolf: {'W' if self.wolf == 1 else 'E'}, Sheep: {'W' if self.sheep == 1 else 'E'}, Lettuce: {'W' if self.lettuce == 1 else 'E'}"
 
-def es_estado_valido(estado):
-    # Verificar si el lobo se come a la cabra o la cabra se come la col
-    if (estado.lado_lobo == estado.lado_cabra and estado.lado_granjero != estado.lado_lobo) or \
-       (estado.lado_cabra == estado.lado_col and estado.lado_granjero != estado.lado_cabra):
-        return False
-    return True
+def get_next_states(current_state):
+    next_states = []
+    for move in [(1, 0, 0, 0), (-1, 0, 0, 0), (1, 1, 0, 0), (-1, -1, 0, 0), (1, 0, 1, 0), (-1, 0, -1, 0), (1, 0, 0, 1), (-1, 0, 0, -1)]:
+        new_state = State(current_state.farmer + move[0], current_state.wolf + move[1], current_state.sheep + move[2], current_state.lettuce + move[3])
+        if 0 <= new_state.farmer <= 1 and 0 <= new_state.wolf <= 1 and 0 <= new_state.sheep <= 1 and 0 <= new_state.lettuce <= 1 and new_state.is_valid():
+            next_states.append(new_state)
+    return next_states
 
+def bfs():
+    start_state = State(0, 0, 0, 0)
+    if start_state.is_goal():
+        return [start_state]
+    visited = set()
+    queue = deque([(start_state, [])])
+    while queue:
+        current_state, path = queue.popleft()
+        for next_state in get_next_states(current_state):
+            if next_state not in visited:
+                if next_state.is_goal():
+                    return path + [current_state, next_state]
+                visited.add(next_state)
+                queue.append((next_state, path + [current_state]))
 
-def dibujar_estado(estado):
-    plt.figure()
-    plt.title("Estado Actual")
-    plt.bar(['Granjero', 'Lobo', 'Cabra', 'Col'],
-            [estado.lado_granjero, estado.lado_lobo, estado.lado_cabra, estado.lado_col])
-    plt.ylim(0, 1)
-    plt.show()
-
-
-def cruzar_river(estado, acciones, visitados, callback):
-    if estado not in visitados and es_estado_valido(estado):
-        visitados.add(estado)
-        dibujar_estado(estado)  # Dibujar el estado actual
-
-        if all(valor == 1 for valor in estado.__dict__.values()):
-            # Hemos llegado al estado objetivo, llamamos al callback
-            callback(acciones)
-            return
-
-        # Intentar llevar al lobo
-        cruzar_river(Estado(1 - estado.lado_granjero, 1 - estado.lado_lobo, estado.lado_cabra, estado.lado_col),
-                     acciones + [('Lobo', '->')], visitados, callback)
-
-        # Intentar llevar a la cabra
-        cruzar_river(Estado(1 - estado.lado_granjero, estado.lado_lobo, 1 - estado.lado_cabra, estado.lado_col),
-                     acciones + [('Cabra', '->')], visitados, callback)
-
-        # Intentar llevar la col
-        cruzar_river(Estado(1 - estado.lado_granjero, estado.lado_lobo, estado.lado_cabra, 1 - estado.lado_col),
-                     acciones + [('Col', '->')], visitados, callback)
-
-        # Intentar cruzar solo
-        cruzar_river(Estado(1 - estado.lado_granjero, estado.lado_lobo, estado.lado_cabra, estado.lado_col),
-                     acciones + [('Granja', '->')], visitados, callback)
-
-
-if __name__ == "__main__":
-    # Estado inicial
-    estado_inicial = Estado(0, 0, 0, 0)
-
-    # Obtener soluciones
-    soluciones = []
-    cruzar_river(estado_inicial, [], set(), soluciones.append)
+solution = bfs()
+if solution:
+    for i, state in enumerate(solution):
+        print(f"Step {i+1}: {state}")
+else:
+    print("No solution found.")
