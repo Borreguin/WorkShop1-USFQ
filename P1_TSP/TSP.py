@@ -3,20 +3,25 @@ from typing import List
 from P1_TSP.util import generar_ciudades_con_distancias, plotear_ruta
 
 class CustomCityPath:
-    def __init__(self, path):
-        self.path = path
+    def __init__(self, city):
+        self.path = [city]
+        # self.distance = 0
+
+    def get_distance(self, distancias):
+        distance = 0
+        for index in range(len(self.path) - 2):
+            distance = distance + distancias[(self.path[index], self.path[index + 1])]
+
+        if self.get_actual_city() != self.get_first_city():
+            distance = distance + distancias[(self.path[len(self.path) - 1], self.get_first_city())]
+
+        return distance
+
+    def get_actual_city(self):
+        return self.path[len(self.path) - 1]
 
     def get_first_city(self):
         return self.path[0]
-
-    def get_total_weight(self):
-        total_weight = 0
-        for cities, distance in self.path:
-            total_weight = total_weight + distance
-
-        return total_weight
-
-
 
 class TSP:
     def __init__(self, ciudades, distancias):
@@ -36,8 +41,46 @@ class TSP:
         return sorted(distances_from_city, key=lambda x: list(x.values())[0])
 
     def encontrar_la_ruta_mas_corta(self):
-        print(self.distancias)
-        print(self.ciudades)
+        custom_city_paths = []
+        ciudades_as_list = list(self.ciudades)
+
+        city_init = ciudades_as_list[0]
+        custom_city_paths.append(CustomCityPath(city_init))
+        ciudades_as_list.remove(city_init)
+
+        while True:
+            custom_city_to_add = []
+            custom_city = custom_city_paths[0]
+
+            if len(custom_city.path) == len(self.ciudades) + 1:
+                break
+
+            if len(custom_city.path) != len(self.ciudades):
+                for ciudad_in_list in ciudades_as_list:
+                    if ciudad_in_list not in custom_city.path:
+                        custom_city_2 = CustomCityPath(custom_city.get_first_city())
+                        custom_city_2.path = custom_city.path.copy()
+                        custom_city_2.path.append(ciudad_in_list)
+                        custom_city_to_add.append(custom_city_2)
+            else:
+                ciudad_in_list = custom_city.get_first_city()
+                custom_city_2 = CustomCityPath(custom_city.get_first_city())
+                custom_city_2.path = custom_city.path.copy()
+                custom_city_2.path.append(ciudad_in_list)
+                custom_city_to_add.append(custom_city_2)
+
+            custom_city_paths.remove(custom_city)
+
+            for custom_city in custom_city_to_add:
+                custom_city_paths.append(custom_city)
+
+            custom_city_paths = sorted(custom_city_paths, key=lambda x: x.get_distance(self.distancias))
+
+        custom_city.path.append(custom_city.get_first_city())
+        print("distance: ", custom_city.get_distance(self.distancias))
+        return custom_city.path
+
+    def encontrar_la_ruta_mas_corta_2(self):
         path = []
         removed_cities = []
 
