@@ -8,4 +8,4 @@
   * Bryan Núñez
   * Francisco Roh
 
-- **Link**: [Planificación en ClickUp](https://app.clickup.com/9013100324/v/li/901302174824)
+- **Link**: [Planificación en ClickUp](https://sharing.clickup.com/9013100324/l/h/6-901302174824-1/664320f8f06c241)
