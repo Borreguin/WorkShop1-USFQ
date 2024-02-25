@@ -47,8 +47,15 @@ class TSP:
         city_init = ciudades_as_list[0]
         custom_city_paths.append(CustomCityPath(city_init))
         ciudades_as_list.remove(city_init)
+        n_iterations = 0
+        custom_city = custom_city_paths[0]
 
         while True:
+            n_iterations += 1
+            if n_iterations > 5000:
+                break
+            if n_iterations % 100 == 0:
+                print("n_iterations: ", n_iterations)
             custom_city_to_add = []
             custom_city = custom_city_paths[0]
 
