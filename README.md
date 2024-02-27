@@ -4,8 +4,9 @@
 - **Nombre del grupo**: G5
 - **Integrantes del grupo**:
   * Felipe Toscano
-  * José Asitimbay
-  * Christian Hernadez
-  * Brayan Lechón
+  * Jose Asitimbay
+  * Bryan Lechon
+  * Christian Hernandez
 
-- **Link**: [Planificación en ClickUp](https://app.clickup.com/xxxxxx)
+
+- **Link**: [Planificación en ClickUp](https://sharing.clickup.com/9013101718/l/h/8ckj14p-373/43c6f0cf0c8cf3c)
