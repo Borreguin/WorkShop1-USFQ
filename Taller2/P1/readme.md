@@ -62,6 +62,7 @@ Se manejan laberintos de diferente profundidad, el mas pequeño cuenta con 43 no
 - Todos los algoritmos encontraron la misma ruta, a excepción del laberinto 1, donde la busqueda bidireccional generó una ruta con una baldosa adicional, ya que el punto de encuentro no se localizó en la ruta de los otros algoritmos, la cual es la mas corta.
 
 - En tiempos de ejecucion, de manera general la busqueda bidireccional es el algoritmo mas rapido, inclusive en casos donde este no encontró la ruta mas corta como en el laberinto 1. Igualmente fue el mas rapido en el laberinto 3, a pesar de que visitó mas nodos (1104 nodos visitados)
-  
+
+- Con respecto a los nodos visitados (procesamiento de la ruta), 
 
  
