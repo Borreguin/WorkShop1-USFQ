@@ -24,6 +24,13 @@ Gráfico del caso de estudio 2
 # B
 La condición actual se basa en el mejor ruta, cuya condición se encuentra relacionada con su tamaño, sin embargo es necesario modificar la condición para evaluar si la última posición de la mejor ruta sea el final establecido, para que el algoritmo pueda encontrar el camino hacia la posición final.
 
+```python
+if self.best_path is None or len(best_path) <= len(self.best_path)
+    and best_path[-1] == self.end:
+                self.best_path = best_path
+```
+
+
 Pasar argumentos alpha y beta al constructor
 ```python
 AntColonyOptimization(start, end, obstacles, alpha=5, beta=30)
