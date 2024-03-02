@@ -87,13 +87,13 @@ Por ejemplo un camino corto con pocas feromonas puede tener un puntaje menor que
 ### C. Describir los parámetros del modelo
 ¿Qué propósito tiene cada parámetro en el modelo?
 
-num_ants: Determina la cantidad de hormigas que se utilizan para explorar el espacio de soluciones, afectando la amplitud de la búsqueda.
+**num_ants**: Determina la cantidad de hormigas que se utilizan para explorar el espacio de soluciones, afectando la amplitud de la búsqueda.
 
-evaporation_rate: Es la tasa a la que se evaporan las feromonas del camino, lo que afecta cuán rápidamente el algoritmo "olvida" los caminos anteriores.
+**evaporation_rate**: Es la tasa a la que se evaporan las feromonas del camino, lo que afecta cuán rápidamente el algoritmo "olvida" los caminos anteriores.
 
-alpha: Controla la importancia relativa de la traza de feromonas en la decisión del camino a seguir por las hormigas.
+**alpha**: Controla la importancia relativa de la traza de feromonas en la decisión del camino a seguir por las hormigas.
 
-beta: Determina la importancia de la información heurística (distancia al objetivo) en la decisión del camino, equilibrando la exploración y la explotación.
+**beta**: Determina la importancia de la información heurística (distancia al objetivo) en la decisión del camino, equilibrando la exploración y la explotación.
 
 ### D. Pregunta de investigación:
 ¿Será que se puede utilizar este algoritmo para resolver el Travelling Salesman Problema (TSP)?
