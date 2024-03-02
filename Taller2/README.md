@@ -4,13 +4,10 @@
 - **Nombre del grupo**: Grupo-3
 - **Integrantes del grupo**:
 
-    *Bryan Calisto
+    Bryan Calisto
+    Daniel Marín
+    Bryan Núñez
+    Francisco Roh
 
-    *Daniel Marín
-
-    *Bryan Núñez
-
-    *Francisco Roh
-    
 
 ![Maze1](/Taller2/images/laberinto2.txt_Busqueda_Bidireccional.gif) 
