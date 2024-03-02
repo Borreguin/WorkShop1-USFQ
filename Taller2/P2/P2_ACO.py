@@ -2,8 +2,10 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.colors import LinearSegmentedColormap
 
+np.random.seed(123)
+
 class AntColonyOptimization:
-    def __init__(self, start, end, obstacles, grid_size=(10, 10), num_ants=10, evaporation_rate=0.1, alpha=0.1, beta=15):
+    def __init__(self, start, end, obstacles, grid_size=(10, 10), num_ants=1000, evaporation_rate=0.5, alpha=0.1, beta=15):
         self.start = start
         self.end = end
         self.obstacles = obstacles
@@ -49,6 +51,22 @@ class AntColonyOptimization:
         for position in path:
             self.pheromones[position[1], position[0]] += 1
 
+# Se pondera la longitud del camino con la cantidad de feromonas depositadas para obtener un puntaje más equitativo
+# En lugar de elegir el camino mas corto se considera el camino con mayor cantidad de feromonas
+# Esto permite que el algoritmo explore más caminos y no se quede estancado en un mínimo local
+# se define una funcion de puntaje para evaluar los caminos
+# Por ejemplo un camino corto con pocas feromonas puede tener un puntaje menor que un camino largo con muchas feromonas
+
+
+    def _path_score(self, path):
+        feromone_sum = sum(self.pheromones[position[1], position[0]] for position in path)
+        length = len(path)
+        # Asegurarse de que la longitud no sea cero para evitar la división por cero
+        if length == 0:
+            return 0
+        # Puede ajustar los pesos según las necesidades
+        return feromone_sum / length
+
     def find_best_path(self, num_iterations):
         for _ in range(num_iterations):
             all_paths = []
@@ -63,15 +81,14 @@ class AntColonyOptimization:
                     current_position = next_position
                 all_paths.append(path)
 
-            # Escoger el mejor camino por su tamaño?
-            # --------------------------
-            all_paths.sort(key=lambda x: len(x))
+            # Evaluar cada camino con la nueva función de puntaje y seleccionar el mejor
+            all_paths.sort(key=self._path_score, reverse=True)  # Ordena descendente por puntaje
             best_path = all_paths[0]
 
             self._evaporate_pheromones()
             self._deposit_pheromones(best_path)
 
-            if self.best_path is None or len(best_path) <= len(self.best_path):
+            if self.best_path is None or self._path_score(best_path) > self._path_score(self.best_path):
                 self.best_path = best_path
             # --------------------------
 
@@ -117,8 +134,8 @@ def study_case_2():
     print("Best path: ", aco.best_path)
 
 if __name__ == '__main__':
-    study_case_1()
-    # study_case_2()
+    #study_case_1()
+    study_case_2()
 
 
 
