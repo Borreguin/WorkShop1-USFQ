@@ -2,7 +2,7 @@ import matplotlib.pyplot as plt
 import os, sys
 project_path = os.path.dirname(__file__)
 sys.path.append(project_path)
-from Taller2.P1.P1_util import define_color
+from P1_util import define_color
 
 
 class MazeLoader:
@@ -13,7 +13,7 @@ class MazeLoader:
     def load_Maze(self):
         _maze = []
         file_path = os.path.join(project_path, self.filename)
-        print("Loading Maze from", file_path)
+        # print("Loading Maze from", file_path)
         with open(file_path, 'r') as file:
             for line in file:
                 _maze.append(list(line.strip()))
@@ -43,3 +43,4 @@ class MazeLoader:
     def get_graph(self):
         # Implementar la creación del grafo a partir del laberinto
         return None
+
