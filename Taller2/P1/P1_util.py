@@ -161,7 +161,7 @@ def plot_maze_before_after(original_maze, transformed_maze, save_path=None):
     transformed_maze (list): The transformed maze represented as a 2D list.
     save_path (str, optional): The path to save the output image. If None, the image is not saved.
     """
-    fig, axes = plt.subplots(1, 2, figsize=(10, 5))  # 1 row, 2 columns for subplots
+    fig, axes = plt.subplots(2, 1, figsize=(10, 5))  # 1 row, 2 columns for subplots
 
     # Defining a new color map
     from matplotlib.colors import ListedColormap
@@ -266,5 +266,47 @@ def mark_path(maze, path, start_position, end_position):
             else:
                 maze[r][c] = 1  # Fill the rest with walls
 
+
+def dfs_find_path(maze, start, end):
+    """
+    Find a path from start to end using DFS.
+
+    Args:
+    maze (list of list of int): The maze representation where 0 is a path and 1 is a wall.
+    start (tuple): The starting position (row, col).
+    end (tuple): The ending position (row, col).
+
+    Returns:
+    list: The path from start to end as a list of (row, col) tuples.
+    """
+    rows, cols = len(maze), len(maze[0])
+    visited = [[False] * cols for _ in range(rows)]
+    parent = {start: None}
+
+    stack = [start]  # Usamos una pila en lugar de una cola
+    visited[start[0]][start[1]] = True
+
+    # Directions: up, down, left, right
+    directions = [(-1, 0), (1, 0), (0, -1), (0, 1)]
+
+    while stack:
+        row, col = stack.pop()  # Cambiamos popleft() por pop()
+        if (row, col) == end:
+            break
+        for dr, dc in directions:
+            r, c = row + dr, col + dc
+            if 0 <= r < rows and 0 <= c < cols and maze[r][c] != 1 and not visited[r][c]:
+                visited[r][c] = True
+                parent[(r, c)] = (row, col)
+                stack.append((r, c))  # Agregamos el siguiente nodo a explorar a la pila
+
+    # Backtrack from end to start to get the path
+    path = []
+    while end is not None:
+        path.append(end)
+        end = parent[end]
+    path.reverse()
+
+    return path if path and path[0] == start else []
 
 

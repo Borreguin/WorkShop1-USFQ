@@ -44,36 +44,3 @@ class MazeLoader:
         # Implementar la creación del grafo a partir del laberinto
         return None
 
-
-
-
-## esto se tiene que acoplar a get_graph
-# def study_case(algorithm, maze_file):
-#     print(f"This is a study case using {algorithm.__name__} on {maze_file}")
-#
-#     # Transformación del laberinto
-#     laberinto = trasnformar_laberinto(os.path.join(project_path, maze_file))
-#     reduccion_laberinto = transform_maze(copy.deepcopy(laberinto))
-#     # plot_maze_before_after(laberinto, reduccion_laberinto)  # Gráfico de la matriz antes y después de la transformación
-#
-#     # Determinación de las posiciones de inicio y fin
-#     start_position = None
-#     end_position = None
-#     for i, row in enumerate(reduccion_laberinto):
-#         for j, val in enumerate(row):
-#             if val == 'E':
-#                 start_position = (i, j)
-#             elif val == 'S':
-#                 end_position = (i, j)
-#
-#     if start_position is None or end_position is None:
-#         print("No se encontraron posiciones de inicio o fin en el laberinto.")
-#         return
-#
-#     # Aplicación del algoritmo para encontrar el camino
-#     path = algorithm(reduccion_laberinto, start_position, end_position)
-#
-#     # Marcar el camino en el laberinto
-#     mark_path(reduccion_laberinto, path, start_position, end_position)
-#
-#     plot_maze_before_after(laberinto, reduccion_laberinto, algorithm.__name__+'-'+maze_file)  # Gráfico de la matriz con el camino marcado
