@@ -61,19 +61,15 @@ class AntColonyOptimization:
                         break
                     path.append(next_position)
                     current_position = next_position
-                all_paths.append(path)
-
-            # Escoger el mejor camino por su tamaño?
-            # --------------------------
-            all_paths.sort(key=lambda x: len(x))
-            best_path = all_paths[0]
+                all_paths.append((path, sum(self.pheromones[pos[1], pos[0]] for pos in path)))
+            all_paths.sort(key=lambda x: (len(x[0]), -x[1]))
+            best_path = all_paths[0][0]
 
             self._evaporate_pheromones()
             self._deposit_pheromones(best_path)
 
             if self.best_path is None or len(best_path) <= len(self.best_path):
                 self.best_path = best_path
-            # --------------------------
 
     def plot(self):
         cmap = LinearSegmentedColormap.from_list('pheromone', ['white', 'green', 'red'])
@@ -95,30 +91,26 @@ class AntColonyOptimization:
         plt.show()
 
 def study_case_1():
-    print("Start of Ant Colony Optimization - First Study Case")
-    start = (0, 0)
-    end = (4, 7)
-    obstacles = [(1, 2), (2, 2), (3, 2)]
-    aco = AntColonyOptimization(start, end, obstacles)
-    aco.find_best_path(100)
-    aco.plot()
-    print("End of Ant Colony Optimization")
     print("Best path: ", aco.best_path)
 
 def study_case_2():
-    print("Start of Ant Colony Optimization - Second Study Case")
-    start = (0, 0)
-    end = (4, 7)
-    obstacles = [(0, 2), (1, 2), (2, 2), (3, 2)]
-    aco = AntColonyOptimization(start, end, obstacles)
-    aco.find_best_path(100)
-    aco.plot()
-    print("End of Ant Colony Optimization")
     print("Best path: ", aco.best_path)
 
 if __name__ == '__main__':
-    study_case_1()
-    # study_case_2()
+    # Define the start, end, and obstacles
+    start = (0, 0)
+    end = (9, 9)
+    obstacles = [(5, 5), (6, 6), (7, 7)]
 
+    # Create an instance of AntColonyOptimization
+    aco = AntColonyOptimization(start, end, obstacles)
 
+    # Find the best path
+    aco.find_best_path(num_iterations=100)
+    
+    # Plot the results
+    aco.plot()
 
+    # Now you can call your study cases
+    #study_case_1()
+    study_case_2()
