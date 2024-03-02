@@ -5,8 +5,12 @@
 - **Integrantes del grupo**:
 
     *Bryan Calisto
+
     *Daniel Marín
+
     *Bryan Núñez
+
     *Francisco Roh
+    
 
 ![Maze1](/Taller2/images/laberinto2.txt_Busqueda_Bidireccional.gif) 
