@@ -19,5 +19,13 @@ Para la realizacion de este ejercicio se utilizo 3 algoritmos diferentes para ca
 
 # Resultados
 
+## Laberinto 1
 
-![Maze1](/Taller2/images/laberinto2.txt_Busqueda_Bidireccional.gif) 
+### BFS
+![lab1BFS](/Taller2/images/laberinto1.txt_BFS.gif)
+### A Estrella
+![lab1AE](/Taller2/images/laberinto1.txt_A_estrella.gif)
+### Busqueda Bidireccional
+![lab1BB](/Taller2/images/laberinto1.txt_Busqueda_Bidireccional.gif)
+
+ 
