@@ -83,3 +83,6 @@ Se plantea el caso de estudio 2, sin embargo, algo está mal en la selección de
 ### D. Pregunta de investigación:
 ¿Será que se puede utilizar este algoritmo para resolver el Travelling Salesman Problema (TSP)?
 
+si, se puede utilizar el algoritmo de colonia de hormigas para resolver el problema del vendedor viajero, ya que este algoritmo se basa en la búsqueda de caminos óptimos, y el problema del vendedor viajero consiste en encontrar el camino más corto que recorra todas las ciudades y regrese a la ciudad de origen.
+ACO se aplica al TSP simulando el comportamiento de las hormigas que buscan caminos entre sus nidos y las fuentes de alimento. En el contexto del TSP, las "ciudades" actúan como los puntos que las hormigas necesitan visitar. Las hormigas exploran diferentes rutas entre las ciudades y depositan feromonas en su camino, marcando las rutas más cortas con mayor intensidad. Con el tiempo, la ruta con la mayor cantidad de feromonas tiende a ser la más corta, guiando a las futuras hormigas a seguir esa ruta.
+A traves de iteraciones y la actualización constante de la información de las feromonas, el algoritmo converge hacia una solución óptima o cercana al óptimo.
