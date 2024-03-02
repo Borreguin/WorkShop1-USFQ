@@ -30,4 +30,4 @@ def study_case_3():
 
 
 if __name__ == '__main__':
-    study_case_1()
+    study_case_3()
