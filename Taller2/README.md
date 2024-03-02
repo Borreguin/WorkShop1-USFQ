@@ -19,3 +19,6 @@
 
 
 Los resultados y conclusiones se encuentran en cada carpeta de los repectivos ejercicios
+
+#### Nota addicional:
+Se utilizó el paquete [ffmpeg](https://www.gyan.dev/ffmpeg/builds/) para obtener el archivo .gif que muestra la animación de la solución de los laberintos

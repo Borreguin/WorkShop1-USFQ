@@ -26,7 +26,7 @@
 
 
 ### B. ¿Qué ocurre con el segundo caso de estudio?
-La condición actual se basa en el mejor ruta, cuya condición se encuentra relacionada con su tamaño, sin embargo es necesario modificar la condición para evaluar si la última posición de la mejor ruta sea el final establecido, para que el algoritmo pueda encontrar el camino hacia la posición final.
+El algoritmo no es capaz de encontrar la salida o el target, debido a que se está evaluando la mejor ruta, por lo que la condición actual se basa en el mejor ruta, cuya condición se encuentra relacionada con su tamaño, sin embargo es necesario modificar la condición para evaluar si la última posición de la mejor ruta sea el final establecido, para que el algoritmo pueda encontrar el camino hacia la posición final.
 
 ```python
 if self.best_path is None or len(best_path) <= len(self.best_path)
