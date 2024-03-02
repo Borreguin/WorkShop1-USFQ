@@ -2,6 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.colors import LinearSegmentedColormap
 
+np.random.seed(124)
 class AntColonyOptimization:
     def __init__(self, start, end, obstacles, grid_size=(10, 10), num_ants=10, evaporation_rate=0.1, alpha=0.1, beta=15):
         self.start = start
@@ -71,7 +72,7 @@ class AntColonyOptimization:
             self._evaporate_pheromones()
             self._deposit_pheromones(best_path)
 
-            if self.best_path is None or len(best_path) <= len(self.best_path):
+            if self.best_path is None or len(best_path) <= len(self.best_path) and best_path[-1] == self.end:
                 self.best_path = best_path
             # --------------------------
 
