@@ -13,11 +13,15 @@
 
 7) Graficar (método plot): Este método grafica la cuadrícula de feromonas, los puntos de inicio y fin, los obstáculos y el mejor camino encontrado.
 
-Gráfico del caso de estudio 1
+### Gráfico del caso de estudio 1
+
+
 ![img.png](img/img.png)
 
 
-Gráfico del caso de estudio 2
+### Gráfico del caso de estudio 2
+
+
 ![img_1.png](img/img_1.png)
 
 
