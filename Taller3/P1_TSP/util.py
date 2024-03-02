@@ -71,4 +71,5 @@ def get_path(edges: dict, initial_city: str, path: List[str]):
         return [next_node]
     elif next_node in path:
         return path
+    path.append(next_node)
     return get_path(edges, next_node, path)

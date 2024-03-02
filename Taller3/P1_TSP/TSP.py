@@ -57,19 +57,31 @@ class TSP:
                 return model.u[i] - model.u[j] + model.x[i, j] * n_cities <= n_cities - 1
             else:
                 # No se puede ir de una ciudad a la misma
-                return model.u[i] - model.u[i] == 0
+                return pyo.Constraint.Skip
 
         _model.complete_path = pyo.Constraint(_model.U, _model.N, rule=rule_formando_path)
 
+        def rule_asegurar_viaje(model, i, j):
+            if i == j:
+                return model.x[i, j] == 0
+            return pyo.Constraint.Skip
+        _model.no_self_travel = pyo.Constraint(_model.N, _model.M, rule=rule_asegurar_viaje)
+
+        # Restricción para evitar simetrías
+        def symmetry_breaking_rule(model, i):
+            return sum(model.x[i, j] for j in model.N if j != i) == 1
+
+        _model.symmetry_breaking = pyo.Constraint(_model.N, rule=symmetry_breaking_rule)
+
         # Resolver el modelo
         solver = pyo.SolverFactory('glpk')
-        results = solver.solve(_model)
+        results = solver.solve(_model, timelimit=30)
 
         # Mostrar resultados
         if results.solver.termination_condition == pyo.TerminationCondition.optimal:
             print("Ruta óptima encontrada:")
         else:
-            print("No se encontró una solución óptima.")
+            print("No se encontró una solución óptima, la siguiente es la mejor solución encontrada:")
 
         edges = dict()
         valid_paths = []
@@ -85,7 +97,8 @@ class TSP:
 
         initial_city = cities[0]
         path = get_path(edges, initial_city, [])
-        print("path", path)
+        path.append(path[0])
+        return path
 
 
 
@@ -102,14 +115,15 @@ def study_case_1():
     tsp.plotear_resultado(ruta)
 
 def study_case_2():
-    n_cities = 100
+    n_cities = 30
     ciudades, distancias = generar_ciudades_con_distancias(n_cities)
     tsp = TSP(ciudades, distancias)
     ruta = ciudades.keys()
-    # ruta = tsp.encontrar_la_ruta_mas_corta()
+    ruta = tsp.encontrar_la_ruta_mas_corta()
     tsp.plotear_resultado(ruta, False)
 
 
 if __name__ == "__main__":
+    print("Se ha colocado un límite de tiempo de 30 segundos para la ejecución del modelo.")
     # Solve the TSP problem
-    study_case_1()
+    study_case_2()
