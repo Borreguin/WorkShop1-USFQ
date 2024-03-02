@@ -12,8 +12,10 @@
 
     Francisco Roh
 
+    Link: Planificación en [ClickUp](https://sharing.clickup.com/9013100324/l/h/6-901302174824-1/664320f8f06c241)
+
 
 ![Maze1](/Taller2/images/laberinto2.txt_Busqueda_Bidireccional.gif) 
 
 
-Los esultados y conclusiones se encuentran en cada carpeta de los repectivos ejercicios
+Los resultados y conclusiones se encuentran en cada carpeta de los repectivos ejercicios

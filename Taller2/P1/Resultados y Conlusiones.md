@@ -11,4 +11,13 @@ Daniel Marín
 Bryan Núñez
 Francisco Roh
 
-Link: Planificación en ClickUp [ASD](https://sharing.clickup.com/9013100324/l/h/6-901302174824-1/664320f8f06c241)
+
+Para la realizacion de este ejercicio se utilizo 3 algoritmos diferentes para cada laberinto, estos son:
+- BFS
+- A estrella
+- Busqueda Bidireccional
+
+# Resultados
+
+
+![Maze1](/Taller2/images/laberinto2.txt_Busqueda_Bidireccional.gif) 
