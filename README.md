@@ -1,5 +1,5 @@
 # WorkShop1-USFQ
-## Taller 1 de inteligencia artificial
+## Taller 2 de inteligencia artificial
 
 - **Nombre del grupo**: xxxxxx
 - **Integrantes del grupo**:
