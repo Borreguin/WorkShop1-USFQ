@@ -3,7 +3,7 @@ import os, sys
 from collections import deque
 project_path = os.path.dirname(__file__)
 sys.path.append(project_path)
-from Taller2.P1.P1_util import define_color
+from .P1_util import define_color
 
 
 class MazeLoader:
