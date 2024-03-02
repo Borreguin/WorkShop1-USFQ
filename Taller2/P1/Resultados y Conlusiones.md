@@ -57,7 +57,7 @@ Para comparar el comportamiento, efectividad y rapidez establecimos las siguient
 
 Se manejan laberintos de diferente profundidad, el mas pequeño cuenta con 43 nodos , el mediano cuenta con 201 nodos y el mas grande cuenta con 1270 nodos. 
 
-![resulF](/Taller2/images/Resultados P1.jpg)
+![resulF](/Taller2/images/Resultados_P1.jpg)
 
 - Todos los algoritmos encontraron la misma ruta, a excepción del laberinto 1, donde la busqueda bidireccional generó una ruta con una baldosa adicional, ya que el punto de encuentro no se localizó en la ruta de los otros algoritmos, la cual es la mas corta.
 
