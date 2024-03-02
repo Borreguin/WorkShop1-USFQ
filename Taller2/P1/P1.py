@@ -3,8 +3,7 @@ project_path = os.path.dirname(__file__)
 import copy
 sys.path.append(project_path)
 from P1_MazeLoader import MazeLoader
-from P1_util import trasnformar_laberinto, transform_maze, plot_maze_before_after, bfs_find_path, mark_path, \
-    a_star_find_path, dfs_find_path
+from P1_util import trasnformar_laberinto, transform_maze, plot_maze_before_after, bfs_find_path, mark_path, dfs_find_path
 
 
 def study_case(algorithm, maze_file):
