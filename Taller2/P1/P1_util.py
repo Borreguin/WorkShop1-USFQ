@@ -2,6 +2,9 @@ from collections import deque
 import matplotlib.pyplot as plt
 import numpy as np
 import os
+import time
+
+
 project_path = os.path.dirname(__file__)
 
 
@@ -215,6 +218,7 @@ def bfs_find_path(maze, start, end):
     Returns:
     list: The path from start to end as a list of (row, col) tuples.
     """
+    start_time = time.time()
     rows, cols = len(maze), len(maze[0])
     visited = [[False]*cols for _ in range(rows)]
     parent = {start: None}
@@ -242,6 +246,8 @@ def bfs_find_path(maze, start, end):
         path.append(end)
         end = parent[end]
     path.reverse()
+
+
 
     return path if path[0] == start else []
 

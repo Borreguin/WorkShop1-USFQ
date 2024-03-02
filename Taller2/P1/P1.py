@@ -1,4 +1,6 @@
 import os, sys
+import time
+
 project_path = os.path.dirname(__file__)
 import copy
 sys.path.append(project_path)
@@ -31,7 +33,7 @@ def study_case(algorithm, maze_file):
 
     # Aplicación del algoritmo para encontrar el camino
     path = algorithm(reduccion_laberinto, start_position, end_position)
-
+    print(f"{algorithm.__name__} Path: {len(path)}")
     # Marcar el camino en el laberinto
     mark_path(reduccion_laberinto, path, start_position, end_position)
 
@@ -45,5 +47,11 @@ if __name__ == '__main__':
     for maze_file in mazes:
         maze = MazeLoader(maze_file).load_Maze().plot_maze()
         # graph = maze.get_graph()
+        start_time = time.time()
         study_case(bfs_find_path, maze_file)
+        end_time = time.time()
+        print(f"Elapsed time for BFS: {end_time-start_time}")
+        start_time = time.time()
         study_case(dfs_find_path, maze_file)
+        end_time = time.time()
+        print(f"Elapsed time for DFS: {end_time-start_time}")
