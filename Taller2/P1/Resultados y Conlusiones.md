@@ -11,11 +11,14 @@ Daniel Marín
 Bryan Núñez
 Francisco Roh
 
+Para este ejercicio se generaron grafos, en las cuales cada baldosa recorrible representa un nodo.
 
-Para la realizacion de este ejercicio se utilizo 3 algoritmos diferentes para cada laberinto, estos son:
+Se utilizó 3 algoritmos de busqueda para encontrar la ruta de salida de cada laberinto, estos son:
 - BFS
 - A estrella
 - Busqueda Bidireccional
+
+
 
 # Resultados
 
@@ -45,5 +48,20 @@ Para la realizacion de este ejercicio se utilizo 3 algoritmos diferentes para ca
 ![lab3AE](/Taller2/images/laberinto3.txt_A_estrella.gif)
 ### Busqueda Bidireccional
 ![lab3BB](/Taller2/images/laberinto3.txt_Busqueda_Bidireccional.gif)
+
+# CONCLUSIONES
+Para comparar el comportamiento, efectividad y rapidez establecimos las siguientes metricas para evaluar los algoritmos:
+- Nodos de la ruta (distancia de la ruta).
+- Nodos visitados (distancia de las visitas).
+- Tiempo de ejecucion de las busquedas.
+
+Se manejan laberintos de diferente profundidad, el mas pequeño cuenta con 43 nodos , el mediano cuenta con 201 nodos y el mas grande cuenta con 1270 nodos. 
+
+![tabla](/Taller2/images/Resultados P1.jpg)
+
+- Todos los algoritmos encontraron la misma ruta, a excepción del laberinto 1, donde la busqueda bidireccional generó una ruta con una baldosa adicional, ya que el punto de encuentro no se localizó en la ruta de los otros algoritmos, la cual es la mas corta. En cambio en tiempos de ejecucion, 
+
+- 
+  
 
  
