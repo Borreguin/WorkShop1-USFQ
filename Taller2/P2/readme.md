@@ -1,15 +1,15 @@
 ### A. Correr la implementación planteada
 1) Inicialización (método init): La clase AntColonyOptimization se inicializa con puntos de inicio y fin, una lista de obstáculos, tamaño de la cuadrícula, número de hormigas, tasa de evaporación y parámetros alfa y beta. También inicializa una cuadrícula de feromonas con el mismo tamaño que la cuadrícula y establece el mejor camino en None.
 
-2) Obtener Vecinos (método _get_neighbors): Este método toma una posición como entrada y devuelve una lista de posiciones vecinas que se encuentran dentro de la cuadrícula y no son obstáculos.
+2) Obtener vecinos (método _get_neighbors): Este método toma una posición como entrada y devuelve una lista de posiciones vecinas que se encuentran dentro de la cuadrícula y no son obstáculos.
 
-3) Seleccionar Próxima Posición (método _select_next_position): Este método toma la posición actual y una lista de posiciones visitadas como entrada. Calcula la probabilidad de moverse a cada vecino no visitado según la cantidad de feromona y la distancia heurística al punto final. Luego selecciona un vecino al que moverse en función de estas probabilidades.
+3) Seleccionar próxima posición (método _select_next_position): Este método toma la posición actual y una lista de posiciones visitadas como entrada. Calcula la probabilidad de moverse a cada vecino no visitado según la cantidad de feromona y la distancia heurística al punto final. Luego selecciona un vecino al que moverse en función de estas probabilidades.
 
-4) Evaporar Feromonas (método _evaporate_pheromones): Este método reduce la cantidad de feromona en cada posición de la cuadrícula por una cierta tasa de evaporación.
+4) Evaporar feromonas (método _evaporate_pheromones): Este método reduce la cantidad de feromona en cada posición de la cuadrícula por una cierta tasa de evaporación.
 
-5) Depositar Feromonas (método _deposit_pheromones): Este método aumenta la cantidad de feromona en cada posición de un camino dado.
+5) Depositar feromonas (método _deposit_pheromones): Este método aumenta la cantidad de feromona en cada posición de un camino dado.
 
-6) Encontrar el Mejor Camino (método find_best_path): Este método ejecuta el algoritmo ACO durante un número dado de iteraciones. En cada iteración, cada hormiga parte de la posición de inicio y se mueve a posiciones vecinas hasta que llega a la posición final o no puede moverse más. Las hormigas prefieren moverse a posiciones con más feromona y más cerca del punto final. Después de que todas las hormigas se han movido, las feromonas se evaporan y luego se depositan más feromonas en las posiciones del camino más corto. El camino más corto también se guarda si es más corto que el mejor camino previamente guardado.
+6) Encontrar el mejor camino (método find_best_path): Este método ejecuta el algoritmo ACO durante un número dado de iteraciones. En cada iteración, cada hormiga parte de la posición de inicio y se mueve a posiciones vecinas hasta que llega a la posición final o no puede moverse más. Las hormigas prefieren moverse a posiciones con más feromona y más cerca del punto final. Después de que todas las hormigas se han movido, las feromonas se evaporan y luego se depositan más feromonas en las posiciones del camino más corto. El camino más corto también se guarda si es más corto que el mejor camino previamente guardado.
 
 7) Graficar (método plot): Este método grafica la cuadrícula de feromonas, los puntos de inicio y fin, los obstáculos y el mejor camino encontrado.
 
@@ -26,6 +26,7 @@
 
 
 ### B. ¿Qué ocurre con el segundo caso de estudio?
+#### Approach 1
 La condición actual se basa en el mejor ruta, cuya condición se encuentra relacionada con su tamaño, sin embargo es necesario modificar la condición para evaluar si la última posición de la mejor ruta sea el final establecido, para que el algoritmo pueda encontrar el camino hacia la posición final.
 
 ```python
@@ -35,6 +36,7 @@ if self.best_path is None or len(best_path) <= len(self.best_path)
 ```
 
 
+#### Approach 2
 Pasar argumentos alpha y beta al constructor
 ```python
 AntColonyOptimization(start, end, obstacles, alpha=5, beta=30)
