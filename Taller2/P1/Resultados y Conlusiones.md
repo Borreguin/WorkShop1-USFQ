@@ -28,4 +28,22 @@ Para la realizacion de este ejercicio se utilizo 3 algoritmos diferentes para ca
 ### Busqueda Bidireccional
 ![lab1BB](/Taller2/images/laberinto1.txt_Busqueda_Bidireccional.gif)
 
+## Laberinto 2
+
+### BFS
+![lab2BFS](/Taller2/images/laberinto2.txt_BFS.gif)
+### A Estrella
+![lab2AE](/Taller2/images/laberinto2.txt_A_estrella.gif)
+### Busqueda Bidireccional
+![lab2BB](/Taller2/images/laberinto2.txt_Busqueda_Bidireccional.gif)
+
+## Laberinto 3
+
+### BFS
+![lab3BFS](/Taller2/images/laberinto3.txt_BFS.gif)
+### A Estrella
+![lab3AE](/Taller2/images/laberinto3.txt_A_estrella.gif)
+### Busqueda Bidireccional
+![lab3BB](/Taller2/images/laberinto3.txt_Busqueda_Bidireccional.gif)
+
  
