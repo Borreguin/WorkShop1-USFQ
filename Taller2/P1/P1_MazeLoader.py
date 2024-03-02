@@ -37,6 +37,7 @@ class MazeLoader:
         plt.xticks([])
         plt.yticks([])
         fig.tight_layout()
+        plt.savefig(os.path.join(project_path, f'../images/{self.filename[:-4]}.png'))
         plt.show()
         return self
 

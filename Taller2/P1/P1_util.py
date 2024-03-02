@@ -247,6 +247,8 @@ def bfs_find_path(maze, start, end):
         end = parent[end]
     path.reverse()
 
+
+
     return path if path[0] == start else []
 
 def mark_path(maze, path, start_position, end_position):
