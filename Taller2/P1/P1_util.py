@@ -1,6 +1,42 @@
 from collections import deque
 import matplotlib.pyplot as plt
 import numpy as np
+import os
+project_path = os.path.dirname(__file__)
+
+
+def build_save_path(save_path):
+    """
+    Construct a save path for the maze image based on the input save path for a text file.
+
+    Args:
+    save_path (str): The input save path for a text file.
+
+    Returns:
+    str: The constructed save path for the maze image.
+    """
+    if not save_path:
+        raise ValueError("No save path provided")
+
+    # Get the base name without extension
+    parts = save_path.split('-')
+    algorithm_name, maze_base = parts
+    maze_name, _ = os.path.splitext(maze_base)
+
+    # Construct the new file name
+    new_file_name = f"{maze_name}-solucion-{algorithm_name}.png"
+
+    # Find the directory of the project and then go up one level to its parent
+    parent_dir = os.path.dirname(project_path)
+
+    # Construct the new save path in the 'images' directory
+    new_save_path = os.path.join(parent_dir, 'images', new_file_name)
+
+    # Ensure the 'images' directory exists, create if it doesn't
+    os.makedirs(os.path.dirname(new_save_path), exist_ok=True)
+
+    return new_save_path
+
 
 def define_color(cell):
     if cell == '#':
@@ -11,7 +47,7 @@ def define_color(cell):
         return 'green'
     elif cell == 'S':   # Salida
         return 'red'
-    
+
 
 ############################
 # Reducción del laberinto  # FT
@@ -19,17 +55,17 @@ def define_color(cell):
 
 def trasnformar_laberinto(archivo):
     """Carga un laberinto desde un archivo de texto y lo convierte en una matriz.
-    
+
     Args:
     archivo (str): la ruta al archivo de texto que contiene el laberinto.
-    
+
     Returns:
     list: una matriz que representa el laberinto, donde ' ' es 0, '#' es 1,
           'E' es el punto de inicio, y 'S' es el punto de salida.
     """
     # Inicializar una lista vacía para la matriz del laberinto
     matriz_laberinto = []
-    
+
     # Abrir el archivo para leer
     with open(archivo, 'r') as file:
         # Iterar sobre cada línea en el archivo
@@ -48,7 +84,7 @@ def trasnformar_laberinto(archivo):
                     fila.append(char)  # 'E' y 'S' se mantienen
             # Agregar la fila a la matriz del laberinto
             matriz_laberinto.append(fila)
-    
+
     return matriz_laberinto
 
 
@@ -67,7 +103,7 @@ def count_open_neighbors(maze, row, col):
     open_neighbors = 0
     # List of potential neighbor positions (up, down, left, right)
     directions = [(-1, 0), (1, 0), (0, -1), (0, 1)]
-    
+
     for dr, dc in directions:
         r, c = row + dr, col + dc
         # Check if neighbor is within bounds
@@ -75,7 +111,7 @@ def count_open_neighbors(maze, row, col):
             # Check if neighbor is an open path or the start/end point
             if maze[r][c] in [0, 'E', 'S']:
                 open_neighbors += 1
-                
+
     return open_neighbors
 
 def transform_maze(maze):
@@ -95,19 +131,19 @@ def transform_maze(maze):
         changed = False
         # Create a copy of the maze to store changes
         new_maze = [row[:] for row in maze]
-        
+
         for i in range(len(maze)):
             for j in range(len(maze[0])):
                 if maze[i][j] == 0:
                     if count_open_neighbors(maze, i, j) < 2:
                         new_maze[i][j] = 1
                         changed = True
-                        
+
         # Check if there was any change in this iteration
         if changed:
             # Update maze for the next iteration
             maze = new_maze
-            
+
     return maze
 
 
@@ -115,29 +151,37 @@ def transform_maze(maze):
 # Sección para el plot de matrices # FT
 ####################################
 
-def plot_maze_before_after(original_maze, transformed_maze):
+
+def plot_maze_before_after(original_maze, transformed_maze, save_path=None):
     """
-    Plot a visual representation of the original and transformed mazes side by side using matplotlib.
+    Plot a visual representation of the original and transformed mazes side by side using matplotlib and optionally save the output.
 
     Args:
     original_maze (list): The original maze represented as a 2D list.
     transformed_maze (list): The transformed maze represented as a 2D list.
+    save_path (str, optional): The path to save the output image. If None, the image is not saved.
     """
     fig, axes = plt.subplots(1, 2, figsize=(10, 5))  # 1 row, 2 columns for subplots
 
+    # Defining a new color map
+    from matplotlib.colors import ListedColormap
+    custom_cmap = ListedColormap(['black', 'white', 'green', 'red'])
+
     # Map the 'E' and 'S' to numeric values for plotting purposes
     mapper = {' ': 0, '#': 1, 'E': 2, 'S': 3}
-    
+
     # Convert the mazes to NumPy arrays for better handling
-    original_maze_array = np.array([[mapper[cell] if cell in mapper else cell for cell in row] for row in original_maze])
-    transformed_maze_array = np.array([[mapper[cell] if cell in mapper else cell for cell in row] for row in transformed_maze])
+    original_maze_array = np.array(
+        [[mapper[cell] if cell in mapper else cell for cell in row] for row in original_maze])
+    transformed_maze_array = np.array(
+        [[mapper[cell] if cell in mapper else cell for cell in row] for row in transformed_maze])
 
     # Plot the original maze
-    cax1 = axes[0].matshow(original_maze_array, cmap=plt.cm.gray)
+    axes[0].matshow(original_maze_array, cmap=custom_cmap)
     axes[0].set_title('Original Maze')
-    
+
     # Plot the transformed maze
-    cax2 = axes[1].matshow(transformed_maze_array, cmap=plt.cm.gray)
+    axes[1].matshow(transformed_maze_array, cmap=custom_cmap)
     axes[1].set_title('Transformed Maze')
 
     # Hide the tick labels
@@ -146,17 +190,15 @@ def plot_maze_before_after(original_maze, transformed_maze):
         ax.set_yticks([])
         ax.grid(False)
 
-    # Add a color bar
-    fig.colorbar(cax1, ax=axes[0], fraction=0.046, pad=0.04)
-    fig.colorbar(cax2, ax=axes[1], fraction=0.046, pad=0.04)
+    plt.tight_layout()
+
+    # Save the plot if a save path is provided
+    if save_path:
+        new_save_path = build_save_path(save_path)
+        plt.savefig(new_save_path, bbox_inches='tight')
 
     # Display the plots
-    plt.tight_layout()
     plt.show()
-
-
-
-
 ###############################
 # Sección de solución por BFS # FT
 ###############################
@@ -176,13 +218,13 @@ def bfs_find_path(maze, start, end):
     rows, cols = len(maze), len(maze[0])
     visited = [[False]*cols for _ in range(rows)]
     parent = {start: None}
-    
+
     queue = deque([start])
     visited[start[0]][start[1]] = True
-    
+
     # Directions: up, down, left, right
     directions = [(-1, 0), (1, 0), (0, -1), (0, 1)]
-    
+
     while queue:
         row, col = queue.popleft()
         if (row, col) == end:
@@ -193,20 +235,20 @@ def bfs_find_path(maze, start, end):
                 visited[r][c] = True
                 parent[(r, c)] = (row, col)
                 queue.append((r, c))
-    
+
     # Backtrack from end to start to get the path
     path = []
     while end is not None:
         path.append(end)
         end = parent[end]
     path.reverse()
-    
+
     return path if path[0] == start else []
 
 def mark_path(maze, path, start_position, end_position):
     """
     Mark the path in the maze with 0 and set all other cells to 1, but preserve 'E' and 'S'.
-    
+
     Args:
     maze (list of list of int/str): The maze to mark.
     path (list of tuple): The path to mark as 0.
