@@ -1,4 +1,4 @@
-# A
+### A. Correr la implementación planteada
 1) Inicialización (método init): La clase AntColonyOptimization se inicializa con puntos de inicio y fin, una lista de obstáculos, tamaño de la cuadrícula, número de hormigas, tasa de evaporación y parámetros alfa y beta. También inicializa una cuadrícula de feromonas con el mismo tamaño que la cuadrícula y establece el mejor camino en None.
 
 2) Obtener Vecinos (método _get_neighbors): Este método toma una posición como entrada y devuelve una lista de posiciones vecinas que se encuentran dentro de la cuadrícula y no son obstáculos.
@@ -21,7 +21,7 @@ Gráfico del caso de estudio 2
 ![img_1.png](\img\img_1.png)
 
 
-# B
+### B. ¿Qué ocurre con el segundo caso de estudio?
 La condición actual se basa en el mejor ruta, cuya condición se encuentra relacionada con su tamaño, sin embargo es necesario modificar la condición para evaluar si la última posición de la mejor ruta sea el final establecido, para que el algoritmo pueda encontrar el camino hacia la posición final.
 
 ```python
@@ -40,7 +40,7 @@ Beta representa la importancia que se le otorga a los resultados de la heurísti
 Vale la pena mencionar que se los valores alpha=5 y beta=30 se determinaron empíricamente, con prueba y error, pero podrían determinarse también probando una serie de valores para alpha y beta de tal manera que se llegue al recuadro objetivo.
 
 
-# C
+### C. Describir los parámetros del modelo
 - start y end: Estos son pares ordenados que representan los puntos de inicio y final del camino que las hormigas intentarán encontrar. Se utilizan para inicializar las posiciones de las hormigas y determinar cuándo las hormigas han llegado al final del camino.
 
 - obstacles: Esta es una lista de pares ordenados que representan las posiciones de los obstáculos en la cuadrícula. Las hormigas no pueden moverse a posiciones que son obstáculos.
@@ -60,7 +60,7 @@ Vale la pena mencionar que se los valores alpha=5 y beta=30 se determinaron emp�
 - Q: Esta es una constante utilizada en el cálculo de la cantidad de feromona que las hormigas depositan en la cuadrícula.
 
 - plot: Este es un booleano que indica si graficar la cuadrícula y el mejor camino encontrado después de cada iteración.
-# D
+### D. Pregunta de investigación
 Sí. ACO está especialmente orientado a resolver problemas con espacios de solución grandes como lo es el TSP en su versión de fuerza bruta.
 
 En el contexto del TSP, el objetivo es encontrar el camino más corto que visite cada ciudad exactamente una vez y regrese al punto de partida. Las hormigas en el ACO representarían posibles soluciones al problema. A continuación, te proporciono una descripción general de cómo se aplicaría el ACO al TSP:
