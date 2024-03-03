@@ -2,6 +2,7 @@ import random
 import string
 import math
 from typing import List
+import datetime as dt
 
 from matplotlib import pyplot as plt
 
@@ -37,6 +38,9 @@ def generar_ciudades_con_distancias(n_cities: int):
     return ciudades, distancias
 
 def plotear_ruta(ciudades, ruta, mostrar_anotaciones=True):
+    if None in ruta:
+        print("La ruta contiene valores nulos, no se encontró una solución válida.")
+        return
     # Extraer coordenadas de las ciudades
     coordenadas_x = [ciudades[ciudad][0] for ciudad in ruta]
     coordenadas_y = [ciudades[ciudad][1] for ciudad in ruta]
@@ -65,7 +69,6 @@ def plotear_ruta(ciudades, ruta, mostrar_anotaciones=True):
     plt.show()
 
 def get_path(edges: dict, initial_city: str, path: List[str]):
-    print(initial_city)
     next_node = edges.get(initial_city, None)
     if next_node is None:
         return [next_node]
@@ -73,3 +76,43 @@ def get_path(edges: dict, initial_city: str, path: List[str]):
         return path
     path.append(next_node)
     return get_path(edges, next_node, path)
+
+def calculate_path_distance(distances: dict, path: List[str]):
+    distance = 0
+    for i in range(len(path) - 1):
+        if path[i] is not None and path[i+1] is not None:
+            distance += distances[(path[i], path[i+1])]
+    return distance
+
+def delta_time_mm_ss(delta_time: dt.timedelta):
+    minutes, seconds = divmod(delta_time.seconds, 60)
+    return f"{0 if minutes < 10 else ''}{minutes}:{0 if seconds < 10 else ''}{seconds}"
+
+def get_min_distance(distances: dict):
+    min_distance = min(distances.values())
+    return min_distance
+
+def get_max_distance(distances: dict):
+    max_distance = max(distances.values())
+    return max_distance
+
+def get_average_distance(distances: dict):
+    avg_distance = sum(distances.values()) / len(distances)
+    return avg_distance
+
+def get_best_max_distance_for_city(city:str, distances: dict):
+    acc_distances = 0
+    max_distance = 0
+    for k, v in distances.items():
+        if city in k:
+            acc_distances += v
+            max_distance = max(max_distance, v)
+    avg_distance = acc_distances / len(distances)
+    return (avg_distance + max_distance) / 2
+
+def get_best_max_distance_for_cities(distances: dict):
+    cities = list(set([city for k in distances.keys() for city in k]))
+    best_max_distances = {}
+    for city in cities:
+        best_max_distances[city] = get_best_max_distance_for_city(city, distances)
+    return best_max_distances

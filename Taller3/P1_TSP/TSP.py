@@ -1,21 +1,45 @@
+import datetime as dt
 from typing import List
 import pyomo.environ as pyo
 import re
 
 
 
-from Taller1.P1_TSP.util import generar_ciudades_con_distancias, plotear_ruta
-from pyomo import *
-
-from Taller3.P1_TSP.util import get_path
+from Taller3.P1_TSP.util import generar_ciudades_con_distancias, plotear_ruta, get_min_distance, get_max_distance, \
+    get_average_distance, get_best_max_distance_for_cities, delta_time_mm_ss, get_path, calculate_path_distance
 
 
 class TSP:
-    def __init__(self, ciudades, distancias):
+    def __init__(self, ciudades, distancias, heuristics: List[str]):
+        self.max_possible_distance = None
+        self.min_possible_distance = None
         self.ciudades = ciudades
         self.distancias = distancias
+        self.heuristics = heuristics
+        self.min_distance = get_min_distance(distancias)
+        self.max_distance = get_max_distance(distancias)
+        self.average_distance = get_average_distance(distancias)
+        self.average_distance_for_city = get_best_max_distance_for_cities(distancias)
+        self.cal_min_max_distances()
 
-    def encontrar_la_ruta_mas_corta(self):
+    def cal_min_max_distances(self):
+        # 1000 , 1500
+        medium_low_distance = (self.min_distance + self.average_distance) / 2
+        self.min_possible_distance = medium_low_distance * len(self.ciudades) * 0.35
+        self.max_possible_distance = medium_low_distance * len(self.ciudades) * 0.50
+
+
+    def print_min_max_distances(self):
+        print(f"Distancia mínima entre nodos: {self.min_distance}")
+        print(f"Distancia máxima entre nodos: {self.max_distance}")
+        print(f"Distancia promedio entre nodos: {self.average_distance}")
+        print(f"Distancia Total mínima posible: {self.min_possible_distance}")
+        print(f"Distancia Total máxima posible: {self.max_possible_distance}")
+        print(f"Heurísticas aplicadas: {self.heuristics}")
+
+    def encontrar_la_ruta_mas_corta(self, tolerance, time_limit, tee):
+        start_time = dt.datetime.now()
+
         _model = pyo.ConcreteModel()
 
         cities = list(self.ciudades.keys())
@@ -31,7 +55,7 @@ class TSP:
 
         # Variables
         _model.x = pyo.Var(_model.N, _model.M, within=pyo.Binary)
-        _model.u = pyo.Var(_model.N, within=pyo.NonNegativeIntegers, bounds=(0, n_cities - 1))
+        _model.u = pyo.Var(_model.N, bounds=(0, n_cities - 1))
 
         # Objetive Function: (función objetivo a minimizar)
         def obj_rule(model):
@@ -67,15 +91,35 @@ class TSP:
             return pyo.Constraint.Skip
         _model.no_self_travel = pyo.Constraint(_model.N, _model.M, rule=rule_asegurar_viaje)
 
-        # Restricción para evitar simetrías
-        def symmetry_breaking_rule(model, i):
-            return sum(model.x[i, j] for j in model.N if j != i) == 1
+        # Heurísticas:
 
-        _model.symmetry_breaking = pyo.Constraint(_model.N, rule=symmetry_breaking_rule)
+        # Añadiendo limites a la función objetivo como una heurística
+        if "limitar_funcion_objetivo" in self.heuristics:
+            _model.obj_lower_bound = pyo.Constraint(expr=_model.obj >= self.min_possible_distance)
+            _model.obj_upper_bound = pyo.Constraint(expr=_model.obj <= self.max_possible_distance)
+
+        if "vecino_cercano" in self.heuristics:
+            def rule_vecino_cercano(model, i, j):
+                if i == j:
+                    return pyo.Constraint.Skip
+                expr = model.x[i,j] * self.distancias[i,j] <= self.average_distance_for_city[i]
+                return expr
+            _model.nearest_neighbor = pyo.Constraint(_model.N, _model.M, rule=rule_vecino_cercano)
+
+        # Initialize empty set for dynamic constraints (optional)
+        # _model.subtour_constraint = pyo.ConstraintList()
+
+
 
         # Resolver el modelo
         solver = pyo.SolverFactory('glpk')
-        results = solver.solve(_model, timelimit=30)
+        solver.options['mipgap'] = tolerance
+        solver.options['tmlim'] = time_limit
+        results = solver.solve(_model, tee=tee)
+
+        execution_time = dt.datetime.now() - start_time
+        print(f"Tiempo de ejecución: {delta_time_mm_ss(execution_time)}")
+        self.print_min_max_distances()
 
         # Mostrar resultados
         if results.solver.termination_condition == pyo.TerminationCondition.optimal:
@@ -98,6 +142,8 @@ class TSP:
         initial_city = cities[0]
         path = get_path(edges, initial_city, [])
         path.append(path[0])
+        distance = calculate_path_distance(self.distancias, path)
+        print("Distancia total recorrida:", distance)
         return path
 
 
@@ -107,23 +153,49 @@ class TSP:
 
 
 def study_case_1():
+    # tal vez un loop para probar 10, 20, 30, 40, 50 ciudades?
     n_cities = 10
     ciudades, distancias = generar_ciudades_con_distancias(n_cities)
-    tsp = TSP(ciudades, distancias)
-    # ruta = ciudades.keys()
-    ruta = tsp.encontrar_la_ruta_mas_corta()
+    heuristics = []
+    tolerance = 0.20
+    time_limit = 30
+    tee = False
+    tsp = TSP(ciudades, distancias, heuristics)
+    ruta = tsp.encontrar_la_ruta_mas_corta(tolerance, time_limit, tee)
     tsp.plotear_resultado(ruta)
 
 def study_case_2():
-    n_cities = 30
+    n_cities = 70
     ciudades, distancias = generar_ciudades_con_distancias(n_cities)
-    tsp = TSP(ciudades, distancias)
-    ruta = ciudades.keys()
-    ruta = tsp.encontrar_la_ruta_mas_corta()
+    # con heuristicas
+    heuristics = ['limitar_funcion_objetivo']
+    # sin heuristicas
+    # heuristics = []
+    tsp = TSP(ciudades, distancias, heuristics)
+    tolerance = 0.20
+    time_limit = 40
+    tee = True
+    ruta = tsp.encontrar_la_ruta_mas_corta(tolerance, time_limit, tee)
+    tsp.plotear_resultado(ruta, False)
+
+def study_case_3():
+    n_cities = 100
+    ciudades, distancias = generar_ciudades_con_distancias(n_cities)
+    # con heuristicas
+    heuristics = ['vecino_cercano']
+    # sin heuristicas
+    # heuristics = []
+    tsp = TSP(ciudades, distancias, heuristics)
+    tolerance = 0.1
+    time_limit = 60
+    tee = True
+    ruta = tsp.encontrar_la_ruta_mas_corta(tolerance, time_limit, tee)
     tsp.plotear_resultado(ruta, False)
 
 
 if __name__ == "__main__":
     print("Se ha colocado un límite de tiempo de 30 segundos para la ejecución del modelo.")
     # Solve the TSP problem
-    study_case_2()
+    study_case_1()
+    # study_case_2()
+    # study_case_3()
