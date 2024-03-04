@@ -150,7 +150,7 @@ def study_case_1(num_ants=10, evaporation_rate=0.1, alpha=0.1, beta=15):
                                 alpha=alpha, 
                                 beta=beta)
     aco.find_best_path(100)
-    #aco.plot()
+    aco.plot()
     print("End of Ant Colony Optimization")
     print("Best path: ", aco.best_path)
     print("Best euclidean_distance: ", aco.euclidean_distance)
@@ -167,7 +167,7 @@ def study_case_2(num_ants=10, evaporation_rate=0.1, alpha=0.1, beta=15):
                                 alpha=alpha, 
                                 beta=beta)
     aco.find_best_path(100)
-    #aco.plot()
+    aco.plot()
     print("End of Ant Colony Optimization")
     print("Best path: ", aco.best_path)
     print("Best euclidean_distance: ", aco.euclidean_distance)
@@ -258,8 +258,8 @@ def aco_simulations(num_ants=10, evaporation_rate=0.1, alpha=0.1, beta=15):
 
 if __name__ == '__main__':
     np.random.seed(124)
-    #study_case_1()
-    #study_case_2()
+    study_case_1()
+    study_case_2()
     aco_simulations()
 
     # Simulations graphs
