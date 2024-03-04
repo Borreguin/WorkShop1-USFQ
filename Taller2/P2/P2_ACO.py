@@ -1,12 +1,10 @@
 import numpy as np
 import matplotlib.pyplot as plt
-# np.random.seed(124)
 from matplotlib.colors import LinearSegmentedColormap
-
+import time
 
 class AntColonyOptimization:
-    def __init__(self, start, end, obstacles, grid_size=(10, 10), num_ants=10, evaporation_rate=0.1, alpha=0.1,
-                 beta=15):
+    def __init__(self, start, end, obstacles, grid_size=(10, 10), num_ants=10, evaporation_rate=0.1, alpha=0.1, beta=15):
         self.start = start
         self.end = end
         self.obstacles = obstacles
@@ -17,6 +15,7 @@ class AntColonyOptimization:
         self.beta = beta
         self.pheromones = np.ones(grid_size)
         self.best_path = None
+        self.euclidean_distance = 0.
 
     def _get_neighbors(self, position):
         pos_x, pos_y = position
@@ -52,7 +51,17 @@ class AntColonyOptimization:
         for position in path:
             self.pheromones[position[1], position[0]] += 1
 
-    def find_best_path(self, num_iterations, problem):
+    def compute_euclidean_distance(self, x1, x2):
+        return np.sqrt((x1[0] - x2[0])**2 + (x1[1] - x2[1])**2)
+    
+    def sum_euclidean_distance(self, path):
+        total_distance = 0
+        for i in range(len(path)-1):
+            total_distance = total_distance + self.compute_euclidean_distance(path[i],path[i+1])
+        return total_distance
+    
+    
+    def find_best_path(self, num_iterations):
         for _ in range(num_iterations):
             all_paths = []
             for _ in range(self.num_ants):
@@ -67,9 +76,7 @@ class AntColonyOptimization:
                     all_paths.append(path)
 
             # Escoger el mejor camino por la cantidad de feromonas depositadas
-            # --------------------------------------------------------------
-            # if problem == "B":
-
+            # --------------------------------------------------------------                
             best_path = None
             best_path_pheromones = 0
             for path in all_paths:
@@ -77,25 +84,16 @@ class AntColonyOptimization:
                 if best_path is None or path_pheromones > best_path_pheromones:
                     best_path = path
                     best_path_pheromones = path_pheromones
-                    # --------------------------------------------------------------
+            # --------------------------------------------------------------
 
             self._evaporate_pheromones()
             self._deposit_pheromones(best_path)
 
             if self.best_path is None or len(best_path) <= len(self.best_path) and best_path[-1] == self.end:
                 self.best_path = best_path
+                self.euclidean_distance = self.sum_euclidean_distance(best_path)
 
-            # else:
-
-            #     all_paths.sort(key=lambda x: len(x))
-            #     best_path = all_paths[0]
-
-            #     self._evaporate_pheromones()
-            #     self._deposit_pheromones(best_path)
-
-            #     if self.best_path is None or len(best_path) <= len(self.best_path) and best_path[-1] == self.end:
-            #         self.best_path = best_path
-
+                
     def plot(self):
         cmap = LinearSegmentedColormap.from_list('pheromone', ['white', 'green', 'red'])
         plt.figure(figsize=(8, 8))
@@ -115,34 +113,188 @@ class AntColonyOptimization:
         plt.grid(True)
         plt.show()
 
+def simulation_graph(num_ants, mean_euclidean_distance, mean_execution_time, ntitle, xtitle):
+    # Create figure and axis
+    fig, ax1 = plt.subplots()
 
-def study_case_1():
+    # Plotting the Euclidean distance on the first y-axis
+    color = 'black'
+    ax1.set_xlabel(xtitle)
+    ax1.set_ylabel('Mean Best Euclidean Distance', color=color)
+    ax1.plot(num_ants, mean_euclidean_distance, color=color)
+    ax1.tick_params(axis='y', labelcolor=color)
+
+    # Create a second y-axis for the execution time
+    ax2 = ax1.twinx()  
+    color = 'tab:blue'
+    ax2.set_ylabel('Mean Execution Time (s)', color=color)  
+    ax2.plot(num_ants, mean_execution_time, color=color)
+    ax2.tick_params(axis='y', labelcolor=color)
+
+    # Title and layout
+    plt.title(ntitle)
+    fig.tight_layout()  
+
+    # Show plot
+    plt.show()
+
+
+def study_case_1(num_ants=10, evaporation_rate=0.1, alpha=0.1, beta=15):
     print("Start of Ant Colony Optimization - First Study Case")
     start = (0, 0)
     end = (4, 7)
     obstacles = [(1, 2), (2, 2), (3, 2)]
-    aco = AntColonyOptimization(start, end, obstacles)
-    aco.find_best_path(100, "A")
-    aco.plot()
+    aco = AntColonyOptimization(start, end, obstacles, 
+                                num_ants=num_ants, 
+                                evaporation_rate=evaporation_rate, 
+                                alpha=alpha, 
+                                beta=beta)
+    aco.find_best_path(100)
+    #aco.plot()
     print("End of Ant Colony Optimization")
     print("Best path: ", aco.best_path)
+    print("Best euclidean_distance: ", aco.euclidean_distance)
+    
 
-
-def study_case_2():
+def study_case_2(num_ants=10, evaporation_rate=0.1, alpha=0.1, beta=15):
     print("Start of Ant Colony Optimization - Second Study Case")
     start = (0, 0)
     end = (4, 7)
     obstacles = [(0, 2), (1, 2), (2, 2), (3, 2)]
-    aco = AntColonyOptimization(start, end, obstacles)
-    aco.find_best_path(100, "B")
-    aco.plot()
+    aco = AntColonyOptimization(start, end, obstacles, 
+                                num_ants=num_ants, 
+                                evaporation_rate=evaporation_rate, 
+                                alpha=alpha, 
+                                beta=beta)
+    aco.find_best_path(100)
+    #aco.plot()
     print("End of Ant Colony Optimization")
     print("Best path: ", aco.best_path)
+    print("Best euclidean_distance: ", aco.euclidean_distance)
+ 
+def aco_simulations(num_ants=10, evaporation_rate=0.1, alpha=0.1, beta=15):
+    start = (0, 0)
+    end = (4, 7)
+    obstacles = [(0, 2), (1, 2), (2, 2), (3, 2)]
+    total_simul = 25
 
+    for num_ants in [2, 5, 10, 20, 40]:
+        l_time = []
+        l_best = []
+        for simulation in range(total_simul):
+            np.random.seed(simulation)
+            t0 = time.time()
+            aco = AntColonyOptimization(start, end, obstacles, 
+                                        num_ants=num_ants, 
+                                        evaporation_rate=0.1, 
+                                        alpha=0.1, 
+                                        beta=15)
+            aco.find_best_path(100)
+            t1 = time.time()
+            l_best.append(aco.euclidean_distance)
+            l_time.append(t1-t0)
+        print(f"{num_ants=}")
+        print("Mean best euclidean_distance: ", np.mean(l_best))
+        print("Mean execution time: ", np.mean(l_time))
+
+    for evaporation_rate in [0.01,0.1, 0.5, 0.8]:
+        l_time = []
+        l_best = []
+        for simulation in range(total_simul):
+            np.random.seed(simulation)
+            t0 = time.time()
+            aco = AntColonyOptimization(start, end, obstacles, 
+                                        num_ants=10, 
+                                        evaporation_rate=evaporation_rate, 
+                                        alpha=0.1, 
+                                        beta=15)
+            aco.find_best_path(100)
+            t1 = time.time()
+            l_best.append(aco.euclidean_distance)
+            l_time.append(t1-t0)
+        print(f"{evaporation_rate=}")
+        print("Mean best euclidean_distance: ", np.mean(l_best))
+        print("Mean execution time: ", np.mean(l_time))
+
+    for alpha in [0.01,0.1, 0.5, 0.8]:
+        l_time = []
+        l_best = []
+        for simulation in range(total_simul):
+            np.random.seed(simulation)
+            t0 = time.time()
+            aco = AntColonyOptimization(start, end, obstacles, 
+                                        num_ants=10, 
+                                        evaporation_rate=0.1, 
+                                        alpha=alpha, 
+                                        beta=15)
+            aco.find_best_path(100)
+            t1 = time.time()
+            l_best.append(aco.euclidean_distance)
+            l_time.append(t1-t0)
+        print(f"{alpha=}")
+        print("Mean best euclidean_distance: ", np.mean(l_best))
+        print("Mean execution time: ", np.mean(l_time))
+
+    for beta in [1, 5, 15, 30]:
+        l_time = []
+        l_best = []
+        for simulation in range(total_simul):
+            np.random.seed(simulation)
+            t0 = time.time()
+            aco = AntColonyOptimization(start, end, obstacles, 
+                                        num_ants=10, 
+                                        evaporation_rate=0.1, 
+                                        alpha=0.1, 
+                                        beta=beta)
+            aco.find_best_path(100)
+            t1 = time.time()
+            l_best.append(aco.euclidean_distance)
+            l_time.append(t1-t0)
+        print(f"{beta=}")
+        print("Mean best euclidean_distance: ", np.mean(l_best))
+        print("Mean execution time: ", np.mean(l_time))
+
+        
 
 if __name__ == '__main__':
-    study_case_1()
+    np.random.seed(124)
+    #study_case_1()
+    #study_case_2()
+    aco_simulations()
 
+    # Simulations graphs
+    num_ants = [2, 5, 10, 20, 40]
+    mean_euclidean_distance = [10.458031739553293, 10.09352380466497, 10.060386719675122, 10.62842712474619, 11.147249634685277]
+    mean_execution_time = [0.18436055183410643, 0.4571403980255127, 0.9096868896484375, 1.822643985748291, 3.6443925380706785]
+    ntitle = 'Impact of Number of Ants on Performance'
+    xtitle = 'Number of Ants'
+    simulation_graph(num_ants, mean_euclidean_distance, mean_execution_time, ntitle, xtitle)
+
+
+    num_ants =[0.01, 0.1, 0.5, 0.8]
+    mean_euclidean_distance = [10.09352380466497, 10.060386719675122, 10.390092347159896, 10.795777772109131]
+    mean_execution_time = [0.9196624660491943, 0.9119847679138183, 0.8931827068328857, 0.8924306583404541]
+    ntitle = 'Impact of Alpha on Performance'
+    xtitle = 'Alpha'
+    simulation_graph(num_ants, mean_euclidean_distance, mean_execution_time, ntitle, xtitle)
+
+
+
+    num_ants = [1, 5, 15, 30]
+    mean_euclidean_distance = [22.170764773832474, 13.657341981845173, 10.060386719675122, 10.192935059634513]
+    mean_execution_time = [1.64949387550354, 1.040101499557495, 0.907792501449585, 0.8812494087219238]
+    ntitle = 'Impact of Beta on Performance'
+    xtitle = 'Beta'
+    simulation_graph(num_ants, mean_euclidean_distance, mean_execution_time, ntitle, xtitle)
+
+
+    num_ants = [0.01, 0.1, 0.5, 0.8]
+    mean_euclidean_distance = [10.18322943214974, 10.060386719675122, 10.29636651713959, 10.499209229614209]
+    mean_execution_time = [0.9148330974578858, 0.9129935455322266, 0.9011675071716309, 0.8946380615234375]
+    ntitle = 'Impact of Evaporation Rate on Performance'
+    xtitle = 'Evaporation Rate'
+    simulation_graph(num_ants, mean_euclidean_distance, mean_execution_time, ntitle, xtitle)
+    
     """
     A. El caso de estudio 1 simula un escenario donde se encuentra el camino más corto desde un punto de inicio hasta un punto final en un laberinto, 
     evitando obstáculos situados en las coordenadas (1, 2), (2, 2) y (3, 2). 
@@ -151,22 +303,22 @@ if __name__ == '__main__':
     El paso óptimo del algoritmo se relaciona con la cantidad de feromonas depositadas en la cuadrícula, 
     donde las rutas con mayores concentraciones de feromonas tienen una mayor probabilidad de ser seleccionadas por las hormigas. Hecho que se lo puede observar en su 
     grafica ya que la ruta encontrada esta marcada por un rango de color de cafe a rojo que denota una densidad de feromonas alta.
-
+    
     """
-    study_case_2()
 
+    
     """
     B. En el segundo caso de estudio, inicialmente, no se encontraba una solución al considerar únicamente el tamaño del camino para seleccionar la mejor ruta.
     A pesar de intentar incrementar el número de iteraciones para abordar este problema utilizando el enfoque inicial, el resultado seguía siendo el mismo. 
     Sin embargo, al modificar el código para seleccionar el mejor camino basado en la cantidad de feromonas depositadas a lo largo del camino, se logró resolver este problema. 
     Este cambio permitió al algoritmo ACO encontrar una solución más efectiva al guiar a las hormigas virtuales hacia caminos más prometedores basados en la intensidad de las feromonas.
-
+    
     Aqui se muestra el bloque de codigo que se modifico: 
         def find_best_path(self, num_iterations,problem):
-
+            
             ...
             if problem == "B":
-
+                
                 best_path = None
                 best_path_pheromones = 0
                 for path in all_paths:
@@ -191,7 +343,7 @@ if __name__ == '__main__':
     """
     """
     D. ¿Será que se puede utilizar este algoritmo para resolver el Travelling Salesman Problema (TSP)?
-
+    
     Si, ya que segun un estudio realizado por la Universidad de Sevilla se demostro como el algoritmo de Optimización por Colonias de Hormigas (ACO) se puede utilizar para resolver el Problema del Viajante (TSP) 
     Como se conoce, el TSP es un problema clásico en la optimización combinatoria, que busca encontrar la ruta más corta que visita un conjunto de ciudades exactamente una vez y regresa al punto de partida. 
     Sin embargo, debido a su complejidad computacional, encontrar la solución óptima para el TSP es difícil, especialmente para un gran número de ciudades.
@@ -211,9 +363,9 @@ if __name__ == '__main__':
 
     En resumen, segun el estudio proporcionado se demuestra cómo el comportamiento de las hormigas en la naturaleza puede inspirar soluciones eficientes
     para problemas difíciles como el TSP mediante el uso de algoritmos de optimización por colonias de hormigas.
-
+    
     Referencia:
-
+        
         Universidad de Sevilla. "Algoritmos de Hormigas y el Problema del Viajante (TSP)." Disponible en: https://www.cs.us.es/~fsancho/Blog/posts/ACO_TSP.md
-
+    
     """
