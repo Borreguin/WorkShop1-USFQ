@@ -1,9 +1,12 @@
 import numpy as np
 import matplotlib.pyplot as plt
+# np.random.seed(124)
 from matplotlib.colors import LinearSegmentedColormap
 
+
 class AntColonyOptimization:
-    def __init__(self, start, end, obstacles, grid_size=(10, 10), num_ants=10, evaporation_rate=0.1, alpha=0.1, beta=15):
+    def __init__(self, start, end, obstacles, grid_size=(10, 10), num_ants=10, evaporation_rate=0.1, alpha=0.1,
+                 beta=15):
         self.start = start
         self.end = end
         self.obstacles = obstacles
@@ -49,7 +52,7 @@ class AntColonyOptimization:
         for position in path:
             self.pheromones[position[1], position[0]] += 1
 
-    def find_best_path(self, num_iterations):
+    def find_best_path(self, num_iterations, problem):
         for _ in range(num_iterations):
             all_paths = []
             for _ in range(self.num_ants):
@@ -61,19 +64,37 @@ class AntColonyOptimization:
                         break
                     path.append(next_position)
                     current_position = next_position
-                all_paths.append(path)
+                    all_paths.append(path)
 
-            # Escoger el mejor camino por su tamaño?
-            # --------------------------
-            all_paths.sort(key=lambda x: len(x))
-            best_path = all_paths[0]
+            # Escoger el mejor camino por la cantidad de feromonas depositadas
+            # --------------------------------------------------------------
+            # if problem == "B":
+
+            best_path = None
+            best_path_pheromones = 0
+            for path in all_paths:
+                path_pheromones = sum(self.pheromones[pos[1], pos[0]] for pos in path)
+                if best_path is None or path_pheromones > best_path_pheromones:
+                    best_path = path
+                    best_path_pheromones = path_pheromones
+                    # --------------------------------------------------------------
 
             self._evaporate_pheromones()
             self._deposit_pheromones(best_path)
 
-            if self.best_path is None or len(best_path) <= len(self.best_path):
+            if self.best_path is None or len(best_path) <= len(self.best_path) and best_path[-1] == self.end:
                 self.best_path = best_path
-            # --------------------------
+
+            # else:
+
+            #     all_paths.sort(key=lambda x: len(x))
+            #     best_path = all_paths[0]
+
+            #     self._evaporate_pheromones()
+            #     self._deposit_pheromones(best_path)
+
+            #     if self.best_path is None or len(best_path) <= len(self.best_path) and best_path[-1] == self.end:
+            #         self.best_path = best_path
 
     def plot(self):
         cmap = LinearSegmentedColormap.from_list('pheromone', ['white', 'green', 'red'])
@@ -94,16 +115,18 @@ class AntColonyOptimization:
         plt.grid(True)
         plt.show()
 
+
 def study_case_1():
     print("Start of Ant Colony Optimization - First Study Case")
     start = (0, 0)
     end = (4, 7)
     obstacles = [(1, 2), (2, 2), (3, 2)]
     aco = AntColonyOptimization(start, end, obstacles)
-    aco.find_best_path(100)
+    aco.find_best_path(100, "A")
     aco.plot()
     print("End of Ant Colony Optimization")
     print("Best path: ", aco.best_path)
+
 
 def study_case_2():
     print("Start of Ant Colony Optimization - Second Study Case")
@@ -111,14 +134,86 @@ def study_case_2():
     end = (4, 7)
     obstacles = [(0, 2), (1, 2), (2, 2), (3, 2)]
     aco = AntColonyOptimization(start, end, obstacles)
-    aco.find_best_path(100)
+    aco.find_best_path(100, "B")
     aco.plot()
     print("End of Ant Colony Optimization")
     print("Best path: ", aco.best_path)
 
+
 if __name__ == '__main__':
     study_case_1()
-    # study_case_2()
 
+    """
+    A. El caso de estudio 1 simula un escenario donde se encuentra el camino más corto desde un punto de inicio hasta un punto final en un laberinto, 
+    evitando obstáculos situados en las coordenadas (1, 2), (2, 2) y (3, 2). 
+    El algoritmo ACO busca encontrar esta ruta óptima utilizando una serie de hormigas virtuales que depositan feromonas en el camino, 
+    lo que guía a otras hormigas a seguir rutas más cortas basadas en la intensidad de las feromonas. 
+    El paso óptimo del algoritmo se relaciona con la cantidad de feromonas depositadas en la cuadrícula, 
+    donde las rutas con mayores concentraciones de feromonas tienen una mayor probabilidad de ser seleccionadas por las hormigas. Hecho que se lo puede observar en su 
+    grafica ya que la ruta encontrada esta marcada por un rango de color de cafe a rojo que denota una densidad de feromonas alta.
 
+    """
+    study_case_2()
 
+    """
+    B. En el segundo caso de estudio, inicialmente, no se encontraba una solución al considerar únicamente el tamaño del camino para seleccionar la mejor ruta.
+    A pesar de intentar incrementar el número de iteraciones para abordar este problema utilizando el enfoque inicial, el resultado seguía siendo el mismo. 
+    Sin embargo, al modificar el código para seleccionar el mejor camino basado en la cantidad de feromonas depositadas a lo largo del camino, se logró resolver este problema. 
+    Este cambio permitió al algoritmo ACO encontrar una solución más efectiva al guiar a las hormigas virtuales hacia caminos más prometedores basados en la intensidad de las feromonas.
+
+    Aqui se muestra el bloque de codigo que se modifico: 
+        def find_best_path(self, num_iterations,problem):
+
+            ...
+            if problem == "B":
+
+                best_path = None
+                best_path_pheromones = 0
+                for path in all_paths:
+                    path_pheromones = sum(self.pheromones[pos[1], pos[0]] for pos in path)
+                    if best_path is None or path_pheromones > best_path_pheromones:
+                        best_path = path
+                        best_path_pheromones = path_pheromones
+            ...
+
+    """
+    """
+    C. 
+        1. start: Representa la posición de inicio del camino que las hormigas virtuales deben recorrer. Este parámetro establece el punto de partida para la búsqueda de la ruta óptima.
+        2. end: Indica la posición de destino o final del camino que las hormigas deben alcanzar. Define el objetivo que el algoritmo intenta alcanzar al encontrar la ruta más corta desde el punto de inicio hasta este punto final.
+        3. obstacles: Es una lista de coordenadas que representan las posiciones de los obstáculos en el laberinto. Estos obstáculos son áreas en el camino que las hormigas deben evitar al buscar la ruta óptima.
+        4. grid_size: Es una tupla que especifica las dimensiones del laberinto o área de búsqueda donde las hormigas se mueven. Define el tamaño del espacio en el que se busca la ruta óptima.
+        5. num_ants: Determina el número de hormigas virtuales que participan en la búsqueda de la ruta óptima. Cuantas más hormigas haya, más exploración del espacio de búsqueda se realizará, lo que puede aumentar las posibilidades de encontrar una solución óptima.
+        6. evaporation_rate: Representa la tasa de evaporación de las feromonas depositadas en el camino por las hormigas. Controla la velocidad a la que las feromonas disminuyen con el tiempo, lo que afecta la capacidad del algoritmo para converger hacia una solución óptima.
+        7. alpha: Es un parámetro que controla la influencia de las feromonas en la elección del próximo movimiento de una hormiga. Un valor más alto de alpha da más peso a las feromonas en la selección del siguiente paso.
+        8. beta: Determina la influencia de la heurística (distancia) en la elección del próximo movimiento de una hormiga. Un valor más alto de beta prioriza la distancia en la selección del siguiente paso sobre las feromonas.
+
+    """
+    """
+    D. ¿Será que se puede utilizar este algoritmo para resolver el Travelling Salesman Problema (TSP)?
+
+    Si, ya que segun un estudio realizado por la Universidad de Sevilla se demostro como el algoritmo de Optimización por Colonias de Hormigas (ACO) se puede utilizar para resolver el Problema del Viajante (TSP) 
+    Como se conoce, el TSP es un problema clásico en la optimización combinatoria, que busca encontrar la ruta más corta que visita un conjunto de ciudades exactamente una vez y regresa al punto de partida. 
+    Sin embargo, debido a su complejidad computacional, encontrar la solución óptima para el TSP es difícil, especialmente para un gran número de ciudades.
+
+    El algoritmo ACO se inspira en el comportamiento colectivo de las hormigas en la naturaleza para encontrar soluciones aproximadas al TSP y los investigadores describen su funcionalidad de la siguiente manera:
+
+        1. Inicialmente, se deposita una cantidad de feromona en todas las aristas del grafo.
+        2. Se crean varias "hormigas" virtuales que construyen soluciones moviéndose de una ciudad a otra siguiendo reglas probabilísticas.
+        3. Cada hormiga construye su recorrido basándose en la cantidad de feromona depositada en las aristas y en una medida de la "visibilidad" de cada arista (inversa de la distancia).
+        4. Después de completar su recorrido, cada hormiga deposita feromona en las aristas que ha recorrido, con una cantidad proporcional a la calidad de su solución.
+        5. Se evapora la feromona en todas las aristas para evitar el estancamiento del algoritmo.
+        6. Se repiten los pasos 2 a 5 durante un número fijo de iteraciones o hasta que se cumpla algún criterio de parada.
+
+    Los resultados obtenidos mostraron que el algoritmo ACO fue efectivo para encontrar soluciones aproximadas al TSP y otros problemas de optimización combinatoria.
+    Además, tambien se han desarollado variantes, que otorgan soluciones efectivas, del algoritmo, como el Sistema de Colonia de Hormigas (ACS), el Sistema de Hormigas Max-Min (MMAS), entre otros,
+    que se adaptan a diferentes contextos y condiciones específicas del problema.
+
+    En resumen, segun el estudio proporcionado se demuestra cómo el comportamiento de las hormigas en la naturaleza puede inspirar soluciones eficientes
+    para problemas difíciles como el TSP mediante el uso de algoritmos de optimización por colonias de hormigas.
+
+    Referencia:
+
+        Universidad de Sevilla. "Algoritmos de Hormigas y el Problema del Viajante (TSP)." Disponible en: https://www.cs.us.es/~fsancho/Blog/posts/ACO_TSP.md
+
+    """
