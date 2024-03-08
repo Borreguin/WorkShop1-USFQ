@@ -1,10 +1,12 @@
 # WorkShop-USFQ
 ## Taller 3 de inteligencia artificial
 
-- **Nombre del grupo**: xxxxxx
+- **Nombre del grupo**: G5
 - **Integrantes del grupo**:
-  * Estudiante 1
-  * Estudiante 2
+  * Felipe Toscano
+  * José Asitimbay
+  * Brayan Lechón
+  * Christian Hernandez
 
 ## GLPK package:
 The GLPK (GNU Linear Programming Kit) package is intended for solving large-scale linear programming (LP), mixed integer programming (MIP), and other related problems. It is a set of routines written in ANSI C and organized in the form of a callable library.
