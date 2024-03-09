@@ -153,11 +153,10 @@ class TSP:
 
 
 def study_case_1():
-    # Lista de números de ciudades a probar
-    num_ciudades = [10, 20, 30, 40, 50]
+    cities = [10, 20, 30, 40, 50]
 
-    for n_cities in num_ciudades:
-        ciudades, distancias = generar_ciudades_con_distancias(n_cities)
+    for n_cities in cities:
+        city, l = generar_ciudades_con_distancias(n_cities)
         heuristics = []
         tolerance = 0.20
         time_limit = 120
