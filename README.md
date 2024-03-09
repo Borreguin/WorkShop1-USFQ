@@ -1,5 +1,5 @@
 # WorkShop1-USFQ
-# Taller 1 de inteligencia artificial
+# Taller 1 de Inteligencia Artificial
 
 - **Nombre del grupo**: Grupo-1
 - **Integrantes del grupo**:
@@ -10,7 +10,7 @@
 
 - **Link**: [Planificación en ClickUp](https://doc.clickup.com/9013102272/d/h/8ckj1p0-33/60b3769cbaa9388)
 
-# Taller 2 de inteligencia artificial
+# Taller 2 de Inteligencia Artificial
 
 - **Integrantes del grupo con descripción de sus tareas**:
   * Santiago Viteri: 
@@ -182,3 +182,9 @@ El algoritmo de optimización por colonia de hormigas se puede utilizar efectiva
 2. Wang, Y. (2021). *Ant colony optimization for traveling salesman problem based on parameters optimization*. Applied soft computing, ELSEVIER. [link](https://www.sciencedirect.com/science/article/abs/pii/S1568494621003628)
 
 3. Stutzle, T.,Lopez, M. Dorigo, M. (2011). *A Concise Overview of Applications of Ant Colony Optimizatio*. [link](chrome-extension://efaidnbmnnnibpcajpcglclefindmkaj/https://lopez-ibanez.eu/doc/StuLopDor2010aco-applications.pdf)
+
+
+# Taller 3 de Inteligencia Artificial
+
+
+![](./Taller3/P2_TSP/results/tsp_1.gif)
