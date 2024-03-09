@@ -139,14 +139,43 @@ with respect to the computation time.
     
     For sin_heuristica, distance: 1896.2938227104403, time: 0:01:00.616954
     
-    Answer: In this case, the heuristic did give us a better result, the execution time is the same for all the heuristics.
-    time is the same for both, however, the distance is better for the algorithm that uses the heuristic.
-    the algorithm that uses the nearest neighbor heuristic.
+    Answer: In this case, the algorithm works better without the use of heuristics, since it finds a shorter distance in the same execution time.
+    since it finds a smaller distance in the same execution time.
+    
+    We tested for 120 cities to see if there is an improvement, and we found that this heuristic works better for more cities as it finds a shorter distance in the same run time.
+    works better for more cities as it finds a smaller distance.
+    
+    For con_heuristic, distance: 1881.8523466910974, time: 0:01:00.487912
+    
+    For sin_heuristica, distance: 2048.256820321997, time: 0:01:00.893955
+
+    We tested for a shorter execution time (30 seconds) and the results are better, so we
+    are better, so we reach the same conclusion we had with the previous heuristic, for faster executions 
+    previous heuristic, for faster executions, this heuristic gives better results.
+    
+    For con_heuristic, distance: 1399.359166137796, time: 0:00:30.20088888
+    
+    For sin_heuristic, distance: 1457.7855368285611, time: 0:00:30.175974
+    
     However, this heuristic is not good for the problem when the number of cities is smaller.
-    the same algorithm with 20 cities, and the results are better for the heuristic without heuristic.
-    are better for the algorithm without heuristics.
+    the same algorithm with 20 cities, and the results are better for the heuristic without heuristics.
+    are better for the algorithm without heuristic.
     
-    For with_heuristic, distance: 731.2632929644172, time: 0:00:00.369940
+    For with_heuristic, distance: 731.2632929644172, time: 0:00:00.328847
     
-    For without_heuristic, distance: 698.001975055342, time: 0:00:00.491536
-    
+    For without_heuristic, distance: 726.901149719755, time: 0:00:00.954094
+
+
+    ```
+    solutions = {}
+
+    heuristics = ['sin_cruces']
+    tsp, ruta, tsp_sin, ruta_sin = study_case_3(30, 0.05, 120, True, heuristics)
+    solutions['con_heuristica'] = [tsp, ruta]
+    solutions['sin_heuristica'] = [tsp_sin, ruta_sin]
+
+    for solution in solutions:
+        print(f"Para {solution}, distancia: {solutions[solution][0].distance}, "
+                f"tiempo: {solutions[solution][0].execution_time}")
+
+    ```
