@@ -1,8 +1,5 @@
 import os
 import seaborn as sns
-import matplotlib.pyplot as plt
-from p1_uml_util import *
-from sklearn.cluster import KMeans
 from Taller3.P1_UML.p1_uml_util import *
 import matplotlib.pyplot as plt
 from sklearn.preprocessing import RobustScaler
@@ -41,7 +38,7 @@ def plot_data(_df: pd.DataFrame, lb1, lb2, legend):
     plt.legend()
     plt.show()
 
-def plot_heatmap(df: pd.DataFrame, variable: str):
+def plot_heatmap(df: pd.DataFrame, variable: str,legend:str):
 
     # Reshape the dataframe to have hours of the day as columns and days as rows
     df.index = pd.to_datetime(df.index, dayfirst=True)
@@ -63,7 +60,7 @@ def plot_heatmap(df: pd.DataFrame, variable: str):
     ax.set_yticklabels(y_labels, rotation=0)  # Set y-axis labels and make them horizontal
     plt.xlabel('Day and Hour of the Week')
     plt.ylabel('Week of the Year')
-    plt.title(f'Heatmap of {variable} over Time')
+    plt.title(f'Heatmap of {legend} over Time')
     plt.show()
 
 
@@ -97,7 +94,7 @@ def elbow_method(df: pd.DataFrame, field: str, k_max: int = 10):
     plt.title('Elbow Curve')
     plt.show()
 
-def plot_clusters(df: pd.DataFrame, field: str):
+def plot_clusters(df: pd.DataFrame, field: str,legend:str):
 
     # Get the number of clusters from the dataframe
     k = df['cluster'].nunique()
@@ -122,7 +119,7 @@ def plot_clusters(df: pd.DataFrame, field: str):
     ax.set_yticklabels(y_labels, rotation=0)  # Set y-axis labels and make them horizontal
     plt.xlabel('Day and Hour of the Week')
     plt.ylabel('Week of the Year')
-    plt.title(f'Clustered Heatmap of {field} over Time')
+    plt.title(f'Clustered Heatmap of {legend} over Time')
     plt.show()
 
 
@@ -270,51 +267,21 @@ def alternative_main():
     # plot_data(df, lb_V005_vent01_CO2, lb_V022_vent02_CO2, "CO2")
     # plot_data(df, lb_V006_vent01_temp_out, lb_V023_vent02_temp_out, "Temperature")
 
-    '''V005_vent01_CO2'''
-    # Se realiza un plot para un a;o y observar el comportamiento general
-    plot_heatmap(df, 'V005_vent01_CO2')
-    # Se utiliza el método del codo para determinar el número de clusters
-    elbow_method(df, 'V005_vent01_CO2', k_max=10)
-    # Se realiza el clustering con k=3
-    df_kmeans = create_kmeans(df, 'V005_vent01_CO2', 3)
-    # Se realiza un plot para observar el comportamiento de los clusters
-    plot_clusters(df_kmeans, 'V005_vent01_CO2')
+def univariable_experiment(_df):
+    columns_to_plot= {column:name for column,name in alias.items() if column != lb_timestamp}
 
-    '''V022_vent02_CO2'''
-    # Se realiza un plot para un a;o y observar el comportamiento general
-    plot_heatmap(df, 'V022_vent02_CO2')
-    # Se utiliza el método del codo para determinar el número de clusters
-    elbow_method(df, 'V022_vent02_CO2', k_max=10)
-    # Se realiza el clustering con k=3
-    df_kmeans = create_kmeans(df, 'V022_vent02_CO2', 3)
-    # Se realiza un plot para observar el comportamiento de los clusters
-    plot_clusters(df_kmeans, 'V022_vent02_CO2')
-
-
-    '''V006_vent01_temp_out'''
-    # Se realiza un plot para un a;o y observar el comportamiento general
-    plot_heatmap(df, 'V006_vent01_temp_out')
-    # Se utiliza el método del codo para determinar el número de clusters
-    elbow_method(df, 'V006_vent01_temp_out', k_max=10)
-    # Se realiza el clustering con k=3
-    df_kmeans = create_kmeans(df, 'V006_vent01_temp_out', 3)
-    # Se realiza un plot para observar el comportamiento de los clusters
-    plot_clusters(df_kmeans, 'V006_vent01_temp_out')
-
-
-    '''V023_vent02_temp_out'''
-    # Se realiza un plot para un a;o y observar el comportamiento general
-    plot_heatmap(df, 'V023_vent02_temp_out')
-    # Se utiliza el método del codo para determinar el número de clusters
-    elbow_method(df, 'V023_vent02_temp_out', k_max=10)
-    # Se realiza el clustering con k=3
-    df_kmeans = create_kmeans(df, 'V023_vent02_temp_out', 3)
-    # Se realiza un plot para observar el comportamiento de los clusters
-    plot_clusters(df_kmeans, 'V023_vent02_temp_out')
-    plot_all_unique_variables(df,plot_boxplot_by_hour)
-    plot_all_unique_variables(df,plot_data_by_day_and_hour,line_color='blue',alpha=0.1)
+    for lb,legend in columns_to_plot.items():
+        plot_data_by_day_and_hour(_df, lb, legend)
+        plot_heatmap(_df,lb,legend)
+        df_kmeans = create_kmeans(_df, lb, 3)
+        plot_clusters(df_kmeans, lb, legend)
 
 
 if __name__ == "__main__":
-
     # multivariable_analisis(df,lb_V005_vent01_CO2,lb_V006_vent01_temp_out)
+    df = prepare_data()
+    univariable_experiment(df)
+
+
+    # plot_all_unique_variables(df,plot_boxplot_by_hour)
+
