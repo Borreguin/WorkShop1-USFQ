@@ -54,28 +54,45 @@ from sklearn.cluster import KMeans
 
 def plot_data_ejercicio1b(_df: pd.DataFrame, variable, legend):
     _df[lb_timestamp] = pd.to_datetime(_df[lb_timestamp], format='%d.%m.%Y %H:%M')
-    y_min = _df[variable].min()
-    y_max = _df[variable].max()
+    _df['day'] = _df[lb_timestamp].dt.day
 
-    # Perform KMeans clustering
-    kmeans = KMeans(n_clusters=24)
-    _df['kmeans_cluster'] = kmeans.fit_predict(_df[[variable]])
+    unique_days = _df['day'].unique()
 
-    plt.figure(figsize=(24, 6))  # Adjust the size of the figure
-    for i in range(24):
-        df_to_plot=_df[_df[lb_timestamp].dt.hour == i]
-        print(df_to_plot)
-        plt.subplot(1, 24, i+1)
-        # Convert time to seconds past midnight
-        time_seconds = df_to_plot[lb_timestamp].dt.minute * 60 + df_to_plot[lb_timestamp].dt.second
-        plt.scatter(time_seconds, df_to_plot[variable], c=df_to_plot['kmeans_cluster'], cmap='hsv')
-        plt.ylim(y_min, y_max) 
-        plt.xlabel(f"{i}:00")
-        plt.ylabel("")
-        plt.title(f"{legend} at {i}:00")
-        plt.tight_layout()  # Adjust the layout of the subplots to avoid overlaps
+    for day in unique_days:
+        df_to_plot=_df[_df['day'] == day]
+
+        # Perform KMeans clustering
+        kmeans = KMeans(n_clusters=10)
+        df_to_plot['kmeans_cluster'] = kmeans.fit_predict(df_to_plot[[variable]])
+
+        # Perform Fuzzy C-means clustering
+        data_2d = df_to_plot[variable].values.reshape(-1, 1).T  # reshape the data to 2D
+        fcm = fuzz.cmeans(data_2d, c=10, m=2, error=0.005, maxiter=1000)
+        df_to_plot['fcm_cluster'] = np.argmax(fcm[1], axis=0)
+
+        # Perform anomaly detection with Isolation Forest
+        isolation_forest = IsolationForest(contamination='auto')
+        df_to_plot['anomaly'] = isolation_forest.fit_predict(df_to_plot[[variable]])
+
+        # Plot clusters
+        for i in range(10):
+            plt.figure(figsize=(10, 5))
+            plt.scatter(range(len(df_to_plot[df_to_plot['kmeans_cluster'] == i])), df_to_plot[df_to_plot['kmeans_cluster'] == i][variable], color='blue')
+            plt.scatter(len(df_to_plot[df_to_plot['kmeans_cluster'] == i])//2, kmeans.cluster_centers_[i], color='red')  # plot the KMeans centroid
+            plt.scatter(range(len(df_to_plot[df_to_plot['fcm_cluster'] == i])), df_to_plot[df_to_plot['fcm_cluster'] == i][variable], color='green')
+            plt.scatter(len(df_to_plot[df_to_plot['fcm_cluster'] == i])//2, fcm[0][i], color='black')  # plot the FCM centroid
+            plt.title(f"Cluster {i+1} for {variable} on day {day}")
+            plt.tight_layout()
+            plt.show()
+
+        # Plot anomalies
+        plt.figure(figsize=(10, 5))
+        plt.scatter(df_to_plot[df_to_plot['anomaly'] == -1][variable].index, df_to_plot[df_to_plot['anomaly'] == -1][variable], color='orange')  # plot the anomalies
+        plt.title(f"Anomalies for {variable} on day {day}")
+        plt.tight_layout()
         plt.show()
-    
+        
+        
 def plot_data_ejercicio1_b(_df: pd.DataFrame, variable):
     # Convert timestamp to datetime
     _df[lb_timestamp] = pd.to_datetime(_df[lb_timestamp], format='%d.%m.%Y %H:%M')
