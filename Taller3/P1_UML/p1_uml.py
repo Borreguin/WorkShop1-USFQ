@@ -8,6 +8,8 @@ from statsmodels.tsa.seasonal import seasonal_decompose
 import numpy as np
 import skfuzzy as fuzz
 from scipy import stats
+from sklearn.ensemble import IsolationForest
+from sklearn.cluster import KMeans
 
 def prepare_data():
     script_path = os.path.dirname(os.path.abspath(__file__))
@@ -48,9 +50,6 @@ def plot_data_ejercicio1(_df: pd.DataFrame, variable, legend):
     plt.title(legend)
     plt.tight_layout()  # Ajusta el diseño de los subplots para evitar superposiciones
     plt.show()  # Mostrar el gráfico
-
-from sklearn.ensemble import IsolationForest
-from sklearn.cluster import KMeans
 
 def plot_data_ejercicio1b(_df: pd.DataFrame, variable, legend):
     _df[lb_timestamp] = pd.to_datetime(_df[lb_timestamp], format='%d.%m.%Y %H:%M')
