@@ -1,5 +1,7 @@
 import datetime as dt
 from typing import List
+
+import pandas as pd
 import pyomo.environ as pyo
 import re
 
@@ -22,6 +24,14 @@ class TSP:
         self.average_distance_for_city = get_best_max_distance_for_cities(distancias)
         self.cal_min_max_distances()
 
+    def get_statistics(self):
+        return {
+            "distancia_minima_nodos": self.min_distance,
+            "distancia_maxima_nodos": self.max_distance,
+            "distancia_promedio_nodos": self.average_distance,
+            "distancia_total_minima_posible": self.min_possible_distance,
+            "distancia_total_maxima_posible": self.max_possible_distance
+        }
     def cal_min_max_distances(self):
         # 1000 , 1500
         medium_low_distance = (self.min_distance + self.average_distance) / 2
@@ -152,50 +162,87 @@ class TSP:
         plotear_ruta(self.ciudades, ruta, mostrar_anotaciones)
 
 
-def study_case_1():
+def study_case_1(n_cities = 10):
     # tal vez un loop para probar 10, 20, 30, 40, 50 ciudades?
-    n_cities = 10
     ciudades, distancias = generar_ciudades_con_distancias(n_cities)
     heuristics = []
     tolerance = 0.20
     time_limit = 30
-    tee = False
+    tee = True
     tsp = TSP(ciudades, distancias, heuristics)
     ruta = tsp.encontrar_la_ruta_mas_corta(tolerance, time_limit, tee)
     tsp.plotear_resultado(ruta)
+    distance = calculate_path_distance(distancias, ruta)
+    statistics = tsp.get_statistics()
+    statistics.update({
+        "n_cities": n_cities,
+        "distance": distance
+    })
+    return statistics
 
-def study_case_2():
+
+
+def study_case_2(with_heuristics=True):
     n_cities = 70
     ciudades, distancias = generar_ciudades_con_distancias(n_cities)
-    # con heuristicas
-    heuristics = ['limitar_funcion_objetivo']
-    # sin heuristicas
-    # heuristics = []
-    tsp = TSP(ciudades, distancias, heuristics)
+    heuristics = ['limitar_funcion_objetivo'] if with_heuristics else []
     tolerance = 0.20
     time_limit = 40
     tee = True
+    tsp = TSP(ciudades, distancias, heuristics)
     ruta = tsp.encontrar_la_ruta_mas_corta(tolerance, time_limit, tee)
     tsp.plotear_resultado(ruta, False)
+    distance = calculate_path_distance(distancias, ruta)
+    statistics = tsp.get_statistics()
+    statistics.update({
+        "n_cities": n_cities,
+        "distance": distance,
+        "ruta": ruta,
+        "with_heuristics": with_heuristics
+    })
+    return statistics
 
 def study_case_3():
-    n_cities = 100
+    n_cities = 10
     ciudades, distancias = generar_ciudades_con_distancias(n_cities)
     # con heuristicas
     heuristics = ['vecino_cercano']
     # sin heuristicas
     # heuristics = []
     tsp = TSP(ciudades, distancias, heuristics)
-    tolerance = 0.1
-    time_limit = 60
+    tolerance = 0.2
+    time_limit = 120
     tee = True
     ruta = tsp.encontrar_la_ruta_mas_corta(tolerance, time_limit, tee)
     tsp.plotear_resultado(ruta, False)
 
+def ej1():
+    # CASO DE ESTUDIO 1
+    results = []
+    for n in [10, 20, 30, 40, 50]:
+        result = study_case_1(n)
+        results.append(result)
+
+    df = pd.DataFrame(results)
+    df = df[['n_cities', 'distance', 'distancia_minima_nodos', 'distancia_maxima_nodos',
+                'distancia_promedio_nodos', 'distancia_total_minima_posible', 'distancia_total_maxima_posible']]
+    print(df)
+    print(df.to_markdown(index=True))
 
 if __name__ == "__main__":
     print("Se ha colocado un límite de tiempo de 30 segundos para la ejecución del modelo.")
     # Solve the TSP problem
-    study_case_1()
-    # study_case_2()
+    #ej1()
+
+    # CASO DE ESTUDIO 2
+    # Correr study_case_2 sin heurísticas
+    results_without_heuristics = study_case_2(with_heuristics=False)
+
+    # Correr study_case_2 con heurísticas
+    results_with_heuristics = study_case_2(with_heuristics=True)
+
+    # Comparar resultados
+    comparison_df = pd.DataFrame([results_without_heuristics, results_with_heuristics])
+
+    # CASO DE ESTUDIO 3
     # study_case_3()
