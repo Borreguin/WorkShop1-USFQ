@@ -42,6 +42,13 @@ Se observa que AGLOMERATIVO JERARQUICO clusteriza los patrones de CO2 en dos gru
 
 Se observa que el AGLOMERATIVO JERARQUICO clusteriza los patrones de Temperatura en tres grupos, el cluster 0 corresponde a los dias entre semana o dias laborables (Lunes a Viernes), mientras que el cluste 1 representa los fines de semana (Sabado y Domingo)
 
+### C. Encontrar anomalías – análisis univariable
+Se encuentran algunas anomalias analizando las graficas:
+
+![alt text](graph_uni/anomaliaCO2.png)
+![alt text](graph_uni/anomaliaTEMP.png)
+
+Se puede identicar varios valores atípicos tanto para KMEANS como para AGLOMERATIVO JERARQUICO.
 
 # CONCLUSIONES
 - En términos generales el método de aglomeración jerárquica realizo una mejor clusterizacion de todos los casos.
