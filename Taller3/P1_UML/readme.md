@@ -2,43 +2,33 @@
 ## Taller 3 de inteligencia artificial
 ## EJERCICIO 1
 
-Para este ejercicio se generaron grafos, en las cuales cada baldosa recorrible representa un nodo.
-
-Se utilizó y comparó 3 algoritmos de búsqueda para encontrar la ruta de salida de cada laberinto, estos son:
-- BFS
-- A estrella
-- Busqueda Bidireccional
-
-
+Para este ejercicio se generaron agrupaciones con KMEANS, y AGLOMERATIVO JERARQUICO, en las cuales OBTUVIMOS LO SIGUIENTE:
 
 # Resultados
 
-## Laberinto 1
+### A. Plotear las variables
+#### Grafico de los patrones diarios de cada varianble.
+![alt text](images/image.png)
+#### Grafico de la insicencia por hora de la variable CO2(Se observa en las areas mas sombreadas que la vairbale CO2 tiene mayor incidencia, esto desde las 10h00 hasta las 17h00).
+![alt text](images/image2.png)
+#### Grafico de la insicencia por hora de la variable Temperatura (Se observa el aumento de temperatura desde las 4H00, esto se relaciona con el aumento de CO2 de la grafica anterior, se identtifica que esto es causado en un horario laboral).
+![alt text](images/image3.png)
 
-### BFS
-![lab1BFS](/Taller2/images/laberinto1.txt_BFS.gif)
-### A Estrella
-![lab1AE](/Taller2/images/laberinto1.txt_A_estrella.gif)
-### Busqueda Bidireccional
-![lab1BB](/Taller2/images/laberinto1.txt_Busqueda_Bidireccional.gif)
 
-## Laberinto 2
+Las dos variables se observa que estan relacionadas, si aumenta CO2, aumenta la temperatura del edificio de manera general
 
-### BFS
-![lab2BFS](/Taller2/images/laberinto2.txt_BFS.gif)
-### A Estrella
-![lab2AE](/Taller2/images/laberinto2.txt_A_estrella.gif)
-### Busqueda Bidireccional
-![lab2BB](/Taller2/images/laberinto2.txt_Busqueda_Bidireccional.gif)
+### B. Encontrar patrones – análisis univariable
 
-## Laberinto 3
+Para obtener un analisis univariable, lo que se realizo primero fue una reducción de dimensionalida de los patrones mediante PCA, ya que cada uno tiene 24 componentes. Como resultado de esa reduccion se tuvo la siguiente gráfica con 2 componentes por patrón:
 
-### BFS
-![lab3BFS](/Taller2/images/laberinto3.txt_BFS.gif)
-### A Estrella
-![lab3AE](/Taller2/images/laberinto3.txt_A_estrella.gif)
-### Busqueda Bidireccional
-![lab3BB](/Taller2/images/laberinto3.txt_Busqueda_Bidireccional.gif)
+Posteriormente se realizó la clusterizacion mediante los dos metodos propuestos.
+### KMEANS
+
+Se observa que KMEANS clusteriza los patrones de CO2 en dos grupos, el primero corresponde a los dias entre semana o dias laborables (Lunes a Viernes), mientras que en el otro grupo se encuentran los fines de semana (Sabado y Domingo)
+
+
+
+
 
 # CONCLUSIONES
 Para comparar el comportamiento, efectividad y rapidez establecimos las siguientes métricas para evaluar los algoritmos:
