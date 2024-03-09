@@ -1,5 +1,5 @@
 import os
-from Taller3.P1_UML.p1_uml_util import *
+from p1_uml_util import *
 
 
 def prepare_data():
@@ -27,3 +27,5 @@ if __name__ == "__main__":
     df = prepare_data()
     plot_data(df, lb_V005_vent01_CO2, lb_V022_vent02_CO2, "CO2")
     plot_data(df, lb_V006_vent01_temp_out, lb_V023_vent02_temp_out, "Temperature")
+
+

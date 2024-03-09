@@ -4,7 +4,6 @@ import pyomo.environ as pyo
 import re
 
 
-
 from Taller3.P2_TSP.util import generar_ciudades_con_distancias, plotear_ruta, get_min_distance, get_max_distance, \
     get_average_distance, get_best_max_distance_for_cities, delta_time_mm_ss, get_path, calculate_path_distance
 
@@ -109,8 +108,6 @@ class TSP:
         # Initialize empty set for dynamic constraints (optional)
         # _model.subtour_constraint = pyo.ConstraintList()
 
-
-
         # Resolver el modelo
         solver = pyo.SolverFactory('glpk')
         solver.options['mipgap'] = tolerance
@@ -147,22 +144,23 @@ class TSP:
         return path
 
 
-
     def plotear_resultado(self, ruta: List[str], mostrar_anotaciones: bool = True):
         plotear_ruta(self.ciudades, ruta, mostrar_anotaciones)
 
 
 def study_case_1():
     # tal vez un loop para probar 10, 20, 30, 40, 50 ciudades?
-    n_cities = 10
-    ciudades, distancias = generar_ciudades_con_distancias(n_cities)
-    heuristics = []
-    tolerance = 0.20
-    time_limit = 30
-    tee = False
-    tsp = TSP(ciudades, distancias, heuristics)
-    ruta = tsp.encontrar_la_ruta_mas_corta(tolerance, time_limit, tee)
-    tsp.plotear_resultado(ruta)
+    n_ciudades = [4]
+    for ciudades in n_ciudades:
+        n_cities = ciudades
+        ciudades, distancias = generar_ciudades_con_distancias(n_cities)
+        heuristics = []
+        tolerance = 0.20
+        time_limit = 120
+        tee = True
+        tsp = TSP(ciudades, distancias, heuristics)
+        ruta = tsp.encontrar_la_ruta_mas_corta(tolerance, time_limit, tee)
+        tsp.plotear_resultado(ruta)
 
 def study_case_2():
     n_cities = 70
@@ -196,6 +194,7 @@ def study_case_3():
 if __name__ == "__main__":
     print("Se ha colocado un límite de tiempo de 30 segundos para la ejecución del modelo.")
     # Solve the TSP problem
+
     study_case_1()
     # study_case_2()
     # study_case_3()
