@@ -1,4 +1,8 @@
 import os
+import matplotlib.pyplot as plt
+from datetime import time
+import seaborn as sns
+from sklearn.cluster import KMeans
 from p1_uml_util import *
 
 
@@ -25,9 +29,7 @@ def plot_data(_df: pd.DataFrame, lb1, lb2, legend):
     plt.show()
 
 def plot_data_ejercicio1(_df: pd.DataFrame, variable, legend):
-    import matplotlib.pyplot as plt
-    from datetime import time
-    import seaborn as sns
+    
     _df[lb_timestamp] = pd.to_datetime(_df[lb_timestamp], format='%d.%m.%Y %H:%M')
     y_min = _df[variable].min()
     y_max = _df[variable].max()
@@ -36,7 +38,7 @@ def plot_data_ejercicio1(_df: pd.DataFrame, variable, legend):
         print(df_to_plot)
         plt.subplot(1, 24, i+1)
         #plt.plot(df_to_plot.index, df_to_plot[variable], label=f"{i}:00 h")
-        sns.boxplot(x=df_to_plot[lb_timestamp].dt.time, y=variable, data=df_to_plot, showfliers=False, color=(i/24, 0.5, 1/(i+1)))
+        sns.boxplot(x=df_to_plot[lb_timestamp].dt.hour, y=variable, data=df_to_plot, showfliers=False, color=(i/24, 0.5, 1/(i+1)))
         plt.ylim(y_min, y_max) 
         plt.xlabel("")
         
@@ -47,8 +49,29 @@ def plot_data_ejercicio1(_df: pd.DataFrame, variable, legend):
     plt.show()  # Mostrar el gráfico
 
 
+def plot_data_kmeans(_df: pd.DataFrame, variable):
+    n = 0
+    _df[lb_timestamp] = pd.to_datetime(_df[lb_timestamp], format='%d.%m.%Y %H:%M')
+    
+    for x in range(1,5):
+        df_to_plot_x=_df[_df[lb_timestamp].dt.hour == x]
+        for y in range(1,5):
+            df_to_plot_y=_df[_df[lb_timestamp].dt.hour == y]
+            n += 1
+            plt.subplot(4, 4, n)
+            plt.subplots_adjust(hspace=0.5, wspace=0.5)
+            sns.regplot(x=df_to_plot_x[variable], y=df_to_plot_y[variable]) # regression plot
+            #plt.ylabel(y.split()[0] + ' ' + y.split()[1] if len(y.split()) > 1 else y)
+    plt.tight_layout()  # Ajusta el diseño de los subplots para evitar superposiciones
+    plt.show()  # Mostrar el gráfico
+
+    def kmeans_clustering (_df: pd.DataFrame, variable):
+        km = KMeans(n_clusters = 3, n_jobs = 4, random_state=21)
+        km.fit(X)
+    
 if __name__ == "__main__":
     df = prepare_data()
     #plot_data(df, lb_V005_vent01_CO2, lb_V022_vent02_CO2, "CO2")
     #plot_data(df, lb_V006_vent01_temp_out, lb_V023_vent02_temp_out, "Temperature")
-    plot_data_ejercicio1(df, lb_V005_vent01_CO2, "CO2")
+    #plot_data_ejercicio1(df, lb_V005_vent01_CO2, "CO2")
+    plot_data_kmeans(df,lb_V005_vent01_CO2)
