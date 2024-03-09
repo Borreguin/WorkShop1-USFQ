@@ -49,29 +49,44 @@ def plot_data_ejercicio1(_df: pd.DataFrame, variable, legend):
     plt.show()  # Mostrar el gráfico
 
 
-def plot_data_kmeans(_df: pd.DataFrame, variable):
+def plot_data_correlation(_df: pd.DataFrame, variable, i: int):
     n = 0
     _df[lb_timestamp] = pd.to_datetime(_df[lb_timestamp], format='%d.%m.%Y %H:%M')
     
-    for x in range(1,5):
+    for x in range(i,i+5):
         df_to_plot_x=_df[_df[lb_timestamp].dt.hour == x]
-        for y in range(1,5):
+        for y in range(i,i+5):
             df_to_plot_y=_df[_df[lb_timestamp].dt.hour == y]
             n += 1
-            plt.subplot(4, 4, n)
+            plt.subplot(5, 5, n)
             plt.subplots_adjust(hspace=0.5, wspace=0.5)
             sns.regplot(x=df_to_plot_x[variable], y=df_to_plot_y[variable]) # regression plot
             #plt.ylabel(y.split()[0] + ' ' + y.split()[1] if len(y.split()) > 1 else y)
+            plt.xlabel("")
+            plt.ylabel("")
+
+    plt.title(f"hours correlation: {i} hasta {(i+5)}")        
     plt.tight_layout()  # Ajusta el diseño de los subplots para evitar superposiciones
+        
     plt.show()  # Mostrar el gráfico
 
-    def kmeans_clustering (_df: pd.DataFrame, variable):
-        km = KMeans(n_clusters = 3, n_jobs = 4, random_state=21)
-        km.fit(X)
+def kmeans_clustering (_df: pd.DataFrame, variable):
+    df[lb_timestamp] = pd.to_datetime(_df[lb_timestamp], format='%d.%m.%Y %H:%M')
+
+    caracteristicas = ["sepal_length", "sepal_width", "petal_length", "petal_width"]
+    X = iris[caracteristicas]
+    y = iris["species"]
+    g = sns.pairplot(X, kind="reg", vars=caracteristicas)
+    km = KMeans(n_clusters = 3, n_jobs = 4, random_state=21)
+    km.fit(X)
+    sns.pairplot(iris[["sepal_length", "sepal_width"] + ["species"]], hue="species",height=2)
     
 if __name__ == "__main__":
     df = prepare_data()
     #plot_data(df, lb_V005_vent01_CO2, lb_V022_vent02_CO2, "CO2")
     #plot_data(df, lb_V006_vent01_temp_out, lb_V023_vent02_temp_out, "Temperature")
-    #plot_data_ejercicio1(df, lb_V005_vent01_CO2, "CO2")
-    plot_data_kmeans(df,lb_V005_vent01_CO2)
+    plot_data_ejercicio1(df, lb_V006_vent01_temp_out, "CO2")
+    
+    plot_data_correlation(df,lb_V006_vent01_temp_out,10)
+    #kmeans_clustering (df,lb_V005_vent01_CO2)
+
