@@ -18,3 +18,20 @@ Windows: https://winglpk.sourceforge.net/
 Linux: apt-get install -y -qq glpk-utils
 
 Mac:  brew install glpk
+
+# 1. Uso de Parendizaje no Supervisado
+
+## A. Plotear las variables
+Presentar un gráfico por cada variable que muestre sus valores superpuestos por cada día. Para propósito de explicación, la gráfica anterior muestra un ejemplo de una
+2  variable de presencia solar que no corresponde a este set de datos, pero sirve de ilustración.
+
+## B. Encontrar patrones – análisis univariable
+Utilizando cualquier técnica de aprendizaje no supervisado, encontrar los patrones diarios que existen en el data set, para cada variable individual. Utilizar al menos dos técnicas para verificar su consistencia entre las dos técnicas.
+## C. Encontrar anomalías – análisis univariable
+Es posible que ciertos perfiles diarios en el set de datos no pertenezcan a los patrones diarios descubiertos en el literal B. ¿Cómo detectarlos?
+## D. Encontrar patrones – análisis multivariable
+De manera similar al literal B, encontrar los patrones diarios que existen en el data set, para cada par de variables, es decir, las dos de la parte Norte Este y las dos de la parte Sur Oeste. Utilizar al menos dos técnicas para verificar su consistencia entre las dos técnicas.
+## E. Encontrar anomalías – análisis multivariable
+De manera similar al literal C, encontrar anomalías, pero de los dos pares de variables.
+## F. Conclusiones
+Se podrá encontrar alguna relación entre la parte Norte Este y Sur Oeste del edificio, ¿Qué pudieran sugerir los patrones y las anomalías encontradas?

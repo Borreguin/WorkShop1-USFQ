@@ -6,7 +6,9 @@ from sklearn.preprocessing import RobustScaler
 from sklearn.cluster import KMeans
 import warnings
 warnings.filterwarnings("ignore")
-
+from fastdtw import fastdtw
+from scipy.spatial.distance import euclidean
+import numpy as np
 def prepare_data():
     script_path = os.path.dirname(os.path.abspath(__file__))
     data_path = os.path.join(script_path, "data")
@@ -61,6 +63,7 @@ def plot_heatmap(df: pd.DataFrame, variable: str,legend:str):
     plt.xlabel('Day and Hour of the Week')
     plt.ylabel('Week of the Year')
     plt.title(f'Heatmap of {legend} over Time')
+    plt.savefig(f'./images/{legend}_heatmap.png')
     plt.show()
 
 
@@ -120,6 +123,7 @@ def plot_clusters(df: pd.DataFrame, field: str,legend:str):
     plt.xlabel('Day and Hour of the Week')
     plt.ylabel('Week of the Year')
     plt.title(f'Clustered Heatmap of {legend} over Time')
+    plt.savefig(f'./images/{legend}_clustered_heatmap.png')
     plt.show()
 
 
@@ -167,8 +171,7 @@ def plot_data_by_day_and_hour(_df: pd.DataFrame, lb: str, legend: str,line_color
     ax.set_xlabel('Hora')
     ax.set_ylabel(legend)
     # No añadimos la leyenda ya que todas las líneas son del mismo color y no hay distinción entre los días
-
-    plt.show()
+    plt.savefig(f'./images/{legend}_diario.png')
     # No añadimos la leyenda ya que todas las líneas son del mismo color y no hay distinción entre los días
 
     plt.show()
@@ -239,6 +242,19 @@ def group_df_by_day(_df: pd.DataFrame):
     df_by_day = _df.resample('D').mean()
     return df_by_day
 
+def plot_heatmap_multivariable(_df: pd.DataFrame, lb1: str, lb2: str, legend1: str, legend2: str):
+    # Creando la figura y los ejes para el gráfico
+    fig, ax = plt.subplots(figsize=(12, 6))
+
+    # Creando el gráfico de dispersión
+    h = ax.hist2d(_df[lb1], _df[lb2], bins=(50, 50), cmap='viridis')
+
+    # Configurando los ejes y la barra de colores
+    ax.set_xlabel(legend1)
+    ax.set_ylabel(legend2)
+    plt.colorbar(h[3], ax=ax)
+
+    plt.show()
 
 def plot_multivariable_analisis(_df: pd.DataFrame, lb1: str, lb2: str):
     # Creando la figura y los ejes para el gráfico
@@ -257,8 +273,62 @@ def plot_multivariable_analisis(_df: pd.DataFrame, lb1: str, lb2: str):
 def multivariable_analisis(_df,lb1,lb2):
     # df = prepare_data()
     df_norm = normalize_z_score(_df[[lb1,lb2]])
-    _df['cluster'] = make_kmeans_clustering(df_norm, 2)
-    plot_multivariable_analisis(_df,)
+    _df['cluster'] = make_kmeans_clustering(df_norm, 3)
+    plot_dtw_analysis_cluster(_df, lb1, lb2, 'cluster')
+
+def plot_dtw_analysis_cluster(_df, label1, label2, cluster_col):
+    # Verificar que las etiquetas y la columna de cluster existan en el DataFrame
+
+    # Calculando la distancia DTW entre las series temporales de las etiquetas especificadas
+    distance, path = fastdtw(_df[label1].values, _df[label2].values, dist=euclidean)
+
+    # Imprimir la distancia DTW
+    print(f"DTW distance between {label1} and {label2}: {distance}")
+
+    # Preparar los datos para la visualización del camino DTW
+    x_coords, y_coords = zip(*path)
+
+    # Crear la figura para el gráfico
+    plt.figure(figsize=(12, 6))
+
+    # Obtener los clusters únicos
+    clusters = _df[cluster_col].unique()
+
+    # Graficar una línea por cada cluster
+    for cluster in clusters:
+        cluster_indices = _df[_df[cluster_col] == cluster].index
+        plt.plot(np.array(x_coords)[cluster_indices], np.array(y_coords)[cluster_indices], '-', linewidth=2,
+                 label=f'Cluster {cluster}')
+
+    # Añadir etiquetas y título al gráfico
+    plt.xlabel(label1)
+    plt.ylabel(label2)
+    plt.title(f'DTW Path between {label1} and {label2}')
+    plt.legend()
+    plt.show()
+def plot_dtw_analisis(_df,cluster_col):
+    # Define the time series data
+    time_series_1 = df[['V005_vent01_CO2', 'V006_vent01_temp_out']]
+    time_series_2 = df[['V022_vent02_CO2', 'V023_vent02_temp_out']]
+
+    # Calculate the DTW distance between the time series data
+    distance_1, path_1 = fastdtw(time_series_1.values, time_series_2.values, dist=euclidean)
+    distance_2, path_2 = fastdtw(time_series_2.values, time_series_2.values, dist=euclidean)
+
+    # Print the DTW distances
+    print(f"DTW distance between V005_vent01_CO2 and V006_vent01_temp_out: {distance_1}")
+    print(f"DTW distance between V022_vent02_CO2 and V023_vent02_temp_out: {distance_2}")
+
+    # Separate the x and y coordinates
+    x_coords, y_coords = zip(*path_1)
+
+    # Plot the DTW path
+    plt.figure(figsize=(12, 6))
+    plt.plot(x_coords, y_coords, 'b-', linewidth=2)
+    plt.xlabel('V005_vent01_CO2')
+    plt.ylabel('V006_vent01_temp_out')
+    plt.title('DTW Path between V005_vent01_CO2 and V006_vent01_temp_out')
+    plt.show()
 
 
 def alternative_main():
@@ -277,11 +347,36 @@ def univariable_experiment(_df):
         plot_clusters(df_kmeans, lb, legend)
 
 
+def plot_data_by_day_2(_df: pd.DataFrame, lb1, lb2, legend1, legend2):
+    # Asumiendo que las últimas 1000 filas son las que quieres graficar
+    df_to_plot = _df.tail(1000)
+
+    # Creando la figura y los ejes
+    fig, ax1 = plt.subplots(figsize=(20, 6))
+
+    # Graficando la primera serie de datos con el eje Y izquierdo
+    color = 'tab:blue'
+    ax1.set_xlabel('Timestamp')
+    ax1.set_ylabel(legend1, color=color)
+    ax1.plot(df_to_plot.index, df_to_plot[lb1], label=lb1, color=color)
+    ax1.tick_params(axis='y', labelcolor=color)
+
+    # Creando un segundo eje Y para la segunda serie de datos
+    ax2 = ax1.twinx()
+    color = 'tab:red'
+    ax2.set_ylabel(legend2, color=color)
+    ax2.plot(df_to_plot.index, df_to_plot[lb2], label=lb2, color=color)
+    ax2.tick_params(axis='y', labelcolor=color)
+
+    # Mostrando las leyendas
+    fig.tight_layout()
+    ax1.legend(loc='upper left')
+    ax2.legend(loc='upper right')
+
+    plt.show()
+
 if __name__ == "__main__":
     # multivariable_analisis(df,lb_V005_vent01_CO2,lb_V006_vent01_temp_out)
     df = prepare_data()
     univariable_experiment(df)
-
-
-    # plot_all_unique_variables(df,plot_boxplot_by_hour)
-
+    # multivariable_analisis(df,lb_V005_vent01_CO2,lb_V006_vent01_temp_out)
