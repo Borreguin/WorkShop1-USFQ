@@ -62,12 +62,12 @@ def plot_data_ejercicio1b(_df: pd.DataFrame, variable, legend):
         df_to_plot=_df[_df['day'] == day]
 
         # Perform KMeans clustering
-        kmeans = KMeans(n_clusters=10)
+        kmeans = KMeans(n_clusters=24)
         df_to_plot['kmeans_cluster'] = kmeans.fit_predict(df_to_plot[[variable]])
 
         # Perform Fuzzy C-means clustering
         data_2d = df_to_plot[variable].values.reshape(-1, 1).T  # reshape the data to 2D
-        fcm = fuzz.cmeans(data_2d, c=10, m=2, error=0.005, maxiter=1000)
+        fcm = fuzz.cmeans(data_2d, c=24, m=2, error=0.005, maxiter=1000)
         df_to_plot['fcm_cluster'] = np.argmax(fcm[1], axis=0)
 
         # Perform anomaly detection with Isolation Forest
@@ -102,11 +102,11 @@ def plot_data_ejercicio1_b(_df: pd.DataFrame, variable):
     _df['day'] = _df[lb_timestamp].dt.dayofweek
 
     # Perform KMeans clustering
-    kmeans = KMeans(n_clusters=10)
+    kmeans = KMeans(n_clusters=24)
     _df['kmeans_cluster'] = kmeans.fit_predict(_df[[variable]])
 
     # Perform Fuzzy C-means clustering
-    fcm = fuzz.cmeans(_df[[variable]].T, c=10, m=2, error=0.005, maxiter=1000)
+    fcm = fuzz.cmeans(_df[[variable]].T, c=24, m=2, error=0.005, maxiter=1000)
     _df['fcm_cluster'] = np.argmax(fcm[1], axis=0)
 
     # Perform anomaly detection with Isolation Forest
@@ -114,7 +114,7 @@ def plot_data_ejercicio1_b(_df: pd.DataFrame, variable):
     _df['anomaly'] = isolation_forest.fit_predict(_df[[variable]])
 
     # Plot clusters
-    for i in range(10):
+    for i in range(24):
         plt.figure(figsize=(10, 5))
         plt.scatter(range(len(_df[_df['kmeans_cluster'] == i])), _df[_df['kmeans_cluster'] == i][variable], color='blue')
         plt.scatter(len(_df[_df['kmeans_cluster'] == i])//2, kmeans.cluster_centers_[i], color='red')  # plot the KMeans centroid
@@ -188,6 +188,7 @@ if __name__ == "__main__":
     df = prepare_data()
     #plot_data(df, lb_V005_vent01_CO2, lb_V022_vent02_CO2, "CO2")
     #plot_data(df, lb_V006_vent01_temp_out, lb_V023_vent02_temp_out, "Temperature")
-    plot_data_ejercicio1b(df, lb_V005_vent01_CO2, "CO2")
-    # plot_data_ejercicio1_d(df, lb_V005_vent01_CO2, lb_V022_vent02_CO2)
+    #plot_data_ejercicio1b(df, lb_V005_vent01_CO2, "CO2")
+    # plot_data_ejercicio1_b(df, lb_V005_vent01_CO2)
+    plot_data_ejercicio1_d(df, lb_V005_vent01_CO2, lb_V022_vent02_CO2)
     
