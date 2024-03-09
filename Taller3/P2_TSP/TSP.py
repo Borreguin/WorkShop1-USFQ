@@ -175,7 +175,7 @@ def study_case_2():
     # heuristics = []
     tsp = TSP(ciudades, distancias, heuristics)
     tolerance = 0.20
-    time_limit = 40
+    time_limit = 120
     tee = True
     ruta = tsp.encontrar_la_ruta_mas_corta(tolerance, time_limit, tee)
     tsp.plotear_resultado(ruta, False)
@@ -198,6 +198,6 @@ def study_case_3():
 if __name__ == "__main__":
     print("Se ha colocado un límite de tiempo de 30 segundos para la ejecución del modelo.")
     # Solve the TSP problem
-    study_case_1()
-    # study_case_2()
+    # study_case_1()
+    study_case_2()
     # study_case_3()
