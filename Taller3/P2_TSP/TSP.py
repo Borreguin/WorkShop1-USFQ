@@ -95,24 +95,38 @@ class TSP:
 
         # Añadiendo limites a la función objetivo como una heurística
         if "sin_cruces" in self.heuristics:
+            def compute_orientation(x1, y1, x2, y2, x3, y3):
+                return (y2 - y1) * (x3 - x2) - (y3 - y2) * (x2 - x1)
+
+            def check_intersection(x1, y1, x2, y2, x3, y3, x4, y4):
+                orientation1 = compute_orientation(x1, y1, x2, y2, x3, y3)
+                orientation2 = compute_orientation(x1, y1, x2, y2, x4, y4)
+                orientation3 = compute_orientation(x3, y3, x4, y4, x1, y1)
+                orientation4 = compute_orientation(x3, y3, x4, y4, x2, y2)
+
+                if orientation1 * orientation2 < 0 and orientation3 * orientation4 < 0:
+                    return True  # Segments intersect
+                else:
+                    return False  # Segments do not intersect
+
             def rule_sin_cruces(model, i, j):
                 if i == j:
                     return pyo.Constraint.Skip
+
+                x1, y1 = self.ciudades[i]
+                x2, y2 = self.ciudades[j]
+
                 for k in model.N:
                     if k != i and k != j:
-                        expr = model.x[i, j] + model.x[j, k] <= 1
-                        return expr
+                        x3, y3 = self.ciudades[k]
+                        for l in model.N:
+                            if l != i and l != j and l != k:
+                                x4, y4 = self.ciudades[l]
+                                if check_intersection(x1, y1, x2, y2, x3, y3, x4, y4):
+                                    return model.x[i, j] + model.x[j, k] + model.x[k, l] + model.x[l, i] <= 3
                 return pyo.Constraint.Skip
 
             _model.no_cross = pyo.Constraint(_model.N, _model.M, rule=rule_sin_cruces)
-
-            def subtour_elimination_rule(model, i, j):
-                if i != j:
-                    return model.u[i] - model.u[j] + n_cities * model.x[i, j] <= n_cities - 1
-                else:
-                    return pyo.Constraint.Skip
-
-            _model.subtour_elimination = pyo.Constraint(_model.U, _model.N, rule=subtour_elimination_rule)
 
         if "limitar_funcion_objetivo" in self.heuristics:
             _model.obj_lower_bound = pyo.Constraint(expr=_model.obj >= self.min_possible_distance)
@@ -338,13 +352,13 @@ if __name__ == "__main__":
     Para sin_heuristica, distancia: 726.901149719755, tiempo: 0:00:00.954094
     '''
 
-    # solutions = {}
-    #
-    # heuristics = ['sin_cruces']
-    # tsp, ruta, tsp_sin, ruta_sin = study_case_3(10, 0.10, 60, True, heuristics)
-    # solutions['con_heuristica'] = [tsp, ruta]
-    # solutions['sin_heuristica'] = [tsp_sin, ruta_sin]
-    #
-    # for solution in solutions:
-    #     print(f"Para {solution}, distancia: {solutions[solution][0].distance}, "
-    #             f"tiempo: {solutions[solution][0].execution_time}")
+    solutions = {}
+
+    heuristics = ['sin_cruces']
+    tsp, ruta, tsp_sin, ruta_sin = study_case_3(30, 0.05, 120, True, heuristics)
+    solutions['con_heuristica'] = [tsp, ruta]
+    solutions['sin_heuristica'] = [tsp_sin, ruta_sin]
+
+    for solution in solutions:
+        print(f"Para {solution}, distancia: {solutions[solution][0].distance}, "
+                f"tiempo: {solutions[solution][0].execution_time}")
