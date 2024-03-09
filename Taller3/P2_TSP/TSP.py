@@ -94,6 +94,26 @@ class TSP:
         # Heurísticas:
 
         # Añadiendo limites a la función objetivo como una heurística
+        if "sin_cruces" in self.heuristics:
+            def rule_sin_cruces(model, i, j):
+                if i == j:
+                    return pyo.Constraint.Skip
+                for k in model.N:
+                    if k != i and k != j:
+                        expr = model.x[i, j] + model.x[j, k] <= 1
+                        return expr
+                return pyo.Constraint.Skip
+
+            _model.no_cross = pyo.Constraint(_model.N, _model.M, rule=rule_sin_cruces)
+
+            def subtour_elimination_rule(model, i, j):
+                if i != j:
+                    return model.u[i] - model.u[j] + n_cities * model.x[i, j] <= n_cities - 1
+                else:
+                    return pyo.Constraint.Skip
+
+            _model.subtour_elimination = pyo.Constraint(_model.U, _model.N, rule=subtour_elimination_rule)
+
         if "limitar_funcion_objetivo" in self.heuristics:
             _model.obj_lower_bound = pyo.Constraint(expr=_model.obj >= self.min_possible_distance)
             _model.obj_upper_bound = pyo.Constraint(expr=_model.obj <= self.max_possible_distance)
@@ -169,7 +189,11 @@ def study_case_2(n_cities, tolerance, time_limit, tee, heuristics):
     ruta = tsp.encontrar_la_ruta_mas_corta(tolerance, time_limit, tee)
     tsp.plotear_resultado(ruta, False)
 
-    return tsp, ruta
+    tsp_sin = TSP(ciudades, distancias, [])
+    ruta_sin = tsp_sin.encontrar_la_ruta_mas_corta(tolerance, time_limit, tee)
+    tsp_sin.plotear_resultado(ruta_sin, False)
+
+    return tsp, ruta, tsp_sin, ruta_sin
 
 def study_case_3(n_cities, tolerance, time_limit, tee, heuristics):
     ciudades, distancias = generar_ciudades_con_distancias(n_cities)
@@ -177,7 +201,11 @@ def study_case_3(n_cities, tolerance, time_limit, tee, heuristics):
     ruta = tsp.encontrar_la_ruta_mas_corta(tolerance, time_limit, tee)
     tsp.plotear_resultado(ruta, False)
 
-    return tsp, ruta
+    tsp_sin = TSP(ciudades, distancias, [])
+    ruta_sin = tsp_sin.encontrar_la_ruta_mas_corta(tolerance, time_limit, tee)
+    tsp_sin.plotear_resultado(ruta_sin, False)
+
+    return tsp, ruta, tsp_sin, ruta_sin
 
 
 if __name__ == "__main__":
@@ -233,68 +261,90 @@ if __name__ == "__main__":
     # solutions = {}
     #
     # heuristics = ['limitar_funcion_objetivo']
-    # tsp, ruta = study_case_2(120, 0.20, 120, True, heuristics)
+    # tsp, ruta, tsp_sin, ruta_sin = study_case_2(20, 0.20, 120, True, heuristics)
     # solutions['con_heuristica'] = [tsp, ruta]
-    #
-    # heuristics = []
-    # tsp, ruta = study_case_2(120, 0.20, 120, True, heuristics)
-    # solutions['sin_heuristica'] = [tsp, ruta]
+    # solutions['sin_heuristica'] = [tsp_sin, ruta_sin]
     #
     # for solution in solutions:
     #     print(f"Para {solution}, distancia: {solutions[solution][0].distance}, "
     #           f"tiempo: {solutions[solution][0].execution_time}")
 
     '''
-    Para con_heuristica, distancia: 1558.250325102994, tiempo: 0:00:40.164015
-    Para sin_heuristica, distancia: 1489.6196678078243, tiempo: 0:00:40.220753
+    Para con_heuristica, distancia: 1558.250325102994, tiempo: 0:00:40.194639
+    Para sin_heuristica, distancia: 1563.6203758773668, tiempo: 0:00:40.250727
     
     Answer: En el tiempo de ejecucion notamos que no hay diferencia entre los 
     dos algoritmos, sin embargo, la distancia si es diferente, y es mejor la distancia
-    sin heuristica, por lo que podemos decir que la heuristica no es buena para este caso.
-    Quiza si le aumentamos el tiempo maximo de ejecucion podriamos ver mejores resultados.
+    con heuristica.
     
-    Para con_heuristica, distancia: 1558.250325102994, tiempo: 0:02:00.187157
-    Para sin_heuristica, distancia: 1489.6196678078243, tiempo: 0:02:00.217129
+    Si le aumentamos el tiempo de computo a 120 segundos, el resultado es:
     
-    Probamos poniendo un limite de 120 segundos, y nos dio el mismo resultado. Lo
-    que nos da a entender que la heuristica no es buena para este problema.
+    Para con_heuristica, distancia: 1558.250325102994, tiempo: 0:02:00.263367
+    Para sin_heuristica, distancia: 1446.9146529109034, tiempo: 0:02:00.204524
+    
+    Por lo que la heuristica es buena para sacar resultados mas rapidos, pero
+    pierde eficacia cuando se le da mas tiempo para hacer calculos.
     
     Probamos la heuristica con pocas ciudades, y el algoritmo no encuentra una 
     respuesta ni solucion, por lo que esta heuristica no funciona para pocas ciudades.
     
-    Sin embargo, cuando probamos con mas ciudades los resultados con la heuristica
-    son mejores, ya que encuentra una distancia mejor que el algoritmo sin heuristica.
-    Los resultados adjuntos son para 120 ciudades.
+    Para con_heuristica, distancia: 0, tiempo: 0:00:00.064021
+    Para sin_heuristica, distancia: 771.3699844082084, tiempo: 0:00:00.346119
     
-    Para con_heuristica, distancia: 2064.324514299455, tiempo: 0:01:48.063817
-    Para sin_heuristica, distancia: 2166.1683409945917, tiempo: 0:02:00.975900
+    Sin embargo, cuando probamos con mas ciudades los resultados con la heuristica
+    no son tann buenos, ya que sin heuristica encuentra distancias menores.
+    Los resultados adjuntos son para el calculo de 120 ciudades.
+    
+    Para con_heuristica, distancia: 2064.324514299455, tiempo: 0:01:59.198407
+    Para sin_heuristica, distancia: 1836.8987616272466, tiempo: 0:02:00.848938
     
     '''
     # solutions = {}
     #
     # heuristics = ['vecino_cercano']
-    # tsp, ruta = study_case_3(20, 0.10, 60, True, heuristics)
+    # tsp, ruta, tsp_sin, ruta_sin = study_case_3(60, 0.10, 30, True, heuristics)
     # solutions['con_heuristica'] = [tsp, ruta]
-    #
-    # heuristics = []
-    # tsp, ruta = study_case_3(20, 0.10, 60, True, heuristics)
-    # solutions['sin_heuristica'] = [tsp, ruta]
+    # solutions['sin_heuristica'] = [tsp_sin, ruta_sin]
     #
     # for solution in solutions:
     #     print(f"Para {solution}, distancia: {solutions[solution][0].distance}, "
     #           f"tiempo: {solutions[solution][0].execution_time}")
 
     '''
-    Para con_heuristica, distancia: 1860.5849359671888, tiempo: 0:01:00.385505
-    Para sin_heuristica, distancia: 1896.2938227104403, tiempo: 0:01:00.616954
+    Para con_heuristica, distancia: 1860.5849359671888, tiempo: 0:01:00.402269
+    Para sin_heuristica, distancia: 1843.3138822726253, tiempo: 0:01:00.522899
     
-    Answer: En este caso, la heuristica si nos dio un resultado mejor, el tiempo
-    de ejecucion es el mismo para los dos, sin embargo, la distancia es mejor para
-    el algoritmo que usa la heuristica del vecino cercano.
+    Answer: En este caso, el algoritmo funciona mejor sin el uso de la heuristica
+    ya que encuentra una distancia menor en el mismo tiempo de ejecucion.
+    
+    Probamos para 120 ciudades a ver si hay una mejora, y encontramos que esta heuristica
+    funciona mejor para mas ciudades ya que encuentra una distancia menor.
+    
+    Para con_heuristica, distancia: 1881.8523466910974, tiempo: 0:01:00.487912
+    Para sin_heuristica, distancia: 2048.256820321997, tiempo: 0:01:00.893955
+
+    Probamos para un menor tiempo de ejecucion (30 segundos) y los resultados
+    son mejores, por ende llegamos a la conclusion que tuvimos con la heuristica 
+    anterior, para ejecuciones mas rapidos, esta heuristica da mejores resultados.
+    
+    Para con_heuristica, distancia: 1399.359166137796, tiempo: 0:00:30.200888
+    Para sin_heuristica, distancia: 1457.7855368285611, tiempo: 0:00:30.175974
+    
     Sin embargo, esta heuristica no es buena para el problema cuando el numero de ciudades
     es menor, se intento correr el mismo algoritmo con 20 ciudades, y los resultados
     son mejores para el algoritmo sin heuristica.
     
-    Para con_heuristica, distancia: 731.2632929644172, tiempo: 0:00:00.369940
-    Para sin_heuristica, distancia: 698.001975055342, tiempo: 0:00:00.491536
+    Para con_heuristica, distancia: 731.2632929644172, tiempo: 0:00:00.328847
+    Para sin_heuristica, distancia: 726.901149719755, tiempo: 0:00:00.954094
     '''
+
+    # solutions = {}
+    #
+    # heuristics = ['sin_cruces']
+    # tsp, ruta, tsp_sin, ruta_sin = study_case_3(10, 0.10, 60, True, heuristics)
+    # solutions['con_heuristica'] = [tsp, ruta]
+    # solutions['sin_heuristica'] = [tsp_sin, ruta_sin]
+    #
+    # for solution in solutions:
+    #     print(f"Para {solution}, distancia: {solutions[solution][0].distance}, "
+    #             f"tiempo: {solutions[solution][0].execution_time}")
