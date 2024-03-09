@@ -19,11 +19,12 @@ Linux: apt-get install -y -qq glpk-utils
 
 Mac:  brew install glpk
 
-# 1. Uso de Parendizaje no Supervisado
+# 1. Uso de Aprendizaje no Supervisado
 
 ## A. Plotear las variables
 Presentar un gráfico por cada variable que muestre sus valores superpuestos por cada día. Para propósito de explicación, la gráfica anterior muestra un ejemplo de una
 2  variable de presencia solar que no corresponde a este set de datos, pero sirve de ilustración.
+### Ventilación Norte Este
 
 ## B. Encontrar patrones – análisis univariable
 Utilizando cualquier técnica de aprendizaje no supervisado, encontrar los patrones diarios que existen en el data set, para cada variable individual. Utilizar al menos dos técnicas para verificar su consistencia entre las dos técnicas.
