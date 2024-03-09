@@ -50,9 +50,32 @@ def plot_data_ejercicio1(_df: pd.DataFrame, variable, legend):
     plt.show()  # Mostrar el gráfico
 
 from sklearn.ensemble import IsolationForest
+from sklearn.cluster import KMeans
 
-from sklearn.ensemble import IsolationForest
+def plot_data_ejercicio1b(_df: pd.DataFrame, variable, legend):
+    _df[lb_timestamp] = pd.to_datetime(_df[lb_timestamp], format='%d.%m.%Y %H:%M')
+    y_min = _df[variable].min()
+    y_max = _df[variable].max()
 
+    # Perform KMeans clustering
+    kmeans = KMeans(n_clusters=24)
+    _df['kmeans_cluster'] = kmeans.fit_predict(_df[[variable]])
+
+    plt.figure(figsize=(24, 6))  # Adjust the size of the figure
+    for i in range(24):
+        df_to_plot=_df[_df[lb_timestamp].dt.hour == i]
+        print(df_to_plot)
+        plt.subplot(1, 24, i+1)
+        # Convert time to seconds past midnight
+        time_seconds = df_to_plot[lb_timestamp].dt.minute * 60 + df_to_plot[lb_timestamp].dt.second
+        plt.scatter(time_seconds, df_to_plot[variable], c=df_to_plot['kmeans_cluster'], cmap='hsv')
+        plt.ylim(y_min, y_max) 
+        plt.xlabel(f"{i}:00")
+        plt.ylabel("")
+        plt.title(f"{legend} at {i}:00")
+        plt.tight_layout()  # Adjust the layout of the subplots to avoid overlaps
+        plt.show()
+    
 def plot_data_ejercicio1_b(_df: pd.DataFrame, variable):
     # Convert timestamp to datetime
     _df[lb_timestamp] = pd.to_datetime(_df[lb_timestamp], format='%d.%m.%Y %H:%M')
@@ -148,6 +171,6 @@ if __name__ == "__main__":
     df = prepare_data()
     #plot_data(df, lb_V005_vent01_CO2, lb_V022_vent02_CO2, "CO2")
     #plot_data(df, lb_V006_vent01_temp_out, lb_V023_vent02_temp_out, "Temperature")
-    #plot_data_ejercicio1_b(df, lb_V005_vent01_CO2)
-    plot_data_ejercicio1_d(df, lb_V005_vent01_CO2, lb_V022_vent02_CO2)
+    plot_data_ejercicio1b(df, lb_V005_vent01_CO2, "CO2")
+    # plot_data_ejercicio1_d(df, lb_V005_vent01_CO2, lb_V022_vent02_CO2)
     
