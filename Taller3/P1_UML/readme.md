@@ -23,27 +23,32 @@ Para obtener un analisis univariable, lo que se realizo primero fue una reducci�
 
 Posteriormente se realizó la clusterizacion mediante los dos metodos propuestos.
 ### KMEANS
+![alt text](graph_uni/co2_kmeans.png)
+![alt text](graph_uni/co2_kmeans_1.png)
+Se observa que KMEANS clusteriza los patrones de CO2 en dos grupos, el cluster 0 corresponde a los dias entre semana o dias laborables (Lunes a Viernes), mientras que el cluste 1 representa los fines de semana (Sabado y Domingo)
 
-Se observa que KMEANS clusteriza los patrones de CO2 en dos grupos, el primero corresponde a los dias entre semana o dias laborables (Lunes a Viernes), mientras que en el otro grupo se encuentran los fines de semana (Sabado y Domingo)
+![alt text](graph_uni/temp_kmeans.png)
+![alt text](graph_uni/temp_kmeans_1.png)
 
+Se observa que KMEANS no clusteriza los patrones de temperatura de una manera adecuada, ya que ambos clusters estan casi sobrepuestos, el cluster 0 corresponde a los dias entre semana o dias laborables (Lunes a Viernes), mientras que el cluste 1 representa los fines de semana (Sabado y Domingo)
 
+### AGLOMERATIVO JERARQUICO
+![alt text](graph_uni/co2_aj.png)
+![alt text](graph_uni/co2_aj_1.png)
+Se observa que AGLOMERATIVO JERARQUICO clusteriza los patrones de CO2 en dos grupos, el cluster 0 corresponde a los dias entre semana o dias laborables (Lunes a Viernes), mientras que el cluste 1 representa los fines de semana (Sabado y Domingo)
 
+![alt text](graph_uni/temp_aj.png)
+![alt text](graph_uni/temp_aj_1.png)
 
+Se observa que el AGLOMERATIVO JERARQUICO clusteriza los patrones de Temperatura en tres grupos, el cluster 0 corresponde a los dias entre semana o dias laborables (Lunes a Viernes), mientras que el cluste 1 representa los fines de semana (Sabado y Domingo)
+
+### C. Encontrar anomalías – análisis univariable
+Se encuentran algunas anomalias analizando las graficas:
+
+![alt text](graph_uni/anomaliaCO2.png)
+![alt text](graph_uni/anomaliaTEMP.png)
+
+Se puede identicar varios valores atípicos tanto para KMEANS como para AGLOMERATIVO JERARQUICO.
 
 # CONCLUSIONES
-Para comparar el comportamiento, efectividad y rapidez establecimos las siguientes métricas para evaluar los algoritmos:
-- Nodos de la ruta (distancia de la ruta).
-- Nodos visitados (distancia de las visitas).
-- Tiempo de ejecución de las búsquedas.
-
-Se manejan laberintos de diferente profundidad, el más pequeño cuenta con 43 nodos , el mediano cuenta con 201 nodos y el más grande cuenta con 1270 nodos. 
-
-![resulF](/Taller2/images/Resultados_P1.jpg)
-
-- Todos los algoritmos encontraron la misma ruta, a excepción del laberinto 1, donde la busqueda bidireccional generó una ruta con una baldosa adicional, ya que el punto de encuentro no se localizó en la ruta de los otros algoritmos, la cual es la más corta.
-
-- En tiempos de ejecucion, de manera general la busqueda bidireccional es el algoritmo más rapido, inclusive en casos donde este no encontró la ruta más corta como en el laberinto 1. Igualmente fue el más rapido en el laberinto 3, a pesar de que fue el que visitó más nodos (1104 nodos visitados)
-
-- Con respecto a los nodos visitados (procesamiento de la ruta), el algoritmo BFS es el que consume más recursos, a excepción del laberinto 3 comentado en el punto anterior.
-
- 
+- En términos generales el método de aglomeración jerárquica realizo una mejor clusterizacion de todos los casos.
