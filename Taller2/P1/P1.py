@@ -1,7 +1,7 @@
 import os, sys
 project_path = os.path.dirname(__file__)
 sys.path.append(project_path)
-from P1_MazeLoader import MazeLoader
+from .P1_MazeLoader import MazeLoader
 
 
 def study_case_1():
@@ -30,4 +30,4 @@ def study_case_3():
 
 
 if __name__ == '__main__':
-    study_case_1()
+    study_case_2()

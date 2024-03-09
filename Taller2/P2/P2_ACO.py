@@ -1,9 +1,11 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.colors import LinearSegmentedColormap
+import math
 
+np.random.seed(123)
 class AntColonyOptimization:
-    def __init__(self, start, end, obstacles, grid_size=(10, 10), num_ants=10, evaporation_rate=0.1, alpha=0.1, beta=15):
+    def __init__(self, start, end, obstacles, grid_size=(10, 10), num_ants=50, evaporation_rate=0.2, alpha=0.2, beta=15):
         self.start = start
         self.end = end
         self.obstacles = obstacles
@@ -65,15 +67,24 @@ class AntColonyOptimization:
 
             # Escoger el mejor camino por su tamaño?
             # --------------------------
-            all_paths.sort(key=lambda x: len(x))
+            all_paths.sort(key=lambda x: self.weight_path(x))
             best_path = all_paths[0]
 
             self._evaporate_pheromones()
             self._deposit_pheromones(best_path)
 
-            if self.best_path is None or len(best_path) <= len(self.best_path):
+            if self.best_path is None or len(best_path) <= len(self.best_path) and self.end in best_path:
                 self.best_path = best_path
             # --------------------------
+
+    def weight_path(self, coordinates):
+        total_path = 0
+        for i in range(len(coordinates) - 1):
+            x1, y1 = coordinates[i]
+            x2, y2 = coordinates[i + 1]
+            distance = math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2)
+            total_path += distance
+        return total_path
 
     def plot(self):
         cmap = LinearSegmentedColormap.from_list('pheromone', ['white', 'green', 'red'])
@@ -118,7 +129,4 @@ def study_case_2():
 
 if __name__ == '__main__':
     study_case_1()
-    # study_case_2()
-
-
-
+    #study_case_2()

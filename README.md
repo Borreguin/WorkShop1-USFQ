@@ -1,10 +1,15 @@
-# WorkShop-USFQ
-## Taller 3 de inteligencia artificial
+# WorkShop1-USFQ
+## Taller 2 de inteligencia artificial
 
 - **Nombre del grupo**: xxxxxx
 - **Integrantes del grupo**:
-  * Estudiante 1
-  * Estudiante 2
+
+  * Diego Morales
+  * Carlos Jarrín
+  * Ángel Molina
+  * Fausto Yugcha 
+- **Link**: [Planificación en ClickUp](https://app.clickup.com/3025009/v/s/90030649457)
+
 
 ## GLPK package:
 The GLPK (GNU Linear Programming Kit) package is intended for solving large-scale linear programming (LP), mixed integer programming (MIP), and other related problems. It is a set of routines written in ANSI C and organized in the form of a callable library.
