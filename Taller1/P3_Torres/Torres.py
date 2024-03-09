@@ -1,3 +1,13 @@
+<<<<<<< HEAD
+
+
+
+
+
+
+if __name__ == '__main__':
+    print("Implementa tu código aquí")
+=======
 def hanoi(num_disks, num_towers):
     if num_disks <= 0 or num_towers <= 0:
         print("Error: Number of disks and towers must be positive integers.")
@@ -20,3 +30,4 @@ num_disks = 3
 num_towers = 3
 
 hanoi(num_disks, num_towers)
+>>>>>>> 787f9e30624b7a3fcddf8419a5f46c2e27ab2fde

@@ -1,3 +1,16 @@
+<<<<<<< HEAD
+
+
+
+
+
+
+
+
+
+if __name__ == '__main__':
+    print("Implementa el código aquí")
+=======
 from collections import deque
 
 class State:
@@ -55,3 +68,4 @@ if solution:
         print(f"Step {i+1}: {state}")
 else:
     print("No solution found.")
+>>>>>>> 787f9e30624b7a3fcddf8419a5f46c2e27ab2fde

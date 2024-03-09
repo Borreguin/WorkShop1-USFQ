@@ -5,7 +5,7 @@ import re
 
 
 
-from Taller3.P2_TSP.util import generar_ciudades_con_distancias, plotear_ruta, get_min_distance, get_max_distance, \
+from .util import generar_ciudades_con_distancias, plotear_ruta, get_min_distance, get_max_distance, \
     get_average_distance, get_best_max_distance_for_cities, delta_time_mm_ss, get_path, calculate_path_distance
 
 
