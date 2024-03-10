@@ -50,5 +50,8 @@ Se encuentran algunas anomalias analizando las graficas:
 
 Se puede identicar varios valores atípicos tanto para KMEANS como para AGLOMERATIVO JERARQUICO.
 
+### D. Encontrar patrones – análisis multivariable
+### E. Encontrar anomalías – análisis multivariable
+
 # CONCLUSIONES
 - En términos generales el método de aglomeración jerárquica realizo una mejor clusterizacion de todos los casos.
