@@ -51,16 +51,16 @@ Esta función realiza una reasignación de aristas en la ruta previamente alcanz
 
 #### Rutas optimizadas:
 
-<img src="images/grafico_1.jpg" width="500" height="350">
-<img src="images/grafico_2.jpg" width="500" height="350">
-<img src="images/grafico_3.jpg" width="500" height="350">
-<img src="images/grafico_4.jpg" width="500" height="350">
-<img src="images/grafico_5.jpg" width="500" height="350">
-<img src="images/grafico_6.jpg" width="500" height="350">
-<img src="images/grafico_7.jpg" width="500" height="350">
-<img src="images/grafico_8.jpg" width="500" height="350">
-<img src="images/grafico_9.jpg" width="500" height="350">
-<img src="images/grafico_10.jpg" width="500" height="350">
-<img src="images/grafico_11.jpg" width="500" height="350">
-<img src="images/grafico_12.jpg" width="500" height="350">
+<img src="images/grafico_1.jpg" width="400" height="300">
+<img src="images/grafico_2.jpg" width="400" height="300">
+<img src="images/grafico_3.jpg" width="400" height="300">
+<img src="images/grafico_4.jpg" width="400" height="300">
+<img src="images/grafico_5.jpg" width="400" height="300">
+<img src="images/grafico_6.jpg" width="400" height="300">
+<img src="images/grafico_7.jpg" width="400" height="300">
+<img src="images/grafico_8.jpg" width="400" height="300">
+<img src="images/grafico_9.jpg" width="400" height="300">
+<img src="images/grafico_10.jpg" width="400" height="300">
+<img src="images/grafico_11.jpg" width="400" height="300">
+<img src="images/grafico_12.jpg" width="400" height="300">
 
