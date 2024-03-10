@@ -9,6 +9,10 @@ warnings.filterwarnings("ignore")
 from fastdtw import fastdtw
 from scipy.spatial.distance import euclidean
 import numpy as np
+from sklearn.decomposition import PCA
+from mpl_toolkits.mplot3d import Axes3D
+import matplotlib.animation as animation
+
 def prepare_data():
     script_path = os.path.dirname(os.path.abspath(__file__))
     data_path = os.path.join(script_path, "data")
@@ -68,6 +72,7 @@ def plot_heatmap(df: pd.DataFrame, variable: str,legend:str):
 
 
 
+
 def create_kmeans(df: pd.DataFrame, field: str, k: int = 2):
     X = df[[field]].values
     kmeans = KMeans(n_clusters=k)
@@ -117,12 +122,13 @@ def plot_clusters(df: pd.DataFrame, field: str,legend:str):
     y_labels = [f"{i}" for i in df_heatmap.index]  # Create y-axis labels
 
     # Create the heatmap
-    plt.figure(figsize=(30, 15))  # Increase the size of the heatmap
+    fig,ax=plt.subplots(1,1,figsize=(30, 15))  # Increase the size of the heatmap
     ax = sns.heatmap(df_heatmap, cmap=['#0000FF', '#00FF00', '#FF0000', '#FFFF00', '#FF00FF'][:k], xticklabels=x_labels)  # Set custom colors for clusters
     ax.set_yticklabels(y_labels, rotation=0)  # Set y-axis labels and make them horizontal
     plt.xlabel('Day and Hour of the Week')
     plt.ylabel('Week of the Year')
     plt.title(f'Clustered Heatmap of {legend} over Time')
+
     plt.savefig(f'./images/{legend}_clustered_heatmap.png')
     plt.show()
 
@@ -176,32 +182,6 @@ def plot_data_by_day_and_hour(_df: pd.DataFrame, lb: str, legend: str,line_color
 
     plt.show()
 
-def plot_boxplot_by_hour(_df: pd.DataFrame, lb: str, legend: str):
-
-    # Tomamos las últimas 1000 observaciones para el gráfico
-    df_to_plot = _df.tail(1000)
-
-    # Extrayendo la hora del índice
-    df_to_plot['hour'] = df_to_plot.index.hour
-
-    # Preparando los datos para el gráfico de caja
-    data_to_plot = [df_to_plot[df_to_plot['hour'] == hour][lb] for hour in range(24)]
-
-    # Creando la figura y los ejes para el gráfico
-    fig, ax = plt.subplots(figsize=(12, 6))
-
-    # Creando el gráfico de caja
-    ax.boxplot(data_to_plot, notch=True, patch_artist=True)
-
-    # Configurando los ejes
-    ax.set_xlabel('Hora')
-    ax.set_ylabel(lb)
-    ax.set_xticklabels(range(24))
-    ax.set_title(f'Distribución de {legend} por hora del día')
-
-    plt.grid(True)
-    plt.show()
-
 
 def plot_all_unique_variables(_df,plotfunc,*args,**kwargs):
     columns_to_plot = {column:name for column,name in alias.items() if column != lb_timestamp}
@@ -237,146 +217,171 @@ def make_kmeans_clustering(_df: pd.DataFrame, n_clusters: int):
     return labels
 
 
-def group_df_by_day(_df: pd.DataFrame):
-    # Agrupando los datos por día
-    df_by_day = _df.resample('D').mean()
-    return df_by_day
 
-def plot_heatmap_multivariable(_df: pd.DataFrame, lb1: str, lb2: str, legend1: str, legend2: str):
-    # Creando la figura y los ejes para el gráfico
-    fig, ax = plt.subplots(figsize=(12, 6))
 
-    # Creando el gráfico de dispersión
-    h = ax.hist2d(_df[lb1], _df[lb2], bins=(50, 50), cmap='viridis')
+def plot_clusters_3d_hour(data, label_x, label_y, title):
+    data['hour'] = data.index.hour
+    data['cluster'] = data['cluster'].astype('category')
 
-    # Configurando los ejes y la barra de colores
-    ax.set_xlabel(legend1)
-    ax.set_ylabel(legend2)
-    plt.colorbar(h[3], ax=ax)
+    fig = plt.figure(figsize=(12, 8))
+    ax = fig.add_subplot(111, projection='3d')
+
+    scatter = ax.scatter(data['hour'],  data[label_x], data[label_y], c=data['cluster'] , alpha=0.1)
+
+    ax.set_xlabel('Hour of Day')
+    ax.set_ylabel(alias[label_x])
+    ax.set_zlabel(alias[label_y])
+    ax.set_title(title)
+
+    categories = np.unique(data['cluster'])
+    colors = [plt.cm.viridis(data['cluster'].cat.codes.unique()[i] / (len(categories) - 1)) for i in
+              range(len(categories))]
+
+    legend_elements = [plt.Line2D([0], [0], marker='o', color='w', label=category,
+                                  markerfacecolor=color, markersize=10) for category, color in zip(categories, colors)]
+
+    ax.legend(handles=legend_elements, title="Cluster")
+
+    # def init():
+    #     return fig,
+    #
+    # def rotate(angle):
+    #     ax.view_init(azim=angle)
+    #     return fig,
+    #
+    # rot_animation = animation.FuncAnimation(fig, rotate, frames=np.arange(0, 360, 10), init_func=init, interval=100,
+    #                                         blit=True)
+    # # Guardando la animación
+    # rot_animation.save(f'./images/Cluster_{label_x}_vs_{label_y}_hour.gif', dpi=60, writer='pillow', fps=5)
 
     plt.show()
 
-def plot_multivariable_analisis(_df: pd.DataFrame, lb1: str, lb2: str):
-    # Creando la figura y los ejes para el gráfico
-    fig, ax = plt.subplots(figsize=(12, 6))
 
-    # Graficando los datos
-    ax.scatter(_df[lb1], _df[lb2], c=_df['cluster'], cmap='viridis', s=50, alpha=0.5)
 
-    # Configurando los ejes
-    ax.set_xlabel(alias[lb1])
-    ax.set_ylabel(alias[lb2])
+def plot_clusters_3d_weekday(data, label_x, label_y, title):
+    # Mapear el día de la semana a un valor numérico (0 = Lunes, 6 = Domingo)
+    data['weekday'] = data.index.dayofweek
+    data['cluster'] = data['cluster'].astype('category')
 
+    fig = plt.figure(figsize=(12, 8))
+    ax = fig.add_subplot(111, projection='3d')
+
+    # Graficar los puntos
+    scatter = ax.scatter(data['weekday'],  data[label_x], data[label_y], c=data['cluster'] , alpha=0.1)
+
+    # Añadir etiquetas y título
+    ax.set_xlabel('Day of Week (0=Monday, 6=Sunday)')
+    ax.set_ylabel(alias[label_x])
+    ax.set_zlabel(alias[label_y])
+    ax.set_title(title)
+
+    # Añadir una barra de color para los clusters
+    # colorbar = fig.colorbar(scatter, ax=ax)
+    # colorbar.set_label('Cluster')
+
+    categories = np.unique(data['cluster'])
+    colors = [plt.cm.viridis(data['cluster'].cat.codes.unique()[i] / (len(categories) - 1)) for i in
+              range(len(categories))]
+
+    # Crea elementos de leyenda
+    legend_elements = [plt.Line2D([0], [0], marker='o', color='w', label=category,
+                                  markerfacecolor=color, markersize=10) for category, color in zip(categories, colors)]
+
+    # Añade la leyenda al gráfico
+    ax.legend(handles=legend_elements, title="Cluster")
+
+    # def init():
+    #     return fig,
+    #
+    # def rotate(angle):
+    #     ax.view_init(azim=angle)
+    #     return fig,
+    #
+    # rot_animation = animation.FuncAnimation(fig, rotate, frames=np.arange(0, 360, 10), init_func=init, interval=100,
+    #                                         blit=True)
+    # # Guardando la animación
+    # rot_animation.save(f'./images/Cluster_{label_x}_vs_{label_y}_weekday.gif', dpi=60, writer='pillow', fps=5)
+
+    plt.show()
+
+
+
+def plot_weekday_cycle(data, label_temp, label_CO2):
+    # Asignar día de la semana a cada timestamp
+    data['day_of_week'] = data.index.day_name()
+    data['hour_of_day'] = data.index.hour
+    # Ordenar los días de la semana
+    weekdays = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
+    data['day_of_week'] = pd.Categorical(data['day_of_week'], categories=weekdays, ordered=True)
+
+    # Agrupar por día de la semana y hora para calcular el promedio
+    weekday_cycle = data.groupby(['day_of_week', 'hour_of_day']).mean().reset_index()
+
+    # Crear la figura
+    fig, axes = plt.subplots(7, 1, figsize=(15, 20), sharex=True)
+
+    for i, day in enumerate(weekdays):
+        ax1 = axes[i]
+        ax2 = ax1.twinx()
+
+        ax1.plot(weekday_cycle[weekday_cycle['day_of_week'] == day]['hour_of_day'],
+                 weekday_cycle[weekday_cycle['day_of_week'] == day][label_temp],
+                 color='tab:red', label='Temperature')
+        ax1.set_ylabel(alias[label_temp], color='tab:red')
+        ax1.tick_params(axis='y', labelcolor='tab:red')
+
+        ax2.plot(weekday_cycle[weekday_cycle['day_of_week'] == day]['hour_of_day'],
+                 weekday_cycle[weekday_cycle['day_of_week'] == day][label_CO2],
+                 color='tab:blue', label='CO2')
+        ax2.set_ylabel(alias[label_CO2], color='tab:blue')
+        ax2.tick_params(axis='y', labelcolor='tab:blue')
+
+        ax1.set_title(day)
+        ax1.legend(loc='upper left')
+        ax2.legend(loc='upper right')
+
+    plt.xlabel('Hour of Day')
+    fig.text(0.04, 0.5, 'Values', va='center', rotation='vertical')
+    plt.tight_layout()
+    plt.savefig(f'./images/{alias[label_CO2]}_vs_{alias[label_temp]}_weekday_cycle.png')
     plt.show()
 
 
 def multivariable_analisis(_df,lb1,lb2):
-    # df = prepare_data()
-    df_norm = normalize_z_score(_df[[lb1,lb2]])
-    _df['cluster'] = make_kmeans_clustering(df_norm, 3)
-    plot_dtw_analysis_cluster(_df, lb1, lb2, 'cluster')
+    df_to_use = _df.copy(deep=True)
+    plot_weekday_cycle(df_to_use, lb1,lb2)
 
-def plot_dtw_analysis_cluster(_df, label1, label2, cluster_col):
-    # Verificar que las etiquetas y la columna de cluster existan en el DataFrame
+    df_pair_cols = df_to_use[[lb1,lb2]].copy(deep=True)
+    df_norm = normalize_robust_scaler(df_pair_cols)
+    pca = PCA(n_components=1)
+    df_to_use['PCA'] = pca.fit_transform(df_norm)
 
-    # Calculando la distancia DTW entre las series temporales de las etiquetas especificadas
-    distance, path = fastdtw(_df[label1].values, _df[label2].values, dist=euclidean)
-
-    # Imprimir la distancia DTW
-    print(f"DTW distance between {label1} and {label2}: {distance}")
-
-    # Preparar los datos para la visualización del camino DTW
-    x_coords, y_coords = zip(*path)
-
-    # Crear la figura para el gráfico
-    plt.figure(figsize=(12, 6))
-
-    # Obtener los clusters únicos
-    clusters = _df[cluster_col].unique()
-
-    # Graficar una línea por cada cluster
-    for cluster in clusters:
-        cluster_indices = _df[_df[cluster_col] == cluster].index
-        plt.plot(np.array(x_coords)[cluster_indices], np.array(y_coords)[cluster_indices], '-', linewidth=2,
-                 label=f'Cluster {cluster}')
-
-    # Añadir etiquetas y título al gráfico
-    plt.xlabel(label1)
-    plt.ylabel(label2)
-    plt.title(f'DTW Path between {label1} and {label2}')
-    plt.legend()
-    plt.show()
-def plot_dtw_analisis(_df,cluster_col):
-    # Define the time series data
-    time_series_1 = df[['V005_vent01_CO2', 'V006_vent01_temp_out']]
-    time_series_2 = df[['V022_vent02_CO2', 'V023_vent02_temp_out']]
-
-    # Calculate the DTW distance between the time series data
-    distance_1, path_1 = fastdtw(time_series_1.values, time_series_2.values, dist=euclidean)
-    distance_2, path_2 = fastdtw(time_series_2.values, time_series_2.values, dist=euclidean)
-
-    # Print the DTW distances
-    print(f"DTW distance between V005_vent01_CO2 and V006_vent01_temp_out: {distance_1}")
-    print(f"DTW distance between V022_vent02_CO2 and V023_vent02_temp_out: {distance_2}")
-
-    # Separate the x and y coordinates
-    x_coords, y_coords = zip(*path_1)
-
-    # Plot the DTW path
-    plt.figure(figsize=(12, 6))
-    plt.plot(x_coords, y_coords, 'b-', linewidth=2)
-    plt.xlabel('V005_vent01_CO2')
-    plt.ylabel('V006_vent01_temp_out')
-    plt.title('DTW Path between V005_vent01_CO2 and V006_vent01_temp_out')
-    plt.show()
+    # _df['cluster'] = make_kmeans_clustering(df_norm, 3)
+    # plot_clusters_3d_weekday(_df, lb1, lb2, f'KMeans Clustering {alias[lb1]} vs {alias[lb2]}')
+    df_to_use['cluster'] = make_kmeans_clustering(np.array(df_to_use['PCA']).reshape(-1, 1), 3)
+    plot_clusters_3d_weekday(df_to_use, lb1, lb2, f'KMeans Clustering {alias[lb1]} vs {alias[lb2]}')
+    plot_clusters_3d_hour(df_to_use, lb1, lb2, f'KMeans Clustering {alias[lb1]} vs {alias[lb2]}')
 
 
-def alternative_main():
-    df = prepare_data()
-    df.fillna(method='ffill', inplace=True) # los valores de NaN se reemplazan por el valor anterior
-    # plot_data(df, lb_V005_vent01_CO2, lb_V022_vent02_CO2, "CO2")
-    # plot_data(df, lb_V006_vent01_temp_out, lb_V023_vent02_temp_out, "Temperature")
 
 def univariable_experiment(_df):
+    df_to_use=_df.copy(deep=True)
     columns_to_plot= {column:name for column,name in alias.items() if column != lb_timestamp}
 
     for lb,legend in columns_to_plot.items():
-        plot_data_by_day_and_hour(_df, lb, legend)
-        plot_heatmap(_df,lb,legend)
-        df_kmeans = create_kmeans(_df, lb, 3)
+        plot_data_by_day_and_hour(df_to_use, lb, legend)
+        plot_heatmap(df_to_use,lb,legend)
+        df_kmeans = create_kmeans(df_to_use, lb, 3)
         plot_clusters(df_kmeans, lb, legend)
 
-
-def plot_data_by_day_2(_df: pd.DataFrame, lb1, lb2, legend1, legend2):
-    # Asumiendo que las últimas 1000 filas son las que quieres graficar
-    df_to_plot = _df.tail(1000)
-
-    # Creando la figura y los ejes
-    fig, ax1 = plt.subplots(figsize=(20, 6))
-
-    # Graficando la primera serie de datos con el eje Y izquierdo
-    color = 'tab:blue'
-    ax1.set_xlabel('Timestamp')
-    ax1.set_ylabel(legend1, color=color)
-    ax1.plot(df_to_plot.index, df_to_plot[lb1], label=lb1, color=color)
-    ax1.tick_params(axis='y', labelcolor=color)
-
-    # Creando un segundo eje Y para la segunda serie de datos
-    ax2 = ax1.twinx()
-    color = 'tab:red'
-    ax2.set_ylabel(legend2, color=color)
-    ax2.plot(df_to_plot.index, df_to_plot[lb2], label=lb2, color=color)
-    ax2.tick_params(axis='y', labelcolor=color)
-
-    # Mostrando las leyendas
-    fig.tight_layout()
-    ax1.legend(loc='upper left')
-    ax2.legend(loc='upper right')
-
-    plt.show()
 
 if __name__ == "__main__":
     # multivariable_analisis(df,lb_V005_vent01_CO2,lb_V006_vent01_temp_out)
     df = prepare_data()
-    univariable_experiment(df)
-    # multivariable_analisis(df,lb_V005_vent01_CO2,lb_V006_vent01_temp_out)
+    df.index = pd.to_datetime(df.index, dayfirst=True)
+
+
+    # univariable_experiment(df)
+    multivariable_analisis(df,lb_V005_vent01_CO2,lb_V006_vent01_temp_out)
+    multivariable_analisis(df, lb_V022_vent02_CO2, lb_V023_vent02_temp_out)
+
