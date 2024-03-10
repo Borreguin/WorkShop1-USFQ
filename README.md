@@ -106,7 +106,6 @@ De manera similar al literal C, encontrar anomalías, pero de los dos pares de v
 
 
 ## F. Conclusiones
-Se podrá encontrar alguna relación entre la parte Norte Este y Sur Oeste del edificio, ¿Qué pudieran sugerir los patrones y las anomalías encontradas?
 
 
 
