@@ -197,24 +197,31 @@ def study_case_2(with_heuristics=True):
     statistics.update({
         "n_cities": n_cities,
         "distance": distance,
-        "ruta": ruta,
         "with_heuristics": with_heuristics
     })
     return statistics
 
-def study_case_3():
-    n_cities = 10
+def study_case_3(with_heuristics=True):
+    n_cities = 100
     ciudades, distancias = generar_ciudades_con_distancias(n_cities)
     # con heuristicas
-    heuristics = ['vecino_cercano']
+    heuristics = ['vecino_cercano'] if with_heuristics else []
     # sin heuristicas
     # heuristics = []
     tsp = TSP(ciudades, distancias, heuristics)
     tolerance = 0.2
     time_limit = 120
-    tee = True
+    tee = False
     ruta = tsp.encontrar_la_ruta_mas_corta(tolerance, time_limit, tee)
     tsp.plotear_resultado(ruta, False)
+    distance = calculate_path_distance(distancias, ruta)
+    statistics = tsp.get_statistics()
+    statistics.update({
+        "n_cities": n_cities,
+        "distance": distance,
+        "with_heuristic": with_heuristics
+    })
+    return statistics
 
 def ej1():
     # CASO DE ESTUDIO 1
@@ -229,11 +236,8 @@ def ej1():
     print(df)
     print(df.to_markdown(index=True))
 
-if __name__ == "__main__":
-    print("Se ha colocado un límite de tiempo de 30 segundos para la ejecución del modelo.")
-    # Solve the TSP problem
-    #ej1()
 
+def ej2():
     # CASO DE ESTUDIO 2
     # Correr study_case_2 sin heurísticas
     results_without_heuristics = study_case_2(with_heuristics=False)
@@ -243,6 +247,39 @@ if __name__ == "__main__":
 
     # Comparar resultados
     comparison_df = pd.DataFrame([results_without_heuristics, results_with_heuristics])
+    print(comparison_df.to_markdown(index=False))
 
     # CASO DE ESTUDIO 3
     # study_case_3()
+
+def ej3():
+    # CASO DE ESTUDIO 3
+    # Ejecutar study_case_3 sin heurística
+    results_without_heuristic = study_case_3(with_heuristics=False)
+
+    # Ejecutar study_case_3 con heurística
+    results_with_heuristic = study_case_3(with_heuristics=True)
+
+    # Crear un DataFrame con los resultados para comparar
+    comparison_results = [results_without_heuristic, results_with_heuristic]
+    comparison_df = pd.DataFrame(comparison_results)
+
+    # Opcional: Reordenar las columnas si es necesario
+    comparison_df = comparison_df[['n_cities', 'distance', 'with_heuristic',
+                                   'distancia_minima_nodos', 'distancia_maxima_nodos',
+                                   'distancia_promedio_nodos', 'distancia_total_minima_posible',
+                                   'distancia_total_maxima_posible']]
+
+    print(comparison_df.to_markdown(index=False))
+
+
+if __name__ == "__main__":
+    print("Se ha colocado un límite de tiempo de 30 segundos para la ejecución del modelo.")
+    # Solve the TSP problem
+    #ej1()
+
+    # CASO DE ESTUDIO 2
+    #ej2()
+
+    # CASO DE ESTUDIO 3
+    ej3()
