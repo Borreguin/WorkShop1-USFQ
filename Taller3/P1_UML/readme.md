@@ -64,6 +64,7 @@ Se observa que AGLOMERATIVO JERARQUICO y KMEANS clusteriza los patrones de CO2 c
 ### E. Encontrar anomalías – análisis multivariable
 ![alt text](graph_multi/var_0_2_anomalia.png)
 ![alt text](graph_multi/var_1_3_anomalia.png)
+
 Se puede identicar varios valores atípicos tanto para KMEANS como para AGLOMERATIVO JERARQUICO. Estos valores coinciden con dias feriados en los que no hubo la misma cantidad de personas en el edificio, igualmente hay valores atípicos de fines de semana en los que se agrupan en el cluster de dias laborables.
 # CONCLUSIONES
 A lo largo de este análisis, hemos aplicado métodos de clustering para identificar patrones y anomalías en datos de CO2 y temperatura dentro de un edificio. Los métodos empleados incluyeron K-Means y Clustering Aglomerativo Jerárquico, y cada uno proporcionó insights valiosos en diferentes contextos.
