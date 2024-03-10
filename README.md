@@ -130,6 +130,20 @@ Subjetivamente,
 |  4 |         50 |   1316.64  |                 2.06155  |                  234.784 |                    114.33  |                          916.586 |                         1309.41  |
 
 
+#### 10 ciudades
+![](/Taller3/P2_TSP/images/SC1_10.png)
+
+#### 20 ciudades
+![](/Taller3/P2_TSP/images/SC1_20.png)
+
+#### 30 ciudades
+![](/Taller3/P2_TSP/images/SC1_30.png)
+
+#### 40 ciudades
+![](/Taller3/P2_TSP/images/SC1_40.png)
+
+#### 50 ciudades
+![](/Taller3/P2_TSP/images/SC1_50.png)
 
 Las soluciones del modelo TSP sin heurísticas muestran un aumento lógico en la distancia total a medida que crece el número de ciudades, lo que es esperado. Para valorar la eficacia de estas 
 soluciones, sería ideal compararlas contra soluciones heurísticas. Las heurísticas podrían ofrecer un buen equilibrio entre calidad de solución y eficiencia computacional.
@@ -141,5 +155,65 @@ El parámetro tee determina si los detalles de la ejecución del solver se impri
 en silencio, sin imprimir nada.
 
 ### Aplicar heurística de límites a la función objetivo 
+
+|   distancia_minima_nodos |   distancia_maxima_nodos |   distancia_promedio_nodos |   distancia_total_minima_posible |   distancia_total_maxima_posible |   n_cities |   distance | with_heuristics   |
+|-------------------------:|-------------------------:|---------------------------:|---------------------------------:|---------------------------------:|-----------:|-----------:|:------------------|
+|                  2.1     |                  251.941 |                    106.548 |                          1121.79 |                          1602.56 |         70 |    1482.02 | False             |
+|                  2.72029 |                  235.996 |                    109.339 |                          1235.45 |                          1764.93 |         70 |    1587.48 | True              |
+
+#### USANDO HEURISTICA
+
+![](/Taller3/P2_TSP/images/SC2_H.png)
+
+#### SIN USAR HEURISTICA
+
+![](/Taller3/P2_TSP/images/SC2_NO_H.png)
+
+
+En este caso específico, la heurística no parece haber mejorado la solución del problema TSP. Esto podría deberse a la estructura específica del conjunto de datos o a que la heurística no está alineada con las características del problema. 
+#### *¿Cuál es la diferencia entre los dos casos?* 
+
+La diferencia entre los dos casos se manifiesta en la distancia total recorrida. Con heurística activa, la ruta es más larga (1587.48) comparada con la ruta sin heurística (1482.02). 
+Esto sugiere que la heurística utilizada puede no estar optimizando la ruta de la manera esperada para este conjunto de datos.
+
+#### *¿Sirve esta heurística para cualquier caso? ¿Cuál pudiera ser una razón?* 
+
+No necesariamente todas las heurísticas son aplicables o mejoran el rendimiento en todos los casos. Una heurística que funciona bien en un conjunto de instancias puede no ser efectiva en otra, dependiendo de la naturaleza del problema y las características específicas de los datos. 
+Por ejemplo, si la heurística está diseñada para favorecer conexiones cercanas y las ciudades están distribuidas de manera uniforme, puede que no ofrezca una ventaja significativa y podría llevar a soluciones que no son las optimas.
+
+
+### Aplicar heurística de vecinos cercanos  
+
+|   n_cities |   distance | with_heuristic   |   distancia_minima_nodos |   distancia_maxima_nodos |   distancia_promedio_nodos |   distancia_total_minima_posible |   distancia_total_maxima_posible |
+|-----------:|-----------:|:-----------------|-------------------------:|-------------------------:|---------------------------:|---------------------------------:|---------------------------------:|
+|        100 |    1915.74 | False            |                 0.894427 |                  268.63  |                    106.204 |                          1536.87 |                          2195.53 |
+|        100 |    1702.73 | True             |                 2.06155  |                  254.005 |                    109.107 |                          1673.09 |                          2390.13 |
+
+#### USANDO HEURISTICA
+
+![](/Taller3/P2_TSP/images/SC3_H.png)
+
+#### SIN USAR HEURISTICA
+
+![](/Taller3/P2_TSP/images/SC3_NO_H.png)
+
+
+
+#### *¿Cuál es la diferencia entre los dos casos?* 
+
+La diferencia entre los dos casos es que la heurística 'vecino cercano' redujo la distancia total recorrida de 1915.74 a 1702.73. Esto indica que la heurística fue efectiva en este escenario particular, generando una ruta más corta.
+
+#### *¿Sirve esta heurística para cualquier caso? ¿Cuál pudiera ser una razón?* 
+
+No, esta heurística no necesariamente funcionará para todos los casos. Su efectividad puede variar según la disposición geográfica de las ciudades, la distribución de las distancias u otros factores o caracteristicas propios del problema o de la data.
+En este caso, parece ser adecuada ya que logró una mejora significativa.
+
+
+## Conclusiones
+
+- Las heurísticas tienen un impacto notable en la solución del problema del viajante de comercio (TSP), donde pueden mejorar o deteriorar las soluciones en comparación con métodos que no utilizan heurísticas, lo que se evidencia en los diferentes casos de estudio analizados.
+- La efectividad de las heurísticas puede variar según la naturaleza del problema y las características específicas de los datos, por lo que es importante evaluar su rendimiento en diferentes escenarios.
+- la elección de la heurística más adecuada requiere un enfoque basado en el conocimiento profundo del problema y la experimentación para identificar la heurística que proporciona los mejores resultados para un conjunto de datos.
+- Las heurísticas proporcionan un equilibrio valioso entre la precisión y la eficiencia computacional, permitiendo obtener soluciones aceptables en un tiempo razonable
 
 

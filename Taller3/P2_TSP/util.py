@@ -48,6 +48,7 @@ def calcular_distancia_total(ruta, distancias):
     return distancia_total
 
 def plotear_ruta(ciudades, ruta, mostrar_anotaciones=True):
+
     if None in ruta:
         print("La ruta contiene valores nulos, no se encontró una solución válida.")
         return
@@ -76,6 +77,7 @@ def plotear_ruta(ciudades, ruta, mostrar_anotaciones=True):
     plt.title('Ubicaciones de las Ciudades y Mejor Ruta')
     plt.legend()
     plt.grid(True)
+    plt.savefig('ruta_optima.png')
     plt.show()
 
 def get_path(edges: dict, initial_city: str, path: List[str]):
