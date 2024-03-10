@@ -1,7 +1,7 @@
 # WorkShop-USFQ
 ## Taller 3 de inteligencia artificial
 
-- **Nombre del grupo**: xxxxxx
+- **Nombre del grupo**: Grupo 3
 - **Integrantes del grupo**:
   * Bryan Calisto
   * Daniel Marín

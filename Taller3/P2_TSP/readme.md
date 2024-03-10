@@ -51,15 +51,16 @@ Esta función realiza una reasignación de aristas en la ruta previamente alcanz
 
 #### Rutas optimizadas:
 
-![G1](images/grafico_1.jpg)
-![G2](images/grafico_2.jpg)
-![G3](images/grafico_3.jpg)
-![G4](images/grafico_4.jpg)
-![G5](images/grafico_5.jpg)
-![G6](images/grafico_6.jpg)
-![G7](images/grafico_7.jpg)
-![G8](images/grafico_8.jpg)
-![G9](images/grafico_9.jpg)
-![G10](images/grafico_10.jpg)
-![G11](images/grafico_11.jpg)
-![G12](images/grafico_12.jpg)
+<img src="images/grafico_1.jpg" width="500" height="350">
+<img src="images/grafico_2.jpg" width="500" height="350">
+<img src="images/grafico_3.jpg" width="500" height="350">
+<img src="images/grafico_4.jpg" width="500" height="350">
+<img src="images/grafico_5.jpg" width="500" height="350">
+<img src="images/grafico_6.jpg" width="500" height="350">
+<img src="images/grafico_7.jpg" width="500" height="350">
+<img src="images/grafico_8.jpg" width="500" height="350">
+<img src="images/grafico_9.jpg" width="500" height="350">
+<img src="images/grafico_10.jpg" width="500" height="350">
+<img src="images/grafico_11.jpg" width="500" height="350">
+<img src="images/grafico_12.jpg" width="500" height="350">
+
