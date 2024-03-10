@@ -4,6 +4,7 @@ import math
 from typing import List
 import datetime as dt
 
+
 from matplotlib import pyplot as plt
 
 random.seed(123) # This fixes the seed for reproducibility
@@ -50,7 +51,7 @@ def plotear_ruta(ciudades, ruta, mostrar_anotaciones=True):
     coordenadas_y.append(coordenadas_y[0])
 
     # Trama de las ubicaciones de las ciudades
-    plt.figure(figsize=(8, 6))
+    plt.figure(figsize=(int(8*0.8), int(6*0.8)))
     plt.scatter(coordenadas_x, coordenadas_y, color='blue', label='Ciudades')
 
     # Trama del mejor camino encontrado
@@ -66,7 +67,16 @@ def plotear_ruta(ciudades, ruta, mostrar_anotaciones=True):
     plt.title('Ubicaciones de las Ciudades y Mejor Ruta')
     plt.legend()
     plt.grid(True)
+    ahora = dt.datetime.now()
+    # Formatear la fecha y hora en un string adecuado para nombres de archivo
+    nombre_archivo = ahora.strftime("grafico_%Y-%m-%d_%H-%M-%S.jpg")
+
+    # Guardar la figura con el nombre que incluye la fecha y hora actuales
+    plt.savefig(nombre_archivo, dpi=300)
     plt.show()
+
+    # Cerrar la figura para liberar memoria
+    plt.close()
 
 def get_path(edges: dict, initial_city: str, path: List[str]):
     next_node = edges.get(initial_city, None)

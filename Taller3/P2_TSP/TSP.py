@@ -2,11 +2,11 @@ import datetime as dt
 from typing import List
 import pyomo.environ as pyo
 import re
+import pandas as pd
+import time
 
-
-
-from Taller3.P2_TSP.util import generar_ciudades_con_distancias, plotear_ruta, get_min_distance, get_max_distance, \
-    get_average_distance, get_best_max_distance_for_cities, delta_time_mm_ss, get_path, calculate_path_distance
+from util import generar_ciudades_con_distancias, plotear_ruta, get_min_distance, get_max_distance, \
+    get_average_distance, get_best_max_distance_for_cities, delta_time_mm_ss, get_path, calculate_path_distance, calcular_distancia
 
 
 class TSP:
@@ -117,8 +117,8 @@ class TSP:
         solver.options['tmlim'] = time_limit
         results = solver.solve(_model, tee=tee)
 
-        execution_time = dt.datetime.now() - start_time
-        print(f"Tiempo de ejecución: {delta_time_mm_ss(execution_time)}")
+        execution_time = delta_time_mm_ss(dt.datetime.now() - start_time)
+        print(f"Tiempo de ejecución: {execution_time}")
         self.print_min_max_distances()
 
         # Mostrar resultados
@@ -144,58 +144,121 @@ class TSP:
         path.append(path[0])
         distance = calculate_path_distance(self.distancias, path)
         print("Distancia total recorrida:", distance)
-        return path
-
-
+        return path, execution_time, distance
 
     def plotear_resultado(self, ruta: List[str], mostrar_anotaciones: bool = True):
         plotear_ruta(self.ciudades, ruta, mostrar_anotaciones)
 
+    def dos_opt(self, ruta):
+        """Implementación del algoritmo 2-opt para mejorar una ruta del TSP."""
+        mejora = True
+        while mejora:
+            mejora = False
+            for i in range(1, len(ruta) - 2):
+                for j in range(i + 1, len(ruta)):
+                    if j - i == 1: continue  # No se intercambia con aristas adyacentes
+                    nueva_ruta = ruta[:i] + ruta[i:j][::-1] + ruta[j:]
+                    distancia_nueva_ruta = calculate_path_distance(self.distancias, nueva_ruta)
+                    distancia_ruta =calculate_path_distance(self.distancias, ruta)
+                    if distancia_nueva_ruta < calculate_path_distance(self.distancias, ruta):
+                        ruta = nueva_ruta
+                        mejora = True
+            break  # Si no hay mejora, termina el loop
+        return ruta, min(distancia_nueva_ruta, distancia_ruta)
+    
 
+from matplotlib import pyplot as plt
 def study_case_1():
     # tal vez un loop para probar 10, 20, 30, 40, 50 ciudades?
+
+    # Lista para almacenar los resultados
+    resultados = pd.DataFrame(columns=['Ciudades', 'Tiempo de ejecucion', 'Distancia recorrida',  'Distancia nueva ruta', 'Distancia nueva ruta (x2)'])
+
+    for i, cities in enumerate([10, 20, 30, 40, 50, 100]):
+        # Configurando el tamaño de la figura para los gráficos
+    
+
+        n_cities = cities
+        ciudades, distancias = generar_ciudades_con_distancias(n_cities)
+        heuristics = []
+        tolerance = 0.20
+        time_limit = 120
+        tee = False
+        tsp = TSP(ciudades, distancias, heuristics)
+        ruta, tiempo_ejecucion, recorrido = tsp.encontrar_la_ruta_mas_corta(tolerance, time_limit, tee)
+        tsp.plotear_resultado(ruta)
+        ruta_mejorada, distancia_nueva_ruta = tsp.dos_opt(ruta)
+        ruta_mejorada2, distancia_nueva_ruta2 = tsp.dos_opt(ruta_mejorada)
+        
+        tsp.plotear_resultado(ruta_mejorada2)
+        
+        # Añade los resultados al DataFrame
+        resultados.loc[len(resultados)] = {'Ciudades': cities, 'Tiempo de ejecucion': tiempo_ejecucion, 'Distancia recorrida': recorrido, 'Distancia nueva ruta': distancia_nueva_ruta, 'Distancia nueva ruta (x2)': distancia_nueva_ruta2}
+
+    print(resultados)
+    resultados.to_excel('resultado_A.xlsx', index=False)
+
+
+def study_case_tee():
+    # tee = True
     n_cities = 10
     ciudades, distancias = generar_ciudades_con_distancias(n_cities)
     heuristics = []
     tolerance = 0.20
-    time_limit = 30
-    tee = False
+    time_limit = 120
+    tee = True
     tsp = TSP(ciudades, distancias, heuristics)
-    ruta = tsp.encontrar_la_ruta_mas_corta(tolerance, time_limit, tee)
+    ruta, tiempo_ejecucion, recorrido = tsp.encontrar_la_ruta_mas_corta(tolerance, time_limit, tee)
     tsp.plotear_resultado(ruta)
-
+    
 def study_case_2():
     n_cities = 70
     ciudades, distancias = generar_ciudades_con_distancias(n_cities)
-    # con heuristicas
-    heuristics = ['limitar_funcion_objetivo']
-    # sin heuristicas
-    # heuristics = []
-    tsp = TSP(ciudades, distancias, heuristics)
-    tolerance = 0.20
-    time_limit = 40
-    tee = True
-    ruta = tsp.encontrar_la_ruta_mas_corta(tolerance, time_limit, tee)
-    tsp.plotear_resultado(ruta, False)
+
+    # Lista para almacenar los resultados
+    resultados = pd.DataFrame(columns=['Heurística', 'Tiempo de ejecucion', 'Distancia recorrida'])
+
+    for heuristica in ['limitar_funcion_objetivo', 'limitar_funcion_objetivo']:
+        heuristics = [heuristica]
+        tsp = TSP(ciudades, distancias, heuristics)
+        tolerance = 0.20
+        time_limit = 40
+        tee = False
+        ruta, tiempo_ejecucion, recorrido = tsp.encontrar_la_ruta_mas_corta(tolerance, time_limit, tee)
+        tsp.plotear_resultado(ruta, False)
+
+        # Añade los resultados al DataFrame
+        resultados.loc[len(resultados)] = {'Heurística': heuristica, 'Tiempo de ejecucion': tiempo_ejecucion, 'Distancia recorrida': recorrido}
+    print(resultados)
+    resultados.to_excel('resultado_C.xlsx', index=False) 
+
 
 def study_case_3():
     n_cities = 100
     ciudades, distancias = generar_ciudades_con_distancias(n_cities)
-    # con heuristicas
-    heuristics = ['vecino_cercano']
-    # sin heuristicas
-    # heuristics = []
-    tsp = TSP(ciudades, distancias, heuristics)
-    tolerance = 0.1
-    time_limit = 60
-    tee = True
-    ruta = tsp.encontrar_la_ruta_mas_corta(tolerance, time_limit, tee)
-    tsp.plotear_resultado(ruta, False)
+    
+    # Lista para almacenar los resultados
+    resultados = pd.DataFrame(columns=['Heurística', 'Tiempo de ejecucion', 'Distancia recorrida'])
+    for heuristica in ['vecino_cercano', '']:
+        heuristics = [heuristica]
+    
+        tsp = TSP(ciudades, distancias, heuristics)
+        tolerance = 0.1
+        time_limit = 60
+        tee = True
+        ruta, tiempo_ejecucion, recorrido = tsp.encontrar_la_ruta_mas_corta(tolerance, time_limit, tee)
+        tsp.plotear_resultado(ruta, False)
+
+        # Añade los resultados al DataFrame
+        resultados.loc[len(resultados)] = {'Heurística': heuristica, 'Tiempo de ejecucion': tiempo_ejecucion, 'Distancia recorrida': recorrido}
+    print(resultados)
+    resultados.to_excel('resultado_D.xlsx', index=False) 
 
 
 if __name__ == "__main__":
-    print("Se ha colocado un límite de tiempo de 30 segundos para la ejecución del modelo.")
+    #print("Se ha colocado un límite de tiempo de 30 segundos para la ejecución del modelo.")
     # Solve the TSP problem
-    study_case_1()
-    # study_case_2()
-    # study_case_3()
+    study_case_1() #Tiempo limite 120 segundos y tolerancia 0.2 para 10, 20, 30, 40, 50, 100 ciudades y opcional
+    #study_case_tee() #Prueba parámetro tee
+    #study_case_2() #Prueba heuristica limitar_funcion_objetivo: restricciones que las rutas entre nodos deben estar en un intervalo
+    #study_case_3() #Heuristica 2

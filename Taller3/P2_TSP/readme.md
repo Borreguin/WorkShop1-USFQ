@@ -22,3 +22,44 @@ tee=False: Desactiva la visualización en pantalla de la salida del solucionador
 
 ### E
 La inclusión de restricciones adicionales, creadas de la manera apropiada, que no anule la región factible de respuesta, permite depurar y mejorar las soluciones esperadas logrando mejores resultados. Se requiere adecuar estas restricciones cuidando su correcta aplicación a los modelos.
+
+### Opcional
+Para mejorar la ruta alcanzada y encontrar caminos más cortos, se implementó la siguiente función por dos ocasiones consecutivas, lo que considerando hasta 100 ciudades fue suficiente para reducir los caminos y eliminar todos los cruces.
+
+``` 
+    def dos_opt(self, ruta):
+        """Implementación del algoritmo 2-opt para mejorar una ruta del TSP."""
+        mejora = True
+        while mejora:
+            mejora = False
+            for i in range(1, len(ruta) - 2):
+                for j in range(i + 1, len(ruta)):
+                    if j - i == 1: continue  # No se intercambia con aristas adyacentes
+                    nueva_ruta = ruta[:i] + ruta[i:j][::-1] + ruta[j:]
+                    distancia_nueva_ruta = calculate_path_distance(self.distancias, nueva_ruta)
+                    distancia_ruta =calculate_path_distance(self.distancias, ruta)
+                    if distancia_nueva_ruta < calculate_path_distance(self.distancias, ruta):
+                        ruta = nueva_ruta
+                        mejora = True
+            break  # Si no hay mejora, termina el loop
+        return ruta, min(distancia_nueva_ruta, distancia_ruta)
+``` 
+
+Esta función realiza una reasignación de aristas en la ruta previamente alcanzada con el objetivo de minimizar las distancias lo que elimina los cruces totalmente con dos iteraciones y minimiza las distancias:
+
+![Tabla](images/Tabla_opcional.png)
+
+#### Rutas optimizadas:
+
+![G1](images/grafico_1.jpg)
+![G2](images/grafico_2.jpg)
+![G3](images/grafico_3.jpg)
+![G4](images/grafico_4.jpg)
+![G5](images/grafico_5.jpg)
+![G6](images/grafico_6.jpg)
+![G7](images/grafico_7.jpg)
+![G8](images/grafico_8.jpg)
+![G9](images/grafico_9.jpg)
+![G10](images/grafico_10.jpg)
+![G11](images/grafico_11.jpg)
+![G12](images/grafico_12.jpg)
