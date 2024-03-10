@@ -40,7 +40,7 @@ Se observa que AGLOMERATIVO JERARQUICO clusteriza los patrones de CO2 en dos gru
 ![alt text](graph_uni/temp_aj.png)
 ![alt text](graph_uni/temp_aj_1.png)
 
-Se observa que el AGLOMERATIVO JERARQUICO clusteriza los patrones de Temperatura en tres grupos, el cluster 0 corresponde a los dias entre semana o dias laborables (Lunes a Viernes), mientras que el cluste 1 representa los fines de semana (Sabado y Domingo)
+Se observa que el AGLOMERATIVO JERARQUICO clusteriza los patrones de Temperatura en tres grupos, el cluster 0 corresponde a los dias entre semana o dias laborables (Lunes a Viernes), mientras que el cluste 1 representa los fines de semana (Sabado y Domingo). El cluster 2 (verde), son valores que representan a patrones de todos los dias de la semana, pero de fehcas en la estacion Verano.
 
 ### C. Encontrar anomalías – análisis univariable
 Se encuentran algunas anomalias analizando las graficas:
@@ -48,9 +48,19 @@ Se encuentran algunas anomalias analizando las graficas:
 ![alt text](graph_uni/anomaliaCO2.png)
 ![alt text](graph_uni/anomaliaTEMP.png)
 
-Se puede identicar varios valores atípicos tanto para KMEANS como para AGLOMERATIVO JERARQUICO.
+Se puede identicar varios valores atípicos tanto para KMEANS como para AGLOMERATIVO JERARQUICO. Estos valores coinciden con dias feriados en los que no hubo la misma cantidad de persoans en el edificio, igualmente hay valores atípicos de fines de semana en los que se agrupan en el cluster de dias laborables.
 
 ### D. Encontrar patrones – análisis multivariable
+Aqui se realizoó analisis multivariable.
+para todos lo casos se realizo primero reducción de componenetes tanto de la variable CO2 como de la variable temperatura, cada una a 1 componente, esto con el próposito de que los algortimos de clusterizacion represnetes los patrones en dos ejes.
+Para la zona Norte Este del edificio se tiene las siguientes gráficas:
+![alt text](graph_multi/var_1_3.png)
+Se observa que AGLOMERATIVO JERARQUICO y KMEANS clusteriza los patrones de CO2 con Temperatura en dos grupos, el cluster 0 corresponde a los dias entre semana o dias laborables (Lunes a Viernes), mientras que el cluste 1 representa los fines de semana (Sabado y Domingo)
+
+Para la zona Sur Oeste del edificio se tiene las siguientes gráficas:
+![alt text](graph_multi/var_0_2.png)
+Se observa que AGLOMERATIVO JERARQUICO y KMEANS clusteriza los patrones de CO2 con Temperatura en dos grupos, el cluster 0 corresponde a los dias entre semana o dias laborables (Lunes a Viernes), mientras que el cluste 1 representa los fines de semana (Sabado y Domingo)
+
 ### E. Encontrar anomalías – análisis multivariable
 
 # CONCLUSIONES
