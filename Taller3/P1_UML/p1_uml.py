@@ -400,12 +400,6 @@ def multivariable():
     df['aniomesdia'] = df[lb_timestamp].dt.strftime('%Y-%m-%d')
     # Creo una columna con el número de semana
     df['semana'] = df[lb_timestamp].dt.isocalendar().week
-    
-
-
-
-
-
 
 
 
