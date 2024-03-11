@@ -27,6 +27,7 @@
     - [C. Aplicar heurística de límites a la función objetivo](#c-aplicar-heurística-de-límites-a-la-función-objetivo)
     - [D. Aplicar heurística de vecinos cercanos](#d-aplicar-heurística-de-vecinos-cercanos)
     - [E. Conclusiones](#e-conclusiones)
+    - [F. Opcional](#f-opcional) 
 
 
 
@@ -558,6 +559,30 @@ Se encuentra que `GLPK` utiliza MIP como algoritmo principal para encontrar el m
 
 La heurística de vecino más cercano es mejor que `GLPK` sin heurística. La heurística de limitación de función objetivo no lo es. Las exactas razones detrás de estos resultados solo se pueden comprender al comprender el mecanismo de MIP. Intuitivamente el algoritmo de vecino más cercano reduce los posibles candidatos de búsqueda ayudando a `GLPK` a encontrar un mejor óptimo. Intuitivamente la heurística de limitación elimina pedazos del grafo que tienen mejores resultados. Según lo visto en clases y la literatura revisada [3], toda heurística es útil para un espacio limitado de problemas. Predecir para que problemas funcionará la heurística requiere de un conocimiento profundo del funcionamiento del algoritmo de optimización utilizado y probablemente de criterio de experto.
 
+### F. Opcional
+
+Tras revisión de literatura e intento de implementación con el `LMM` ChatGPT se encuentra que las restricciones necesarias para evitar que los caminos se cruzen en TSP son no lineales, y se requiere linealizarlas, lo cual es una tarea muy compleja. Sólamente se logró implementar la siguiente restricción:
+
+```Python
+self.detour_threshold = 0.00000000001
+def detour_penalty_rule(model, i, j, k):
+    if i != j and j != k and i != k:
+        dist_ij = self.distancias[i, j]
+        dist_jk = self.distancias[j, k]
+        dist_ik = self.distancias[i, k]
+
+        # The idea is to enforce that going from i to j to k should not be much longer than going from i to k directly
+        return model.x[i, j] + model.x[j, k] <= 2 + (dist_ij + dist_jk - dist_ik) / self.detour_threshold
+    else:
+        return pyo.Constraint.Skip
+```
+
+Hemos encontrado que esta heurística sólamente funcionó para el caso de 30 ciudades, como se puede ver en la siguiente ilustración. Creemos que esto se debe a que `detour_penalty_rule` analiza grupos de 3 ciudades y evita que se tengan distancias largas entre las 3 ciudades, esto puede evitar que se tengan cruces, pero no lo garantiza, ya que se cumple para cierto grupo de 3 ciudades pero no para otro.
+
+<p align="center">
+  <img src="./Taller3/P2_TSP/results/heuristic_f_30.png" alt="Alt text 1" width="400"/>
+  <img src="./Taller3/P2_TSP/results/heuristic_f_40.png" alt="Alt text 2" width="400"/> 
+</p>
 
 * __Revisión Bibliográfica__
 
