@@ -441,7 +441,7 @@ def plot_pca_and_clusters(pca_df, clus_k, pca):
     
     plt.xlabel('Principal Component 1')
     plt.ylabel('Principal Component 2')
-    plt.title('PCA Biplot with Cluster Visualization')
+    plt.title(f'PCA Biplot with Cluster Visualization (k = {clus_k})')
     plt.legend()
     #plt.colorbar(scatter, label='Cluster')
     plt.grid()
@@ -479,7 +479,7 @@ def plot_pca_and_clusters_subplot(row,col,pca_df_list, names_list, clus_k, pca):
         
         plt.xlabel('Principal Component 1')
         plt.ylabel('Principal Component 2')
-        plt.title(names_list[i])
+        plt.title(f'{names_list[i]} (k = {clus_k[i]})')
         # plt.colorbar(label='Cluster')
         plt.legend()
         plt.grid()
