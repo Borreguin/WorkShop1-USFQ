@@ -78,7 +78,12 @@ Utilizando cualquier técnica de aprendizaje no supervisado, encontrar los patro
 ![](Taller3/P1_UML/images/Temp.%20Vent.%20SW%20Out_clustered_heatmap.png)
 
 ## C. Encontrar anomalías – análisis univariable
-Es posible que ciertos perfiles diarios en el set de datos no pertenezcan a los patrones diarios descubiertos en el literal B. ¿Cómo detectarlos?
+
+Al observar las temperaturas y ventilación de CO2 en el heat map de las 52 semanas del año podemos observar la correlación entre la temperatura y la cantidad de CO2 cada una con el horario laboral del edificio. Al iniciar la jornada laboral  vemos el incremento de temperatura y de CO2, lo mismo ocurre al hacer el análisis por días laborables.
+Al realizar los clusterizados y graficarlos en un nuevo heatmap vemos 3 clusters que vendrían a ser los niveles o intensidad del CO2 y de la temperatura respectivamente, ¿qué datos atípicos podríamos ver y como identificarlos? Estos  vendrían a ser los comportamientos tanto de la temperatura como de CO2 en épocas de invierno (Enero-Marzo) y también de los fines de semana.  Por ejemplo un cluster vendría con datos atípicos de ventilación de CO2  ya que solo aparece en los días laborables y en las primeras y últimas semanas del año, esto respondería a una recircularización del CO2 por temas del invierno. En cambio en la temperatura vemos 3 cluster y el clúster que indica una temperatura mayor vemos un comportamiento anormal los domingos de invierno y es debido a posiblemente un precalentamiento previo para el lunes que es laboral.
+Los clusterizados nos permitieron identificar estos comportamientos anormales al relacionarlos con las semanas del año.
+
+
 ## D. Encontrar patrones – análisis multivariable
 De manera similar al literal B, encontrar los patrones diarios que existen en el data set, para cada par de variables, es decir, las dos de la parte Norte Este y las dos de la parte Sur Oeste. Utilizar al menos dos técnicas para verificar su consistencia entre las dos técnicas.
 
@@ -107,7 +112,18 @@ De manera similar al literal C, encontrar anomalías, pero de los dos pares de v
 
 ## F. Conclusiones
 
+El análisis univariable muestra patrones en relación con los niveles de CO2 y la temperatura dentro del dataset, utilizando un gráfico de calor y una técnica de clusterización se identificó lo siguiente:
 
+1. Tendencias identificadas a través del gráfico de calor:
+- Los niveles de CO2 son significativamente más altos durante las horas de 6 a 18 de lunes a viernes, con picos en los primeros y últimos meses del año. Este patrón se relaciona a una mayor recirculación del aire en el edificio para minimizar las pérdidas de calor.
+- Se observan niveles bajos de CO2 durante la primera y última semana del año, lo cual podría indicar una menor presencia de personal en el edificio debido a las festividades y, por consiguiente, una reducción en la actividad.
+- La temperatura dentro del edificio comienza a incrementarse desde las 4 de la mañana todos los días, excepto los domingos, cuando el aumento empieza a partir de las 5 de la tarde. Este fenómeno se relaciona con sistemas de precalentamiento diseñados para asegurar una temperatura confortable al momento de la llegada del personal. Este patrón se mantiene consistente a lo largo del año.
+- Se registra un incremento general en la temperatura del edificio desde la semana 14 hasta la semana 48, alcanzando su punto más alto entre las semanas 28 y 36. Este aumento corresponde a las temporadas de primavera, verano y el inicio del otoño.
+
+2. Clusterización (k=3) a través del método del codo:
+- La aplicación de la clusterización con k igual a 3 ha permitido distinguir entre patrones usuales y menos comunes, como por ejemplo, niveles anormalmente altos de temperatura o CO2. Esta técnica ha facilitado la identificación de comportamientos típicos y atípicos dentro del dataset, proporcionando una comprensión más profunda de las dinámicas ambientales en el edificio.
+
+Estos hallazgos son fundamentales para entender cómo fluctúan los niveles de CO2 y la temperatura en el edificio a lo largo del día y del año, y podrían indicar la implementación de medidas que mejoran la eficiencia energética y el bienestar de los ocupantes.
 
 
 ## Investigacion Operativa
