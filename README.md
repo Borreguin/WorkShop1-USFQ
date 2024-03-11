@@ -223,6 +223,7 @@ El algoritmo de optimización por colonia de hormigas se puede utilizar efectiva
 
 # Taller 3 
 [Back to Top](#tabla-de-contenidos)
+
 - **Integrantes del grupo con descripción de sus tareas**:
   * Ricardo Loor: 
     * Elaboración código y documentación Problema 2. 
@@ -234,6 +235,7 @@ El algoritmo de optimización por colonia de hormigas se puede utilizar efectiva
     * Elaboración código y documentación Problema 1.
 ## Problema 1: Uso de Aprendizaje No Supervisado
 [Back to Top](#tabla-de-contenidos)
+
 Para el presente estudio se usa el dataset en [https://github.com/Borreguin/WorkShop1-USFQ](https://github.com/Borreguin/WorkShop1-USFQ) que tiene 4 varaibles y su descripción se presenta a continuación:
 
 | Tag_name  | Alias | Descripción |
