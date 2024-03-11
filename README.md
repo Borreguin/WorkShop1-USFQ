@@ -120,7 +120,8 @@ El análisis univariable muestra patrones en relación con los niveles de CO2 y 
 - La temperatura dentro del edificio comienza a incrementarse desde las 4 de la mañana todos los días, excepto los domingos, cuando el aumento empieza a partir de las 5 de la tarde. Este fenómeno se relaciona con sistemas de precalentamiento diseñados para asegurar una temperatura confortable al momento de la llegada del personal. Este patrón se mantiene consistente a lo largo del año.
 - Se registra un incremento general en la temperatura del edificio desde la semana 14 hasta la semana 48, alcanzando su punto más alto entre las semanas 28 y 36. Este aumento corresponde a las temporadas de primavera, verano y el inicio del otoño.
 
-2. Clusterización (k=3) a través del método del codo:
+2. Clusterización usando Kmean (k=3 obtenido 
+   mediante el método del codo):
 - La aplicación de la clusterización con k igual a 3 ha permitido distinguir entre patrones usuales y menos comunes, como por ejemplo, niveles anormalmente altos de temperatura o CO2. Esta técnica ha facilitado la identificación de comportamientos típicos y atípicos dentro del dataset, proporcionando una comprensión más profunda de las dinámicas ambientales en el edificio.
 
 Estos hallazgos son fundamentales para entender cómo fluctúan los niveles de CO2 y la temperatura en el edificio a lo largo del día y del año, y podrían indicar la implementación de medidas que mejoran la eficiencia energética y el bienestar de los ocupantes.
