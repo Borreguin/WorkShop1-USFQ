@@ -270,10 +270,13 @@ Como se puede ver en la gráfica para las columnas del ventilador 01, el método
 
 Como se puede ver es difícil ver los patrones de la segmentación propuesta por kmeans, porque cada día es un eje en el espacio multidimensional, por ejemplo para la salida de temperatura del ventilador 01, tenemos la hora 19 cerca de un centroide que no es de su grupo, por esta razón vamos a realizar la técnica de PCA (análisis de componenetes principales) para visualizar todos los días en una sola gráfica de 2 dimensiones:
 
-Las sigueintes gráficas representa el método de codo con la segmentación de kmenas para cada variable utilizando la técnica de PCA.
+Las siguientes gráficas representa el método de codo con la segmentación de kmenas para cada variable utilizando la técnica de PCA.
 
-![elbow_method_univariable_pca](./Taller3/P1_UML/graficas/elbow_method_univariable.png)
-![kmeans_method_univariable_pca](./Taller3/P1_UML/graficas/kmeans_method_univariable.png)
+![elbow_method_univariable_pca](./Taller3/P1_UML/graficas/elbow_method_univariable_pca.png)
+
+A diferencia del método del codo anterior, sin la técnica del PCA, aquí se sugiere agrupar de tres es decir un k = 3 en las 4 variables.
+
+![kmeans_method_univariable_pca](./Taller3/P1_UML/graficas/kmeans_method_univariable_pca.png)
 
 Con la técnica de PCA se puede visualizar una mejor agrupación, donde cada grupo se encuentra alrededor de su propio centroide, sin embargo aún tenemos algunos puntos alejados de sus centroidos por lo que posiblemente sean anomalías, por eso con el rango intercuartilico hallaremos los valores atípicos.
 
@@ -295,20 +298,22 @@ Como vimos en la gráfica de cluster con PCA los valores más alejados de sus ce
 
 Para el EDA, es importante un análisis multivariado, por lo que combinaremos las variables del ventilador 01 y ventilador 02 para el método de kmeans, obteniendo los siguientes resultados.
 
-![elbow_method_bivariable](./Taller3/P1_UML/graficas/elbow_method_univariable.png)
-![kmeans_method_bivariable](./Taller3/P1_UML/graficas/kmeans_method_univariable.png)
+![elbow_method_bivariable](./Taller3/P1_UML/graficas/elbow_method_bivariable.png)
 
-Como se puede ver cuando se juntan las columnas de CO2 y temperatura de cada ventilador obtenemos otros patrones de los datos, por lo que el método de kmeans sugiere agrupar con k=4, y resulta mas difícil ver para una gráfica de 2 dimensiones. Por lo que realizando la técnica de PCA podemos obtener nuevos patrones que no visualizamos antes.
+Como se puede ver cuando se juntan las columnas de CO2 y temperatura de cada ventilador obtenemos otros patrones de los datos, por lo que el método de kmeans sugiere agrupar con k=4.
 
-Ahora aplicamos la técnica del PCA para el análisis multivariable, obteniendo los resultados siguientes.
+![kmeans_method_bivariable](./Taller3/P1_UML/graficas/kmeans_method_bivariable.png)
 
-![elbow_method_bivariable_pca](./Taller3/P1_UML/graficas/elbow_method_univariable.png)
-![kmeans_method_bivariable_pca](./Taller3/P1_UML/graficas/kmeans_method_univariable.png)
+Resulta más difícil ver para una gráfica de 2 dimensiones la agrupación de tantas variables. Por lo tanto, se realiza la técnica de PCA para poder obtener nuevos patrones visibles.
+
+Los resultados siguientes muestra la técnica del PCA para el análisis multivariable.
+
+![elbow_method_bivariable_pca](./Taller3/P1_UML/graficas/elbow_method_bivariable_pca.png)
+![kmeans_method_bivariable_pca](./Taller3/P1_UML/graficas/kmeans_method_bivariable_pca.png)
 
 Como podemos ver en la gráfica parece que los puntos ya no estan alejados de sus centroidos, indicando una mejor agrupación, pero es necesario descartar las anomalías de este análisis.
 
 ### Anomalías – Análisis multivariable
-
 
 Según el rango intercuartilico de cada grupo tenemos las siguientes anomalias:
 
@@ -330,6 +335,7 @@ En resumen, los patrones y anomalías encontradas mediante el análisis de compo
 Lo que podemos concluir al finalizar el análisis multivariado, es que los valores sí parecen tener una similitud entre los grupos de las horas del ventilador NE y el ventilador SW, a diferencia del grupo morado que a pesar de estar cerca de los mismos valores vemos que en el ventilador uno tiene más tendencia al componente principal 2, un siguiente análisis es ver que variables tienen peso en el eje del componenete principal 2. Sin embargo esta similaridad no se visualiza en el análisis univariado, esto puede deberse a que exista una correlación entre el CO2 y la temperatura de cada ventilador.
 
 Ahora visualizamos el resultado del análisis en las series de los ventiladores obteniendo el siguiente resultado.
+
 ##### Cluster del Análisis univariado en data principal
 ![data_analisis_univariado_time](./Taller3/P1_UML/graficas/data_analisis_univariado_time.png)
 ![data_analisis_univariado_hour](./Taller3/P1_UML/graficas/data_analisis_univariado_hour.png)
