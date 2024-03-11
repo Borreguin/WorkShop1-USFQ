@@ -448,7 +448,7 @@ def problem_d():
 
 if __name__ == "__main__":
     # Solve the TSP problem
-    #print(problem_a())
-    #print(problem_a_naive())
-    # print(problem_c())
+    print(problem_a())
+    print(problem_a_naive())
+    print(problem_c())
     print(problem_d())
