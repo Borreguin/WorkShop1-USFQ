@@ -1,18 +1,12 @@
 # WorkShop1-USFQ
 
 # Tabla de Contenidos
-- [WorkShop1-USFQ](#workshop1-usfq)
-- [Tabla de Contenidos](#tabla-de-contenidos)
 - [Taller 1](#taller-1)
 - [Taller 2](#taller-2)
   - [Problema 1: Uso de Algoritmos de Búsqueda](#problema-1-uso-de-algoritmos-de-búsqueda)
     - [Study Case 1](#study-case-1)
-      - [Tiempos de ejecucion y numero de nodos](#tiempos-de-ejecucion-y-numero-de-nodos)
     - [Study Case 2](#study-case-2)
-      - [Tiempos de ejecucion y numero de nodos](#tiempos-de-ejecucion-y-numero-de-nodos-1)
     - [Study Case 3](#study-case-3)
-      - [Tiempos de ejecucion y numero de nodos](#tiempos-de-ejecucion-y-numero-de-nodos-2)
-      - [Conclusiones](#conclusiones)
   - [Problema 2: Optimización de Colonias de Hormigas](#problema-2-optimización-de-colonias-de-hormigas)
     - [A. Implementación Planteada](#a-implementación-planteada)
     - [B. ¿Qué ocurre con el segundo caso de estudio?](#b-qué-ocurre-con-el-segundo-caso-de-estudio)
