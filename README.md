@@ -330,7 +330,13 @@ En resumen, los patrones y anomalías encontradas mediante el análisis de compo
 Lo que podemos concluir al finalizar el análisis multivariado, es que los valores sí parecen tener una similitud entre los grupos de las horas del ventilador NE y el ventilador SW, a diferencia del grupo morado que a pesar de estar cerca de los mismos valores vemos que en el ventilador uno tiene más tendencia al componente principal 2, un siguiente análisis es ver que variables tienen peso en el eje del componenete principal 2. Sin embargo esta similaridad no se visualiza en el análisis univariado, esto puede deberse a que exista una correlación entre el CO2 y la temperatura de cada ventilador.
 
 Ahora visualizamos el resultado del análisis en las series de los ventiladores obteniendo el siguiente resultado.
+##### Cluster del Análisis univariado en data principal
+![data_analisis_univariado_time](./Taller3/P1_UML/graficas/data_analisis_univariado_time.png)
+![data_analisis_univariado_hour](./Taller3/P1_UML/graficas/data_analisis_univariado_hour.png)
 
+##### Cluster del Análisis Multivariado en data principal
+![data_analisis_bivariado_time](./Taller3/P1_UML/graficas/data_analisis_bivariado_time.png)
+![data_analisis_bivariado_hour](./Taller3/P1_UML/graficas/data_analisis_bivariado_hour.png)
 
 
 ## Problema 2: Investigación Operativa, el problema TSP
