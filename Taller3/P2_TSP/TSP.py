@@ -1,10 +1,19 @@
 import datetime as dt
+from itertools import permutations
 from typing import List
 import pyomo.environ as pyo
 import re
 import random
+import pandas as pd
+import numpy as np
+import time
+import math
 
-
+# Me aseguro que directorio del código siempre sea la carpeta en la que se encuentra el código ------ #
+import os
+script_dir = os.path.dirname(os.path.abspath(__file__))
+os.chdir(script_dir)
+# --------------------------------------------------------------------------------------------------- #
 
 # from Taller3.P2_TSP.util import generar_ciudades_con_distancias, plotear_ruta, get_min_distance, get_max_distance, \
 #     get_average_distance, get_best_max_distance_for_cities, delta_time_mm_ss, get_path, calculate_path_distance
@@ -25,6 +34,7 @@ class TSP:
         self.average_distance_for_city = get_best_max_distance_for_cities(distancias)
         self.cal_min_max_distances()
         self.total_distance = 0.
+        self.optimal_solution_found = None
 
     def cal_min_max_distances(self):
         # 1000 , 1500
@@ -128,8 +138,10 @@ class TSP:
         # Mostrar resultados
         if results.solver.termination_condition == pyo.TerminationCondition.optimal:
             print("Ruta óptima encontrada:")
+            self.optimal_solution_found = True
         else:
             print("No se encontró una solución óptima, la siguiente es la mejor solución encontrada:")
+            self.optimal_solution_found = False
 
         edges = dict()
         valid_paths = []
@@ -153,84 +165,290 @@ class TSP:
 
 
 
-    def plotear_resultado(self, ruta: List[str], mostrar_anotaciones: bool = True):
-        plotear_ruta(self.ciudades, ruta, mostrar_anotaciones)
+    def plotear_resultado(self, 
+                          ruta: List[str], 
+                          mostrar_anotaciones: bool = True,
+                          show_plot: bool = False,
+                          name_plot: str = ""):
+        plotear_ruta(self.ciudades, ruta, mostrar_anotaciones, show_plot, name_plot)
 
 
-def study_case_1():
-    # tal vez un loop para probar 10, 20, 30, 40, 50 ciudades?
-    n_cities = 10
-    ciudades, distancias = generar_ciudades_con_distancias(n_cities)
-    heuristics = []
-    tolerance = 0.20
-    time_limit = 30
-    tee = False
-    tsp = TSP(ciudades, distancias, heuristics)
-    ruta = tsp.encontrar_la_ruta_mas_corta(tolerance, time_limit, tee)
-    tsp.plotear_resultado(ruta)
+    # Function to calculate distance between two points
+    def distance(self, point1, point2):
+        x1, y1 = point1
+        x2, y2 = point2
+        return math.sqrt((x2 - x1)**2 + (y2 - y1)**2)
 
-def study_case_2():
-    n_cities = 70
-    ciudades, distancias = generar_ciudades_con_distancias(n_cities)
-    # con heuristicas
-    heuristics = ['limitar_funcion_objetivo']
-    # sin heuristicas
-    # heuristics = []
-    tsp = TSP(ciudades, distancias, heuristics)
-    tolerance = 0.20
-    time_limit = 40
-    tee = True
-    ruta = tsp.encontrar_la_ruta_mas_corta(tolerance, time_limit, tee)
-    tsp.plotear_resultado(ruta, False)
+    # Function to calculate total distance for a permutation
+    def compute_total_distance(self, data, permutation):
+        total = 0
+        for i in range(len(permutation) - 1):
+            total += self.distance(data[permutation[i]], data[permutation[i+1]])
+        return total
+    
+    # Function to generate m random permutations
+    def random_permutations(self, input_list:list, m:int)->list:
+        permutations = []
+        list_length = len(input_list)
+        # To avoid duplicates, we'll shuffle the list once and then sample from it
+        random.shuffle(input_list)
+        
+        for _ in range(m):
+            permutation = random.sample(input_list, list_length)
+            permutations.append(tuple(permutation))
+        
+        return permutations
+    
+    # Function to generate all permutations of k cities
+    def generate_permutations(self, data, k, max_n = 9, max_permutations = 1_000_000):
+        city_names = list(data.keys())
+        if len(city_names) <= max_n:
+            all_permutations = permutations(city_names, k)
+        else: 
+            all_permutations = self.random_permutations(city_names, max_permutations)
+        return all_permutations
 
-def study_case_3():
-    n_cities = 100
-    ciudades, distancias = generar_ciudades_con_distancias(n_cities)
-    # con heuristicas
-    heuristics = ['vecino_cercano']
-    # sin heuristicas
-    # heuristics = []
-    tsp = TSP(ciudades, distancias, heuristics)
-    tolerance = 0.1
-    time_limit = 60
-    tee = True
-    ruta = tsp.encontrar_la_ruta_mas_corta(tolerance, time_limit, tee)
-    tsp.plotear_resultado(ruta, False)
+    # Calculate total distance for all permutations of k cities
+    def calculate_all_distances(self, data, k, max_n = 9, max_permutations = 1_000_000):
+        all_permutations = self.generate_permutations(data, k, max_n, max_permutations)
+        distances = {}
+        for perm in all_permutations:
+            distances[perm] = self.compute_total_distance(data, perm)
+        return distances
+
+    # Wrap all functions together
+    def encontrar_la_ruta_mas_corta_naive(self, max_n = 9, max_permutations = 1_000_000):
+        distances = self.calculate_all_distances(self.ciudades, len(self.ciudades), max_n, max_permutations)
+        all_perm = []
+        all_dist = []
+        for perm, dist in distances.items():
+            all_perm.append(perm)
+            all_dist.append(dist)
+        df_res = pd.DataFrame({"permutation": all_perm, "cost_value": all_dist})
+        best_permutation = df_res.loc[lambda x: x.cost_value == x.cost_value.min(), "cost_value"].tolist()[0]
+        #best_permutation = list(best_permutation)
+        return best_permutation
+
+
+
+# def study_case_1():
+#     # tal vez un loop para probar 10, 20, 30, 40, 50 ciudades?
+#     n_cities = 10
+#     ciudades, distancias = generar_ciudades_con_distancias(n_cities)
+#     heuristics = []
+#     tolerance = 0.20
+#     time_limit = 30
+#     tee = False
+#     tsp = TSP(ciudades, distancias, heuristics)
+#     ruta = tsp.encontrar_la_ruta_mas_corta(tolerance, time_limit, tee)
+#     tsp.plotear_resultado(ruta)
+
+# def study_case_2():
+#     n_cities = 70
+#     ciudades, distancias = generar_ciudades_con_distancias(n_cities)
+#     # con heuristicas
+#     heuristics = ['limitar_funcion_objetivo']
+#     # sin heuristicas
+#     # heuristics = []
+#     tsp = TSP(ciudades, distancias, heuristics)
+#     tolerance = 0.20
+#     time_limit = 40
+#     tee = True
+#     ruta = tsp.encontrar_la_ruta_mas_corta(tolerance, time_limit, tee)
+#     tsp.plotear_resultado(ruta, False)
+
+# def study_case_3():
+#     n_cities = 100
+#     ciudades, distancias = generar_ciudades_con_distancias(n_cities)
+#     # con heuristicas
+#     heuristics = ['vecino_cercano']
+#     # sin heuristicas
+#     # heuristics = []
+#     tsp = TSP(ciudades, distancias, heuristics)
+#     tolerance = 0.1
+#     time_limit = 60
+#     tee = True
+#     ruta = tsp.encontrar_la_ruta_mas_corta(tolerance, time_limit, tee)
+#     tsp.plotear_resultado(ruta, False)
 
 def study_case_general(n_cities = 10, 
                        heuristics = [], 
                        tolerance = 0.1, 
                        time_limit = 60,
                        tee = True,
-                       plot = True):
-    #random.seed(123)
+                       show_plot = False,
+                       name_plot = ""):
+    random.seed(123)
     ciudades, distancias = generar_ciudades_con_distancias(n_cities)
     tsp = TSP(ciudades, distancias, heuristics)
     ruta = tsp.encontrar_la_ruta_mas_corta(tolerance, time_limit, tee)
-    if plot:
+    if show_plot:
         tsp.plotear_resultado(ruta, False)
-    return tsp.total_distance
+    if not show_plot:
+        tsp.plotear_resultado(ruta, False, name_plot = name_plot)
+    return tsp.total_distance, tsp.optimal_solution_found
 
+def study_case_naive(n_cities = 10, 
+                       heuristics = [], 
+                       tolerance = 0.1, 
+                       time_limit = 60,
+                       tee = True,
+                       show_plot = False,
+                       name_plot = ""):
+    random.seed(123)
+    ciudades, distancias = generar_ciudades_con_distancias(n_cities)
+    tsp = TSP(ciudades, distancias, heuristics)
+    distancia_recorrida = tsp.encontrar_la_ruta_mas_corta_naive()
+    return distancia_recorrida
+
+
+
+def problem_a():
+    time_limit = 120
+    cases = [10,20,30,40,50]
+    elapsed_time = []
+    total_distances = []
+    optimal_solutions_found = []
+    for case in cases:
+        t0 = time.time()
+        total_distance, optimal_solution_found = study_case_general(n_cities = case, 
+                            heuristics = [], 
+                            tolerance = 0.20, 
+                            time_limit = time_limit,
+                            tee = True,
+                            show_plot = False,
+                            name_plot = "problem_a_" + str(case))
+        t1 = time.time()
+        diff_time = np.round(t1-t0,2)
+
+        total_distance = study_case_general(n_cities = case)
+
+        elapsed_time.append(diff_time)
+        total_distances.append(total_distance)
+        optimal_solutions_found.append(optimal_solution_found)
+    
+    df_res = pd.DataFrame({"Total Ciudades": cases,
+                           "Tiempo Ejecución": elapsed_time,
+                           "Distancia Total": total_distances,
+                           "Solución Óptima Encontrada": optimal_solutions_found})
+    df_res.to_markdown("./results/problem_a.md", index=False)
+
+    return df_res
+
+def problem_a_naive():
+    time_limit = 120
+    cases = [10,20,30,40,50]
+    elapsed_time = []
+    total_distances = []
+    optimal_solutions_found = []
+    total_distances_naive = []
+    elapsed_time_naive = []
+    for case in cases:
+        t0 = time.time()
+        total_distance, optimal_solution_found = study_case_general(n_cities = case, 
+                            heuristics = [], 
+                            tolerance = 0.20, 
+                            time_limit = time_limit,
+                            tee = True,
+                            show_plot = False,
+                            name_plot = "problem_a_" + str(case))
+        t1 = time.time()
+        diff_time = np.round(t1-t0,2)
+        elapsed_time.append(diff_time)
+        total_distances.append(total_distance)
+        optimal_solutions_found.append(optimal_solution_found)
+        
+        t0 = time.time()
+        total_distance_naive = study_case_naive(n_cities = case)
+        t1 = time.time()
+        diff_time = np.round(t1-t0,2)
+        total_distances_naive.append(total_distance_naive)
+        elapsed_time_naive.append(diff_time)
+
+    df_res = pd.DataFrame({"Total Ciudades": cases,
+                           "Tiempo Ejecución - GLPK": elapsed_time,
+                           "Distancia Total - GLPK": total_distances,
+                           "Solución Óptima Encontrada - GLPK": optimal_solutions_found,
+                           "Tiempo Ejecución - Naive": elapsed_time_naive,
+                           "Distancia Total - Naive": total_distances_naive,
+                           })
+    df_res.to_markdown("./results/problem_a_naive.md", index=False)
+
+    return df_res
+
+
+def problem_c():
+    time_limit = 120
+    elapsed_time = []
+    total_distances = []
+    optimal_solutions_found = []
+    cases  = []
+    for h in [['limitar_funcion_objetivo'],[]]:
+    #for h in [['limitar_funcion_objetivo']]:
+        t0 = time.time()
+        if len(h) == 0:
+            h_name = "" 
+        if len(h) > 0:
+            h_name = "limit" 
+        total_distance, optimal_solution_found = study_case_general(n_cities = 70, 
+                            heuristics = h, 
+                            tolerance = 0.20, 
+                            time_limit = time_limit,
+                            tee = True,
+                            show_plot = False,
+                            name_plot = "problem_c_heuristic_" + h_name)
+        t1 = time.time()
+        diff_time = np.round(t1-t0,2)
+        elapsed_time.append(diff_time)
+        total_distances.append(total_distance)
+        optimal_solutions_found.append(optimal_solution_found)
+        cases.append(h_name)
+    
+    df_res = pd.DataFrame({"Total Ciudades": cases,
+                           "Tiempo Ejecución": elapsed_time,
+                           "Distancia Total": total_distances,
+                           "Solución Óptima Encontrada": optimal_solutions_found})
+    df_res.to_markdown("./results/problem_c.md", index=False)
+
+    return df_res
+
+def problem_d():
+    time_limit = 120
+    elapsed_time = []
+    total_distances = []
+    optimal_solutions_found = []
+    cases  = []
+    for h in [['vecino_cercano'],[]]:
+        t0 = time.time()
+        if len(h) == 0:
+            h_name = "" 
+        if len(h) > 0:
+            h_name = "vecino_cercano" 
+        total_distance, optimal_solution_found = study_case_general(n_cities = 100, 
+                            heuristics = h, 
+                            tolerance = 0.10, 
+                            time_limit = time_limit,
+                            tee = True,
+                            show_plot = False,
+                            name_plot = "problem_d_heuristic_" + h_name)
+        t1 = time.time()
+        diff_time = np.round(t1-t0,2)
+        elapsed_time.append(diff_time)
+        total_distances.append(total_distance)
+        optimal_solutions_found.append(optimal_solution_found)
+        cases.append(h_name)
+    
+    df_res = pd.DataFrame({"Total Ciudades": cases,
+                           "Tiempo Ejecución": elapsed_time,
+                           "Distancia Total": total_distances,
+                           "Solución Óptima Encontrada": optimal_solutions_found})
+    df_res.to_markdown("./results/problem_d.md", index=False)
+
+    return df_res
 
 if __name__ == "__main__":
-    print("Se ha colocado un límite de tiempo de 30 segundos para la ejecución del modelo.")
     # Solve the TSP problem
-    #study_case_1()
-    # study_case_2()
-    # study_case_3()
-    time_limit = 30
-    print("-"*100)
-    print("Case 1")
-    c1 = study_case_general(n_cities = 30, tee=True, plot= False, time_limit = time_limit)
-    # print("-"*100)
-    # print("Case 2")
-    # c2 = study_case_general(n_cities = 30, tee=False, plot= False, time_limit = time_limit)
-    # print("-"*100)
-    # print("Case 3")
-    # c3 = study_case_general(n_cities = 30, tee=False, plot= False, time_limit = time_limit)
-    # print("-"*100)
-    # print("Case 4")  
-    # c4 = study_case_general(n_cities = 30, tee=True, plot= False, time_limit = time_limit)
-
-    # all_distances = [c1, c2, c3, c4]
-    # print(all_distances)
+    #print(problem_a())
+    #print(problem_a_naive())
+    # print(problem_c())
+    print(problem_d())

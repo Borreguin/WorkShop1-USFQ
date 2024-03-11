@@ -37,7 +37,8 @@ def generar_ciudades_con_distancias(n_cities: int):
     distancias = generar_distancias(ciudades)
     return ciudades, distancias
 
-def plotear_ruta(ciudades, ruta, mostrar_anotaciones=True):
+def plotear_ruta(ciudades, ruta, mostrar_anotaciones=True, show_plot = True, name_plot = ""):
+    total_ciudades = len(ruta)
     if None in ruta:
         print("La ruta contiene valores nulos, no se encontró una solución válida.")
         return
@@ -63,10 +64,14 @@ def plotear_ruta(ciudades, ruta, mostrar_anotaciones=True):
 
     plt.xlabel('Coordenada X')
     plt.ylabel('Coordenada Y')
-    plt.title('Ubicaciones de las Ciudades y Mejor Ruta')
+    #plt.title('Ubicaciones de las Ciudades y Mejor Ruta. Total Ciudades: ' + str(total_ciudades))
     plt.legend()
     plt.grid(True)
-    plt.show()
+    if name_plot != "":
+        plt.savefig('./results/' + name_plot + ".png")
+        plt.close()
+    if show_plot:
+        plt.show()
 
 def get_path(edges: dict, initial_city: str, path: List[str]):
     next_node = edges.get(initial_city, None)

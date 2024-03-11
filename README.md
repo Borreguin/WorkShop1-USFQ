@@ -1,5 +1,37 @@
 # WorkShop1-USFQ
-# Taller 1 de Inteligencia Artificial
+
+# Tabla de Contenidos
+- [WorkShop1-USFQ](#workshop1-usfq)
+- [Tabla de Contenidos](#tabla-de-contenidos)
+- [Taller 1](#taller-1)
+- [Taller 2](#taller-2)
+  - [Problema 1: Uso de Algoritmos de Búsqueda](#problema-1-uso-de-algoritmos-de-búsqueda)
+    - [Study Case 1](#study-case-1)
+      - [Tiempos de ejecucion y numero de nodos](#tiempos-de-ejecucion-y-numero-de-nodos)
+    - [Study Case 2](#study-case-2)
+      - [Tiempos de ejecucion y numero de nodos](#tiempos-de-ejecucion-y-numero-de-nodos-1)
+    - [Study Case 3](#study-case-3)
+      - [Tiempos de ejecucion y numero de nodos](#tiempos-de-ejecucion-y-numero-de-nodos-2)
+      - [Conclusiones](#conclusiones)
+  - [Problema 2: Optimización de Colonias de Hormigas](#problema-2-optimización-de-colonias-de-hormigas)
+    - [A. Implementación Planteada](#a-implementación-planteada)
+    - [B. ¿Qué ocurre con el segundo caso de estudio?](#b-qué-ocurre-con-el-segundo-caso-de-estudio)
+    - [C. Describir los parámetros del modelo](#c-describir-los-parámetros-del-modelo)
+    - [D. Descripcion del modelo](#d-descripcion-del-modelo)
+    - [E. Pregunta de investigación: ¿Se puede utilizar este algoritmo para resolver el Travelling Salesman Problema (TSP)?](#e-pregunta-de-investigación-se-puede-utilizar-este-algoritmo-para-resolver-el-travelling-salesman-problema-tsp)
+- [Taller 3](#taller-3)
+  - [Problema 1: Uso de Aprendizaje No Supervisado](#problema-1-uso-de-aprendizaje-no-supervisado)
+  - [Problema 2: Investigación Operativa, el problema TSP](#problema-2-investigación-operativa-el-problema-tsp)
+    - [A. Analizar el código propuesto](#a-analizar-el-código-propuesto)
+    - [B. Analizar el parámetro tee](#b-analizar-el-parámetro-tee)
+    - [C. Aplicar heurística de límites a la función objetivo](#c-aplicar-heurística-de-límites-a-la-función-objetivo)
+    - [D. Aplicar heurística de vecinos cercanos](#d-aplicar-heurística-de-vecinos-cercanos)
+    - [E. Conclusiones](#e-conclusiones)
+
+
+
+# Taller 1
+[Back to Top](#tabla-de-contenidos)
 
 - **Nombre del grupo**: Grupo-1
 - **Integrantes del grupo**:
@@ -10,7 +42,10 @@
 
 - **Link**: [Planificación en ClickUp](https://doc.clickup.com/9013102272/d/h/8ckj1p0-33/60b3769cbaa9388)
 
-# Taller 2 de Inteligencia Artificial
+
+# Taller 2
+[Back to Top](#tabla-de-contenidos)
+
 
 - **Integrantes del grupo con descripción de sus tareas**:
   * Santiago Viteri: 
@@ -23,6 +58,7 @@
     * Revisión de literatura y documentación ejercicio 2.
 
 ## Problema 1: Uso de Algoritmos de Búsqueda
+[Back to Top](#tabla-de-contenidos)
 
 Se utilizarán varios algoritmos de búsqueda no informados para la solución de laberintos. A continuación se presenta los resultados encontrados por cada algoritmo. Adicionalmente se analiza cada algoritmos bajo las siguientes métricas: tiempo de ejecución y número de nodos en la solución.
 
@@ -77,6 +113,7 @@ Además, Greedy Best-First Search (GBFS) muestra tiempos de ejecución más bajo
 En conclusión, la selección del algoritmo depende de los requisitos específicos del problema, como la necesidad de optimización, el tiempo de ejecución tolerado y los recursos computacionales disponibles.
 
 ## Problema 2: Optimización de Colonias de Hormigas
+[Back to Top](#tabla-de-contenidos)
 
 Ant Colony Optimization (ACO) es una técnica de optimización inspirada en el comportamiento de las hormigas reales cuando buscan recursos para su colonia. El propósito de este algoritmo en el campo de la IA es el de simular el comportamiento de las hormigas para encontrar el mejor camino desde el nido de la colonia a la fuente de recursos.
 
@@ -184,7 +221,248 @@ El algoritmo de optimización por colonia de hormigas se puede utilizar efectiva
 3. Stutzle, T.,Lopez, M. Dorigo, M. (2011). *A Concise Overview of Applications of Ant Colony Optimizatio*. [link](chrome-extension://efaidnbmnnnibpcajpcglclefindmkaj/https://lopez-ibanez.eu/doc/StuLopDor2010aco-applications.pdf)
 
 
-# Taller 3 de Inteligencia Artificial
+# Taller 3 
+[Back to Top](#tabla-de-contenidos)
+- **Integrantes del grupo con descripción de sus tareas**:
+  * Ricardo Loor: 
+    * Elaboración código y documentación Problema 2. 
+  * Kuntur Muenala:
+    * Elaboración código y documentación Problema 1.
+  * Diego Villacreses: 
+    * Elaboración código y documentación Problema 2.
+  * Santiago Viteri: 
+    * Elaboración código y documentación Problema 1.
+## Problema 1: Uso de Aprendizaje No Supervisado
+[Back to Top](#tabla-de-contenidos)
 
 
-![](./Taller3/P2_TSP/results/tsp_1.gif)
+
+## Problema 2: Investigación Operativa, el problema TSP
+[Back to Top](#tabla-de-contenidos)
+
+### A. Analizar el código propuesto
+Cómo se puede apreciar en la siguiente tabla, el algorítmo `GLPK` logra converger en menos de un segundo para TSP de 10 y 20 ciudades, y, en 61 segundos para 30 ciudades. Si bien la condición `results.solver.termination_condition == pyo.TerminationCondition.optimal` no se cumple para ningún caso, esto se puede deber a condiciones que no se han logrado encontrar en la documentación de `pyomo` ni `GLPK`. Pero, por el `log` de la función sabemos la última iteración ha presentado un incremento menor o igual a la tolerancia impuesta (0.2). Lo cual se puede considerar un óptimo local. 
+
+La única forma de garantizar que se ha encontrado un óptimo global en este tipo de problema es mediante la búsqueda exhaustiva de $n!$ posibles caminos, donde $n$, es el total de ciudades. Para 10 ciudades se tendrían 3.6 millones de permutaciones, para 20 ciudades 2.43e+18 y para 30 ciudades 2.65e+32. Considérese que se cree existen 2e+20 estrellas en el universo [1]. Si pudieramos computar 1 millón de escenarios, por segundo, nos demoraríamos 77,146 años en analizar todas las permutaciones del problema de 20 ciudades y 8.4e+18 (8 quintillones) de años para el problema de 30 ciudades (`Anexo No. 1`). Considerando la enorme complejidad computacional del problema, resulta impresionante que se encuentre un óptimo local en los tiempos mencionados.
+
+
+|   Total Ciudades |   Tiempo Ejecución |   Distancia Total | Solución Óptima Encontrada   |
+|-----------------:|-------------------:|------------------:|:-----------------------------|
+|               10 |               0.12 |           570.7   | False                        |
+|               20 |               0.5  |           781.984 | False                        |
+|               30 |              61.92 |           912.967 | False                        |
+|               40 |             120.35 |           983.656 | False                        |
+|               50 |             120.55 |          1167.4   | False                        |
+
+Por otra parte, desconocemos que tan lejano se encuentre el óptimo local encontrado en relación al óptimo global. Por lo que estrictamente no podemos afirmar si esta solución es una mejora relevante con respecto a dejar que una persona siga su intuición si se enfrentara al problema. En Análisis Supervisado se suele comparar técnicas avanzadas contra la técnica más simple posible, como por ejemplo para clasificación Naive Bayes o Logit, para series de tiempo AR(1). Para nuestro caso se propone la selección de un millón de permutaciones aleatorias (ya que es más difícil programar un algoritmo que funcione en base a restricción de tiempo), de las cuales se escoge la que presenta menor distancia. Los resultados se encuentran en la tabla a continuación.
+
+|   Total Ciudades |   Tiempo Ejecución - GLPK |   Distancia Total - GLPK | Solución Óptima Encontrada - GLPK   |   Tiempo Ejecución - Naive |   Distancia Total - Naive |
+|-----------------:|--------------------------:|-------------------------:|:------------------------------------|---------------------------:|--------------------------:|
+|               10 |                      0.47 |                  570.7   | False                               |                      17.3  |                   435.221 |
+|               20 |                      0.63 |                  781.984 | False                               |                      31.04 |                  1096.17  |
+|               30 |                     58.98 |                  912.967 | False                               |                      41.7  |                  1701.38  |
+|               40 |                    120.54 |                  983.656 | False                               |                      54.42 |                  2450.51  |
+|               50 |                    120.68 |                 1167.4   | False                               |                      66.6  |                  3225.03  |
+
+
+Cómo se puede apreciar, `GLPK` presenta soluciones mucho mejores a nuestro algoritmo Naive (una distancia para cincuenta ciudades se tiene que la mejor distancia es 3 veces mejor en `GLPK` que en Naive). Solo se tiene como caso atípico el caso de 10 ciudades, en el que Naive encuentra un mejor resultado que `GLPK` esto se puede deber a que encuentra un óptimo global por suerte. Asumiendo que nuestro algoritmo Naive es un buen benchmark `GLPK` es una enorme mejora con respecto a Naive. Revisión de literatura se sugiere muy fuertemente para corroborar esta conclusión.
+
+<p align="center">
+  <img src="./Taller3/P2_TSP/results/problem_a_10.png" alt="Alt text 1" width="200"/>
+  <img src="./Taller3/P2_TSP/results/problem_a_20.png" alt="Alt text 2" width="200"/> 
+</p>
+<p align="center">
+  <img src="./Taller3/P2_TSP/results/problem_a_30.png" alt="Alt text 1" width="200"/>
+  <img src="./Taller3/P2_TSP/results/problem_a_40.png" alt="Alt text 2" width="200"/> 
+</p>
+<p align="center">
+  <img src="./Taller3/P2_TSP/results/problem_a_50.png" alt="Alt text 1" width="200"/>
+</p>
+
+### B. Analizar el parámetro tee
+
+Tras un análisis del `log` del optimizador `GLPK` y su manual [2] se puede apreciar que el parámetro `tee` presenta el detalle de la optimización. A continuación se presenta el mencionado `log` para el caso de 10 ciudades. Su primera fila nos dice que es un GLPK Simplex Optimizer que se encuentra en la versión 4.65, [2] es el manual para la versión 4.64 por lo que no deberían existir diferencias importantes. Según la página 90 de [2], en la segunda fila del `log` se tienen: i) filas que represetan el total de restricciones, ii) columnas que representan el total de variables, iii) non-zeros que representan el total de variables binarias a probar por el algoritmo. No se ha podido reproducir el cálculo exacto de estos valores, se considera una materia de investigación importante para comprender el optimizador y las formas más eficientes de usarlo.
+
+En primera instancia el optimizador asume que todas las variables involucradas son continuas y busca un óptimo dadas las restricciones usando Linear Programming, estos pasos se pueden observar hasta la presencia de una linea que afirme si se ha encontrado o no una solución a este primer problema: `OPTIMAL LP SOLUTION FOUND`. El optimizador LP nos da para cada cierto número de iteraciones este output `53: obj =   4.098935248e+02 inf =   0.000e+00 (0)`:
+  * El primer número antes de los dos puntos representa el número de iteración.
+  * `obj = ` representa el valor de la función objetivo, en este caso es 409.8. 
+  * `inf =   0.000e+00` donde `inf` significa _infeasibility_, que se puede traducir al español como imposibilidad, estas tres letras apuntan a un valor numérico, que representa la suma de las distancias entre los valores esperados por las restricciones y cuan lejos de ellos se encuentran nuestras restricciones.
+  * El número al final `(0)` representa cuantas restricciones ha roto el modelo en dicha iteración.
+
+El siguiente paso es la optimización MIP (Mixed Integer Programming), un método de optimización lineal que permite optimizar sobre variables que pertenezcan a los reales en conjugación con variables que pertenecen a los enteros, sabemos por [2] que MIP utiliza búsqueda en grafos, los detalles de esta búsqueda no se pudieron dilucidar en el tiempo asignado al presente trabajo. El optimizador presenta un log del con filas del siguiente estilo: `687: mip =   5.706995633e+02 >=   4.817231748e+02  15.6% (33; 75)`. 
+  * El primer número antes de los dos puntos representa el número de iteración.
+  * `mip = ` representa el valor de la función objetivo, en este caso es 570.6. 
+  * `5.706995633e+02 >=   4.817231748e+02  15.6%` significa que el valor actual de la función objetivo se encuentra un 15.6% por encima de la cota inferior calculada (4.817231748e+02), no se ha logrado encontrar en la documentación cómo este valor se recalcula en cada iteración, solamente se sabe que para para la primera iteración parte del óptimo encontrado por LP.
+  * `(33; 75)` se refiere a la posición que se encuentra el optimizador en el grafo. No se ha encontrado suficiente información en la documentación para describir exactamente como entender el grafo y por consiguiente su posicionamiento.
+
+Finalmente, MIP puede presentar las siguientes salidas: i) `RELATIVE MIP GAP TOLERANCE REACHED; SEARCH TERMINATED`, ii) `TIME LIMIT EXCEEDED; SEARCH TERMINATED`. La primera significa que la condición de tolerancia se ha complido, la segunda que la condición de tiempo se ha cumplido sin cumplir la condición de tolerancia. Considérese que la función objetivo para nuestro caso es el total de recorrido por el vendedor en TSP.
+
+```Bash
+GLPK Simplex Optimizer, v4.65
+101 rows, 100 columns, 423 non-zeros
+      0: obj =   5.451497642e+02 inf =   1.070e+02 (19)
+     25: obj =   7.897774110e+02 inf =   3.331e-16 (0)
+*    53: obj =   4.098935248e+02 inf =   0.000e+00 (0)
+OPTIMAL LP SOLUTION FOUND
+Integer optimization begins...
+Long-step dual simplex will be used
++    53: mip =     not found yet >=              -inf        (1; 0)
++   137: >>>>>   8.120257885e+02 >=   4.235500168e+02  47.8% (11; 0)
++   242: >>>>>   7.368733210e+02 >=   4.433499705e+02  39.8% (27; 4)
++   301: >>>>>   7.254201696e+02 >=   4.455822840e+02  38.6% (32; 9)
++   469: >>>>>   7.103758334e+02 >=   4.462518162e+02  37.2% (48; 11)
++   546: >>>>>   6.581400017e+02 >=   4.552003938e+02  30.8% (56; 14)
++   600: >>>>>   6.467659616e+02 >=   4.634157353e+02  28.3% (55; 23)
++   687: >>>>>   5.706995633e+02 >=   4.817231748e+02  15.6% (61; 25)
++   687: mip =   5.706995633e+02 >=   4.817231748e+02  15.6% (33; 75)
+RELATIVE MIP GAP TOLERANCE REACHED; SEARCH TERMINATED
+```
+
+### C. Aplicar heurística de límites a la función objetivo
+* ¿Cuál es la diferencia entre los dos casos?
+
+En el primer caso se utiliza cómo heurística las siguientes restricciones en modelo de optimización:
+```Python
+_model.obj_lower_bound = pyo.Constraint(expr=_model.obj >= self.min_possible_distance)
+_model.obj_upper_bound = pyo.Constraint(expr=_model.obj <= self.max_possible_distance)
+```
+Donde `_model.obj` se refiere a la función objetivo del modelo, que como se mencionó anteriormente, es la suma de las distancias recorridas. Para comprender los límites que se impone a la función objetivo debemos analizar como se construyeron los siguientes objetos:
+
+```Python
+medium_low_distance = (self.min_distance + self.average_distance) / 2
+self.min_possible_distance = medium_low_distance * len(self.ciudades) * 0.35
+self.max_possible_distance = medium_low_distance * len(self.ciudades) * 0.50
+```
+
+Que se puede traducir como las siguientes restricciones matemáticas:
+
+
+$medium\_low\_distance = (min\_distance + average\_distance) / 2$
+
+$min\_possible\_distance = medium\_low\_distance  \cdot total\_ciudades \cdot 0.35$
+
+$max\_possible\_distance = medium\_low\_distance  \cdot total\_ciudades \cdot 0.50$
+
+
+Valores máximos y mínimos que se imponen a la función objetivo, no se ha logrado encontrar literatura que respalde el uso de estas ecuaciones [3]. Se podría argumentar, ¿por qué no multiplicar $medium\_low\_distance  \cdot total\_ciudades$ por 0.6, o 0.7?
+
+Nótese que al aplicar esta heurística se obtiene un resultado peor que al no aplicarla (1,572 vs 1,482 respectivamente). Las razones por las cuales este escenario sucede se desconoce, ya que para comprender como cambia el algoritmo MIP se debería compronder la construcción del grafo de búsqueda. Se puede asumir que esta restricción eliminó los caminos incorrectos del grafo por lo cual la distancia total termina siendo peor.
+
+| Heurística   |   Tiempo Ejecución |   Distancia Total | Solución Óptima Encontrada   |
+|:-----------------|-------------------:|------------------:|:-----------------------------|
+| Si            |             121.41 |           1572.82 | False                        |
+| No                 |             121.16 |           1482.02 | False                        |
+
+
+El gráfico de la izquierda no incluye heurísticas, el de la derecha incluye la mencionada heurística.
+
+<p align="center">
+  <img src="./Taller3/P2_TSP/results/problem_c_heuristic_.png" alt="Alt text 1" width="200"/>
+  <img src="./Taller3/P2_TSP/results/problem_c_heuristic_limit.png" alt="Alt text 2" width="200"/> 
+</p>
+
+
+Considérese que $max\_possible\_distance=1602.5$, por lo cual intuitivamente no se esperaría que el optimizador obtenga un peor resultado al limitar la función objetivo a un valor superior al mejor valor encontrado. Para comprender las razones de este problema, se debería comprender la construcción del gráfo de búsqueda de MIP.
+
+* ¿Sirve esta heurística para cualquier caso? ¿Cuál pudiera ser una razón?
+
+Para este caso en específico no sirvió, ya que presenta una función objetivo peor que sin heurística. En general, las heurísticas suelen funcionar solo para un grupo limitado de problemas, por lo cual se debe experimentar con diferentes enfoques. Las razones de este efecto para este tipo de problemas están dentro de la construcción del grafo de MIP. Para el caso simple en el que todas las variables fueran continuas, se podría hacer la analogía en la que se añade una restricción que reduce el espacio de posibles soluciones a un peor resultado para este caso en específico.
+
+
+### D. Aplicar heurística de vecinos cercanos
+
+* ¿Cuál es la diferencia entre los dos casos?
+
+El primero incluye como heurística la regla de que cada camino que se vaya a añadir en el grafo de MIP debe encontrarse dentro de un radio de cercanía de la ciudad en la que inicia, según la siguiente regla:
+
+```Python
+def rule_vecino_cercano(model, i, j):
+    if i == j:
+        return pyo.Constraint.Skip
+    expr = model.x[i,j] * self.distancias[i,j] <= self.average_distance_for_city[i]
+    return expr
+_model.nearest_neighbor = pyo.Constraint(_model.N, _model.M, rule=rule_vecino_cercano)
+```
+Que es el promedio de las ciudades más cercanas según:
+
+```Python
+def get_best_max_distance_for_city(city:str, distances: dict):
+    acc_distances = 0
+    max_distance = 0
+    for k, v in distances.items():
+        if city in k:
+            acc_distances += v
+            max_distance = max(max_distance, v)
+    avg_distance = acc_distances / len(distances)
+    return (avg_distance + max_distance) / 2
+
+def get_best_max_distance_for_cities(distances: dict):
+    cities = list(set([city for k in distances.keys() for city in k]))
+    best_max_distances = {}
+    for city in cities:
+        best_max_distances[city] = get_best_max_distance_for_city(city, distances)
+    return best_max_distances
+
+self.average_distance_for_city = get_best_max_distance_for_cities(distancias)
+```
+
+
+`self.average_distance_for_city` se puede entender como el promedio de distancias desde la ciudad que se encuentra analizando $i$ con el resto de ciudades.
+
+Como se puede ver en la tabla a continuación el uso de esta heúristica mejora en un 10% el resultado.
+
+| Heurística   |   Tiempo Ejecución |   Distancia Total | Solución Óptima Encontrada   |
+|:-----------------|-------------------:|------------------:|:-----------------------------|
+| Si   |             121.83 |           1760.73 | False                        |
+| No               |             121.71 |           1969.96 | False                        |
+
+El gráfico de la izquierda no incluye heurísticas, el de la derecha incluye la mencionada heurística.
+
+<p align="center">
+  <img src="./Taller3/P2_TSP/results/problem_d_heuristic_.png" alt="Alt text 1" width="200"/>
+  <img src="./Taller3/P2_TSP/results/problem_d_heuristic_vecino_cercano.png" alt="Alt text 2" width="200"/> 
+</p>
+
+* ¿Sirve esta heurística para cualquier caso? ¿Cuál pudiera ser una razón?
+
+Para este caso la heurística resulto generar un mejor escenario que MIP sin optimización. Cómo se vió en clases, ninguna heurística funciona para todas los problemas de optimización. Se debería analizar para diferentes casos, pero intuitivamente un problema TSP con demasiadas ciudades podría quedarse sin vecinos cercanos y no encontrar solución. No se obtendría resultados mejores si se tuviera un problema diferente al TSP, por ejemplo uno en el que se requiera maximizar la función objetivo y no minimizarla.
+
+### E. Conclusiones
+
+Se encuentra que el uso de la librería de optimización lineal `GLPK` es mejor que nuestro algoritmo Naive, si este es el mejor algoritmo para el rango de problemas TSP de interés deberá ser confirmado por una revisión exhaustiva de la literatura.
+
+Se encuentra que `GLPK` utiliza MIP como algoritmo principal para encontrar el mínimo de TSP, lamentablemente no se ha podido comprender completamente la búsqueda de MIP mediante [2], tal vez se requiera comprender a mayor profundidad para construir mejores heurísticas. Criterio de experto se sugiere para planificar cuanta comprensión del algoritmo es necesario para llevar al máximo esta librería en el mundo real.
+
+La heurística de vecino más cercano es mejor que `GLPK` sin heurística. La heurística de limitación de función objetivo no lo es. Las exactas razones detrás de estos resultados solo se pueden comprender al comprender el mecanismo de MIP. Intuitivamente el algoritmo de vecino más cercano reduce los posibles candidatos de búsqueda ayudando a `GLPK` a encontrar un mejor óptimo. Intuitivamente la heurística de limitación elimina pedazos del grafo que tienen mejores resultados. Según lo visto en clases y la literatura revisada [3], toda heurística es útil para un espacio limitado de problemas. Predecir para que problemas funcionará la heurística requiere de un conocimiento profundo del funcionamiento del algoritmo de optimización utilizado y probablemente de criterio de experto.
+
+
+* __Revisión Bibliográfica__
+
+[1] Howell, E., Harvey, A. (2022). How Many Stars Are There? Space.com. https://www.space.com/26078-how-many-stars-are-there.html
+
+[2] GNU Project. (2017). GNU Linear Programming Kit Reference Manual for GLPK Version 4.64. Free Software Foundation. https://hpc.nih.gov/apps/glpk/latest/glpk.pdf
+
+[3] Cook, W. J. (2015). In pursuit of the traveling salesman: mathematics at the limits of computation. Princeton University Press.
+
+* __Anexos__
+  * __Anexo No. 1__
+
+```Python
+def factorial(n):
+    if n == 0 or n == 1:
+        return 1
+    else:
+        return n * factorial(n - 1)
+
+n_large = 20
+factorial_large = factorial(n_large)
+
+total_per_second = 1_000_000
+total_seconds = 60
+total_minutes = 60
+total_hours = 24
+year = 365
+
+total_days = factorial_large/(total_per_second*total_seconds*total_minutes*total_hours*year)
+print(f"{total_days:_}")
+```
