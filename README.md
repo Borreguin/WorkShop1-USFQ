@@ -9,17 +9,19 @@
   * Christian Hernandez
 
 **Participación en el taller:**
-  * **Felipe Toscano**: Desarollo principal P1 
-    del 
-    literal A al C, apoyo en los literales D y E
-  * **José Asitimbay**: Desarollo principal P1 
-    literal D y E apoyo en la redaccion del readme
-  * **Brayan Lechón**: Participacion en P1 
-    literales A, D, E y F. Participacion en 
-    estructuracion del directorio del 
-    proyecto y redaccion del readme resultados P1.
+  * **Felipe Toscano**: Desarollo y redacción 
+    de las conclusiones ejercicio P1 del 
+    literal A al C, 
+    apoyo en los literales D y E
+  * **José Asitimbay**: Desarollo y redacción 
+    de las conclusiones ejercicio P1 
+    literal D y E
+  * **Brayan Lechón**: Apoyo en P1 
+    literales A, D, E y F. Estructuración del 
+    directorio del proyecto y redacción del 
+    readme resultados P1.
   * **Christian Hernandez**: Desarollo y 
-    redaccion de resultados del P2.
+    redacción de resultados del ejercicio P2.
 
 ## GLPK package:
 The GLPK (GNU Linear Programming Kit) package is intended for solving large-scale linear programming (LP), mixed integer programming (MIP), and other related problems. It is a set of routines written in ANSI C and organized in the form of a callable library.
@@ -126,6 +128,13 @@ El análisis univariable muestra patrones en relación con los niveles de CO2 y 
 
 Estos hallazgos son fundamentales para entender cómo fluctúan los niveles de CO2 y la temperatura en el edificio a lo largo del día y del año, y podrían indicar la implementación de medidas que mejoran la eficiencia energética y el bienestar de los ocupantes.
 
+En el análisis multivariable, se examinaron conjuntamente la temperatura y la ventilación de CO2 para descubrir patrones que emergen de su interacción. Se aplicó la técnica de Análisis de Componentes Principales (PCA) para reducir la dimensionalidad de los datos, manteniendo al mismo tiempo la integridad de la información crucial. A través del proceso de clustering, se identificaron tres grupos distintos caracterizados por:
+1.	Alta Temperatura y Alto CO2: Este cluster es prominente durante las horas y días laborables, lo cual es coherente con la mayor presencia de personas en el edificio, resultando en un aumento simultáneo de la temperatura y los niveles de CO2.
+2.	Baja Temperatura y Bajo CO2: Este grupo es más frecuente en las primeras horas de la mañana y últimas de la noche, momentos en los cuales el edificio se encuentra generalmente vacío, reflejando los niveles más bajos de actividad y presencia humana.
+3.	Alta Temperatura y Bajo CO2: Este cluster sugiere una fase de transición en la cual el edificio comienza a experimentar un aumento de temperatura antes de que se refleje un incremento proporcional en los niveles de CO2. Esto puede ocurrir en los momentos previos a la llegada de las personas al edificio, posiblemente en días más fríos donde los sistemas de calefacción se activan temprano para asegurar el confort al inicio de la jornada laboral, o en situaciones donde la ventilación es eficaz en la disipación del CO2 a pesar de una temperatura ascendente.
+
+En conclusión, el enfoque de clustering multivariable para analizar conjuntamente la temperatura y la ventilación de CO2 ha demostrado ser fundamental para comprender la interacción compleja entre estos factores ambientales. Este método supera las limitaciones de los análisis univariantes, que podrían pasar por alto patrones clave resultantes de la interrelación entre variables. Al explorar las variables de manera combinada, hemos podido identificar grupos distintos que reflejan las dinámicas operacionales y la ocupación del edificio, que de otro modo podrían haber permanecido ocultos.
+Estos insights no solo destacan el comportamiento ambiental del edificio sino que también subrayan oportunidades para optimizar los sistemas de calefacción, ventilación y aire acondicionado.
 
 ## Investigacion Operativa
 
