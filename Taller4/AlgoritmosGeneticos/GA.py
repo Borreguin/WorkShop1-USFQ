@@ -1,4 +1,4 @@
-from AlgoritmosGeneticos.generalSteps import *
+from Taller4.AlgoritmosGeneticos.generalSteps import *
 
 
 class GA:

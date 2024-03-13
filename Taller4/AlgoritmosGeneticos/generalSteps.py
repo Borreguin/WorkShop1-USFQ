@@ -1,7 +1,7 @@
 from random import choice
 
-from AlgoritmosGeneticos.operation import *
-from AlgoritmosGeneticos.util import word_distance
+from Taller4.AlgoritmosGeneticos.operation import *
+from Taller4.AlgoritmosGeneticos.util import word_distance
 
 
 # Generar población
