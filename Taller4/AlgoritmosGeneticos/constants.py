@@ -1,7 +1,7 @@
 from enum import Enum
 MY_SEED = 123
 
-all_possible_individuals = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ !"
+all_possible_gens = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ !"
 
 class AptitudeType(str, Enum):
     DEFAULT = 'default'

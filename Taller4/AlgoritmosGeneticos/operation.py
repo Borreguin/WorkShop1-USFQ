@@ -40,7 +40,7 @@ def mutate(_type: MutationType, individual, mutation_rate):
         # Mutación de un individuo
         for i in range(len(individual)):
             if random.random() < mutation_rate:
-                individual = individual[:i] + random.choice(all_possible_individuals) + individual[i + 1:]
+                individual = individual[:i] + random.choice(all_possible_gens) + individual[i + 1:]
         return individual
     if _type == MutationType.NEW:
         print("implement here the new mutation")

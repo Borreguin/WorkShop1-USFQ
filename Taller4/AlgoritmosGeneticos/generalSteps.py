@@ -10,7 +10,7 @@ def generate_population(population_size, string_length, seed=MY_SEED):
     population = []
     for _ in range(population_size):
         # crear un individuo aleatorio de tamaño string_length
-        individual = ''.join(choice(all_possible_individuals) for _ in range(string_length))
+        individual = ''.join(choice(all_possible_gens) for _ in range(string_length))
         population.append(individual)
     return population
 
