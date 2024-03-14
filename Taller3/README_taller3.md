@@ -41,43 +41,43 @@ Presentar un gráfico por cada variable que muestre sus valores superpuestos por
 2  variable de presencia solar que no corresponde a este set de datos, pero sirve de ilustración.
 ### CO2 Ventilación NE
 **Grafico agrupado por dia y hora**
-![](Taller3/P1_UML/images/CO2%20Ventilation%20NE_diario.png)
+![](P1_UML/images/CO2 Ventilation NE_diario.png)
 **Grafico agrupado por Semana del año vs Dia y Hora**
-![](Taller3/P1_UML/images/CO2%20Ventilation%20NE_heatmap.png)
+![](P1_UML/images/CO2 Ventilation NE_heatmap.png)
 
 ### C02 Ventilacion SW
 **Grafico agrupado por dia y hora**
-![](Taller3/P1_UML/images/CO2%20Ventilation%20SW_diario.png)
+![](P1_UML/images/CO2 Ventilation SW_diario.png)
 **Grafico agrupado por Semana del año vs Dia y Hora**
-![](Taller3/P1_UML/images/CO2%20Ventilation%20SW_heatmap.png)
+![](P1_UML/images/CO2 Ventilation SW_heatmap.png)
 
 ### Temperatura NE
 **Grafico agrupado por dia y hora**
-![](Taller3/P1_UML/images/Temp.%20Vent.%20NE%20Out_diario.png)
+![](P1_UML/images/Temp. Vent. NE Out_diario.png)
 **Grafico agrupado por Semana del año vs Dia y Hora**
-![](Taller3/P1_UML/images/Temp.%20Vent.%20NE%20Out_heatmap.png)
+![](P1_UML/images/Temp. Vent. NE Out_heatmap.png)
 
 ### Temperatura SW 
 **Grafico agrupado por dia y hora**
-![](Taller3/P1_UML/images/Temp.%20Vent.%20SW%20Out_diario.png)
+![](P1_UML/images/Temp. Vent. SW Out_diario.png)
 **Grafico agrupado por Semana del año vs Dia y Hora**
-![](Taller3/P1_UML/images/Temp.%20Vent.%20SW%20Out_heatmap.png)
+![](P1_UML/images/Temp. Vent. SW Out_heatmap.png)
 
 ## B. Encontrar patrones – análisis univariable
 Utilizando cualquier técnica de aprendizaje no supervisado, encontrar los patrones diarios que existen en el data set, para cada variable individual. Utilizar al menos dos técnicas para verificar su consistencia entre las dos técnicas.
 
 ### CO2 Ventilación NE
-![](Taller3/P1_UML/images/CO2%20Ventilation%20NE_clustered_heatmap.png)
+![](P1_UML/images/CO2 Ventilation NE_clustered_heatmap.png)
 
 ### C02 Ventilacion SW
-![](Taller3/P1_UML/images/CO2%20Ventilation%20SW_clustered_heatmap.png)
+![](P1_UML/images/CO2 Ventilation SW_clustered_heatmap.png)
 
 
 ### Temperatura NE
-![](Taller3/P1_UML/images/Temp.%20Vent.%20NE%20Out_clustered_heatmap.png)
+![](P1_UML/images/Temp. Vent. NE Out_clustered_heatmap.png)
 
 ### Temperatura SW
-![](Taller3/P1_UML/images/Temp.%20Vent.%20SW%20Out_clustered_heatmap.png)
+![](P1_UML/images/Temp. Vent. SW Out_clustered_heatmap.png)
 
 ## C. Encontrar anomalías – análisis univariable
 
@@ -91,25 +91,25 @@ De manera similar al literal B, encontrar los patrones diarios que existen en el
 
 
 ### C02 Ventilacion NE vs Temperatura NE
-![](Taller3/P1_UML/images/Temp.%20Vent.%20NE%20Out_vs_CO2%20Ventilation%20NE_weekday_cycle.png)
+![](P1_UML/images/Temp. Vent. NE Out_vs_CO2 Ventilation NE_weekday_cycle.png)
 
 ### C02 Ventilacion SW vs Temperatura SW
-![](Taller3/P1_UML/images/Temp.%20Vent.%20SW%20Out_vs_CO2%20Ventilation%20SW_weekday_cycle.png)
+![](P1_UML/images/Temp. Vent. SW Out_vs_CO2 Ventilation SW_weekday_cycle.png)
 ## E. Encontrar anomalías – análisis multivariable
 De manera similar al literal C, encontrar anomalías, pero de los dos pares de variables.
 
 ### C02 Ventilacion NE vs Temperatura NE
 **Agrupacion por Hora**
-![](Taller3/P1_UML/images/Cluster_V005_vent01_CO2_vs_V006_vent01_temp_out_hour.gif)
+![](P1_UML/images/Cluster_V005_vent01_CO2_vs_V006_vent01_temp_out_hour.gif)
 **Agrupacion por Dia de la Semana**
-![](Taller3/P1_UML/images/Cluster_V005_vent01_CO2_vs_V006_vent01_temp_out_weekday.gif)
+![](P1_UML/images/Cluster_V005_vent01_CO2_vs_V006_vent01_temp_out_weekday.gif)
 
 ### C02 Ventilacion SW vs Temperatura SW
 **Agrupacion por Hora**
-![](Taller3/P1_UML/images/Cluster_V022_vent02_CO2_vs_V023_vent02_temp_out_hour.gif)
+![](P1_UML/images/Cluster_V022_vent02_CO2_vs_V023_vent02_temp_out_hour.gif)
 
 **Agrupacion por Dia de la Semana**
-![](Taller3/P1_UML/images/Cluster_V022_vent02_CO2_vs_V023_vent02_temp_out_weekday.gif)
+![](P1_UML/images/Cluster_V022_vent02_CO2_vs_V023_vent02_temp_out_weekday.gif)
 
 
 ## F. Conclusiones
