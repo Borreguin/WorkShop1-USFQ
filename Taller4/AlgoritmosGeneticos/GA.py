@@ -1,6 +1,7 @@
+from matplotlib import pyplot as plt
 import numpy as np
-
-from Taller4.AlgoritmosGeneticos.generalSteps import *
+import time
+from generalSteps import *
 
 
 class GA:
@@ -121,12 +122,12 @@ def case_study_2(_objetive):
     ga.set_new_generation_type(NewGenerationType.MIN_DISTANCE)
     ga.run()
 
-def conv_elitismo(_objetive):
+def conv_elitismo(_objetive, elitism_rate = 0.1):
     # Definición de la población inicial
     population = generate_population(100, len(_objetive))
     mutation_rate = 0.01
     n_iterations = 10000
-    ga = EnhancedGA(population, _objetive, mutation_rate, n_iterations)
+    ga = EnhancedGA(population, _objetive, mutation_rate, n_iterations, elitism_rate)
     ga.run()
 
 def case_study_3(_objetive):
@@ -146,11 +147,62 @@ def case_study_4(_objetive):
     ga = EnhancedGA(population, _objetive, mutation_rate, n_iterations)
     ga.run()
 
+# Función para medir el tiempo de ejecución
+def benchmark(func, *args, repetitions=50):
+    times = []
+    for _ in range(repetitions):
+        start_time = time.time()
+        func(*args)
+        times.append(time.time() - start_time)
+    return np.mean(times), np.std(times)
+
 if __name__ == "__main__":
     objetive = "GA Workshop! USFQ"
     #objetive = "Prueba Segundo CASO de la nueva distancia con una solucion absoluta"
-    #
+    
     #case_study_1(objetive)
     #case_study_2(objetive)
     #case_study_4(objetive)
-    case_study_3(objetive)
+    #case_study_3(objetive)
+    #conv_elitismo(objetive, 0.1) # Se ocupo una seleccion de elitismo
+
+    # Corrección de la llamada a benchmark para case_study_1
+    mean_time_case_study_1, std_dev_case_study_1 = benchmark(case_study_1, objetive)
+
+    # Si necesitas pasar argumentos adicionales a conv_elitismo, asegúrate de que también se pasen correctamente.
+    mean_time_conv_elitismo, std_dev_conv_elitismo = benchmark(conv_elitismo, objetive, 0.1)
+
+
+    # Imprimir los resultados
+    print(f"case_study_1: Tiempo promedio = {mean_time_case_study_1:.4f}s, Desviación estándar = {std_dev_case_study_1:.4f}")
+    print(f"conv_elitismo: Tiempo promedio = {mean_time_conv_elitismo:.4f}s, Desviación estándar = {std_dev_conv_elitismo:.4f}")
+
+    # Creando el gráfico
+    plt.figure(figsize=(10, 6))
+
+    # Distribuciones de los tiempos de ejecución para case_study_1
+    x_case_study_1 = np.linspace(mean_time_case_study_1 - 3*std_dev_case_study_1, 
+                                mean_time_case_study_1 + 3*std_dev_case_study_1, 100)
+    y_case_study_1 = np.exp(-((x_case_study_1 - mean_time_case_study_1) ** 2) / (2 * std_dev_case_study_1 ** 2)) / (std_dev_case_study_1 * np.sqrt(2 * np.pi))
+
+    # Distribuciones de los tiempos de ejecución para conv_elitismo
+    x_conv_elitismo = np.linspace(mean_time_conv_elitismo - 3*std_dev_conv_elitismo, 
+                                mean_time_conv_elitismo + 3*std_dev_conv_elitismo, 100)
+    y_conv_elitismo = np.exp(-((x_conv_elitismo - mean_time_conv_elitismo) ** 2) / (2 * std_dev_conv_elitismo ** 2)) / (std_dev_conv_elitismo * np.sqrt(2 * np.pi))
+
+    # Graficando las distribuciones
+    plt.plot(x_case_study_1, y_case_study_1, color='blue', label='case_study_1')
+    plt.fill_between(x_case_study_1, y_case_study_1, color='blue', alpha=0.5)
+
+    plt.plot(x_conv_elitismo, y_conv_elitismo, color='red', label='conv_elitismo(objetive, 0.1)')
+    plt.fill_between(x_conv_elitismo, y_conv_elitismo, color='red', alpha=0.5)
+
+    # Añadiendo leyendas y títulos
+    plt.xlabel('Tiempo de ejecución (s)')
+    plt.ylabel('Densidad de probabilidad')
+    plt.title('Comparación de distribuciones de tiempos de ejecución')
+    plt.legend()
+
+    plt.savefig('Images/Punto4.png')
+    # Mostrar el gráfico
+    plt.show()
