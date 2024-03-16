@@ -1,6 +1,6 @@
 import random
-from Taller4.AlgoritmosGeneticos.constants import *
-from Taller4.AlgoritmosGeneticos.util import *
+from constants import *
+from util import *
 
 
 def parent_selection(_type: ParentSelectionType, population, aptitudes):
