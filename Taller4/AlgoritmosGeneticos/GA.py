@@ -1,6 +1,7 @@
 from generalSteps import *
 import pandas as pd
 import matplotlib.pyplot as plt
+import decimal
 
 class GA:
     def __init__(self, population, objetive, mutation_rate, n_iterations):
@@ -36,7 +37,6 @@ class GA:
                 print("Objetivo alcanzado:")
                 print(f"Generación {self.n_generation}: {best_individual} - Aptitud: {best_aptitude}")
                 return self.n_generation
-                break
             print(f"Generación {self.n_generation}: {best_individual} - población: {len(self.population)} - Aptitud: {best_aptitude}")
 
             # la nueva generación se obtiene a partir de la población actual, interactuando entre los individuos
@@ -45,6 +45,7 @@ class GA:
 
         if not success:
             print(f"Objetivo no alcanzado en las iteraciones establecidas {self.n_iterations}")
+            return 1001
 
 def plot_scatter_with_line(df, x_column, y_column):
     # Crear el gráfico de dispersión
@@ -53,7 +54,7 @@ def plot_scatter_with_line(df, x_column, y_column):
     plt.plot(df[x_column], df[y_column], color='skyblue')
     # Agregar etiquetas de los valores en cada punto
     for index, value in enumerate(df[y_column]):
-        plt.text(df[x_column][index]+0.01, value+0.01, str(value))
+        plt.text(df[x_column][index], value, str(value), fontsize=8)
     # Títulos y etiquetas de los ejes
     plt.xlabel(x_column)
     plt.ylabel(y_column)
@@ -95,16 +96,19 @@ def case_study_3(_objetive):
     # Almacenar los resultados
     resultados_mutation_rate = pd.DataFrame(columns=['Mutation Rate', 'Generación de convergencia'])
 
-    for mutation in range(0, 2, 0.005): 
+    i = 0
+    while i < 0.15:
+        mutation = i
         mutation_rate = mutation
         n_iterations = 1000
         ga = GA(population, _objetive, mutation_rate, n_iterations)
         ga.set_evaluation_type(AptitudeType.BY_DISTANCE)
         ga.set_best_individual_selection_type(BestIndividualSelectionType.MIN_DISTANCE)
-        ga.set_new_generation_type(NewGenerationType.NEW)
+        ga.set_new_generation_type(NewGenerationType.MIN_DISTANCE)
         n_generation = ga.run()
         # Añade los resultados al DataFrame
         resultados_mutation_rate.loc[len(resultados_mutation_rate)] = {'Mutation Rate': mutation_rate, 'Generación de convergencia': n_generation}
+        i += 0.01
     
     print(resultados_mutation_rate)
     resultados_mutation_rate.to_excel('resultados_mutation_rate.xlsx', index=False)
@@ -144,10 +148,10 @@ def case_study_5(_objetive):
     
 if __name__ == "__main__":
     objetive = "GA Workshop! USFQ"
-    case_study_1(objetive)
-    case_study_2(objetive)
+    # case_study_1(objetive)
+    # case_study_2(objetive)
     #case_study_2_mejorado(objetive)
-    #case_study_3(objetive)
+    case_study_3(objetive)
     #case_study_4(objetive)
     #case_study_5(objetive)
     
