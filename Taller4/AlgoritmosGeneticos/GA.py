@@ -44,8 +44,10 @@ class GA:
             self.population = generate_new_population(self.new_generation_type, self.population, aptitudes, self.mutation_rate)
             self.n_generation += 1
 
+
         if not success:
             print(f"Objetivo no alcanzado en las iteraciones establecidas {self.n_iterations}")
+
 
 class EnhancedGA(GA):
     def __init__(self, population, objetive, mutation_rate, n_iterations, elitism_rate=0.1, tournament_size=3):
@@ -130,13 +132,13 @@ def conv_elitismo(_objetive, elitism_rate = 0.1):
     ga = EnhancedGA(population, _objetive, mutation_rate, n_iterations, elitism_rate)
     ga.run()
 
-def case_study_3(_objetive):
+def case_study_3(_objetive, mutation_rate):
     # Definición de la población inicial
     population = generate_population(100, len(_objetive))
-    mutation_rate = 0.004
     n_iterations = 10000
     ga = GA(population, _objetive, mutation_rate, n_iterations)
     ga.run()
+    return ga.n_generation
 
 def case_study_4(_objetive):
     # Definición de la población inicial
