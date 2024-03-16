@@ -55,7 +55,7 @@ class TSP:
 
         # Variables
         _model.x = pyo.Var(_model.N, _model.M, within=pyo.Binary)
-        _model.u = pyo.Var(_model.N, bounds=(0, n_cities - 1))
+        _model.u = pyo.Var(_model.N, bounds=(0, n_cities - 1), within=pyo.NonNegativeIntegers)
 
         # Objetive Function: (función objetivo a minimizar)
         def obj_rule(model):
@@ -157,7 +157,7 @@ def study_case_1():
     n_cities = 10
     ciudades, distancias = generar_ciudades_con_distancias(n_cities)
     heuristics = []
-    tolerance = 0.20
+    tolerance = 10
     time_limit = 30
     tee = False
     tsp = TSP(ciudades, distancias, heuristics)
@@ -165,14 +165,14 @@ def study_case_1():
     tsp.plotear_resultado(ruta)
 
 def study_case_2():
-    n_cities = 70
+    n_cities = 120
     ciudades, distancias = generar_ciudades_con_distancias(n_cities)
     # con heuristicas
     heuristics = ['limitar_funcion_objetivo']
     # sin heuristicas
     # heuristics = []
     tsp = TSP(ciudades, distancias, heuristics)
-    tolerance = 0.20
+    tolerance = 10
     time_limit = 40
     tee = True
     ruta = tsp.encontrar_la_ruta_mas_corta(tolerance, time_limit, tee)
@@ -186,7 +186,7 @@ def study_case_3():
     # sin heuristicas
     # heuristics = []
     tsp = TSP(ciudades, distancias, heuristics)
-    tolerance = 0.1
+    tolerance = 10
     time_limit = 60
     tee = True
     ruta = tsp.encontrar_la_ruta_mas_corta(tolerance, time_limit, tee)
@@ -196,6 +196,6 @@ def study_case_3():
 if __name__ == "__main__":
     print("Se ha colocado un límite de tiempo de 30 segundos para la ejecución del modelo.")
     # Solve the TSP problem
-    study_case_1()
+    # study_case_1()
     # study_case_2()
-    # study_case_3()
+    study_case_3()
