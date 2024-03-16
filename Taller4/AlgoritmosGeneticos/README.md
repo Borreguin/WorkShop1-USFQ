@@ -54,7 +54,30 @@ A pesar de no contar con una lógica clara que administre la diferencia de "dist
 
 Sin alterar el parámetro de mutación mutation_rate, se procedió a buscar alternativas de mejora y optimización:
 
-* De inicio se intentó mediante la métrica ajustada de distancia encontrar los 50 individuos más aptos, y proceder a reproducirlos en parejas acorde su ranking, los mismos generan un hijo y la población se complementa con 50 individuos nuevos en la población para matenenrla en 100.
+* Se logró alcanzar la generación 171 con un nuevo crossover: crossover uniforme. Fue el mejor resultado que obtuvimos.
+
+```python
+def crossover(_type: CrossoverType, parent1, parent2, aptitudes1=None, aptitudes2=None):
+    ...
+    if _type == CrossoverType.NEW:
+        child1 = []
+        child2 = []
+
+        for i in range(len(parent1)):
+            if random.randint(0,1) == 1:
+                child1.append(parent1[i])
+                child2.append(parent2[i])
+            else:
+                child1.append(parent2[i])
+                child2.append(parent1[i])
+        
+        child1 = ''.join(child1) 
+        child2 = ''.join(child2)
+
+        return child1, child2
+```
+
+* También se intentó mediante la métrica ajustada de distancia encontrar los 50 individuos más aptos, y proceder a reproducirlos en parejas acorde su ranking, los mismos generan un hijo y la población se complementa con 50 individuos nuevos en la población para matenenrla en 100.
 
 ``` python
     if _type == ParentSelectionType.NEW:
