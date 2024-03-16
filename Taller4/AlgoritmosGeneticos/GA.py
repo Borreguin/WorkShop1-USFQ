@@ -47,7 +47,7 @@ class GA:
             print(f"Objetivo no alcanzado en las iteraciones establecidas {self.n_iterations}")
             return 1001
 
-def plot_scatter_with_line(df, x_column, y_column):
+def plot_scatter_with_line(df, x_column, y_column, filename):
     # Crear el gráfico de dispersión
     plt.scatter(df[x_column], df[y_column], color='red')
     # Unir los puntos con una línea
@@ -60,6 +60,7 @@ def plot_scatter_with_line(df, x_column, y_column):
     plt.ylabel(y_column)
     plt.title(f'{y_column} vs {x_column}')
     # Mostrar el gráfico
+    plt.savefig(f'images/{filename}')
     plt.show()
 
 
@@ -112,7 +113,7 @@ def case_study_3(_objetive):
     
     print(resultados_mutation_rate)
     resultados_mutation_rate.to_excel('resultados_mutation_rate.xlsx', index=False)
-    plot_scatter_with_line(resultados_mutation_rate, 'Mutation Rate', 'Generación de convergencia')
+    plot_scatter_with_line(resultados_mutation_rate, 'Mutation Rate', 'Generación de convergencia', 'mutation_rate.png')
 
 
 def case_study_4(_objetive):
@@ -133,7 +134,7 @@ def case_study_4(_objetive):
     
     print(resultados_population)
     resultados_population.to_excel('resultados_population.xlsx', index=False)
-    plot_scatter_with_line(resultados_population, 'Population', 'Generación de convergencia')
+    plot_scatter_with_line(resultados_population, 'Population', 'Generación de convergencia', 'population.png')
 
 def case_study_5(_objetive):
     population = generate_population(100, len(_objetive))
