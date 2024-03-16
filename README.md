@@ -48,6 +48,25 @@ permita una rápida convergencia. Pista: ¿Tal vez elegir de manera diferente lo
 parámetro. ¿Qué conclusión se puede obtener de este cambio?
 6. Cree un nuevo caso de estudio 4. Altere el tamaño de la población, ¿es beneficioso o no
 aumentar la población?
+Como se puede observar que al aumentar la population vemos que el número de generaciones disminuye y converge más rápidamente.
+![](Taller4/AlgoritmosGeneticos/images/population_vs_ngenerations.png)
+
+Aquí vemos la performance en tiempo y número de generations para diferentes tamaños de población.
+
+
+| population_size | n_generations | execution_time |
+|-----------------|---------------|----------------|
+|             100 |            93 |       0.159570 |
+|             200 |           119 |       0.421872 |
+|             300 |            36 |       0.197471 |
+|             400 |            21 |       0.155585 |
+|             500 |            20 |       0.176497 |
+|             600 |            19 |       0.207475 |
+|             700 |            16 |       0.200449 |
+|             800 |            30 |       0.441833 |
+|             900 |            22 |       0.367986 |
+
+
 7. De todo lo aprendido, cree el caso de estudio definitivo (caso de estudio 5) el cual tiene lo
 mejor de los ítems 4, 5, 6.
 
