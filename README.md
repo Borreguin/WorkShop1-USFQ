@@ -59,6 +59,18 @@ Revisar el archivo util.py función distance.
 mejorar la convergencia y que esta sea más rápida? Implemente cualquier mejora que
 permita una rápida convergencia. Pista: ¿Tal vez elegir de manera diferente los padres?
 ¿Realizar otro tipo de mutación o cruce?
+
+Se ha seleccionado la implementación de elitismo para realizar comparaciones y validar sus beneficios con respecto a la implementación previamente presentada. El principal beneficio del elitismo es que previene la pérdida de las mejores soluciones encontradas. Esto es especialmente importante en problemas donde encontrar una solución óptima o cercana al óptimo es complicado y puede ser fácilmente perdida debido a la aleatoriedad inherente a los operadores genéticos.
+
+Para medir la eficacia de la implementación, se ejecutan 50 veces las soluciones para obtener una comparación estadística de los resultados y evidenciar si existe una mejora significativa. Esta comparación se realiza una vez que se ha demostrado que ambas funciones convergen (case_study_1 y conv_elitismo). En el caso del elitismo, se ha tomado un valor de 0.1, como es comúnmente utilizado.
+
+Se evidencia una mejora en los tiempos, y los resultados son los siguientes, lo que indica que el uso de elitismo mejora el tiempo:
+
+case_study_1: Tiempo promedio = 1.3886s, Desviación estándar = 0.0890
+conv_elitismo: Tiempo promedio = 0.4579s, Desviación estándar = 0.2217
+
+![](/Taller4/AlgoritmosGeneticos/Images/Punto_4.png)
+
 5. Cree un nuevo caso de estudio 3. Altere el parámetro de mutación mutation_rate, ¿ha beneficiado en algo la convergencia? Qué valores son los más adecuados para este
 parámetro. ¿Qué conclusión se puede obtener de este cambio?
 
