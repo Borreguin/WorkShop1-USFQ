@@ -133,10 +133,9 @@ def conv_elitismo(_objetive):
     ga = EnhancedGA(population, _objetive, mutation_rate, n_iterations)
     ga.run()
 
-def case_study_3(_objetive):
+def case_study_3(_objetive, mutation_rate):
     # Definición de la población inicial
     population = generate_population(100, len(_objetive))
-    mutation_rate = 0.004
     n_iterations = 10000
     ga = GA(population, _objetive, mutation_rate, n_iterations)
     ga.run()
@@ -177,6 +176,7 @@ def ej5():
 
     # Crea un DataFrame con los resultados
     df_results = pd.DataFrame(results)
+    print(df_results)
 
     # Grafica los resultados
     plt.figure(figsize=(10, 6))
@@ -185,8 +185,9 @@ def ej5():
     plt.xlabel('Tasa de mutación')
     plt.ylabel('Número de generaciones')
     plt.grid(True)
+    plt.savefig('Images/img_5.png')
     plt.show()
-    plt.savefig('img_5.png')
+
 
 if __name__ == "__main__":
     objetive = "GA Workshop! USFQ"

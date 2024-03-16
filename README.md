@@ -46,6 +46,28 @@ permita una rápida convergencia. Pista: ¿Tal vez elegir de manera diferente lo
 ¿Realizar otro tipo de mutación o cruce?
 5. Cree un nuevo caso de estudio 3. Altere el parámetro de mutación mutation_rate, ¿ha beneficiado en algo la convergencia? Qué valores son los más adecuados para este
 parámetro. ¿Qué conclusión se puede obtener de este cambio?
+
+![](Taller4/AlgoritmosGeneticos/Images/img_5.png)
+
+| mutation_rate | n_generation |
+|---------------|--------------|
+| 0.001         | 10000        |
+| 0.002         | 4075         |
+| 0.003         | 2340         |
+| 0.004         | 1305         |
+| 0.005         | 1449         |
+| 0.006         | 925          |
+| 0.007         | 861          |
+| 0.008         | 531          |
+| 0.009         | 1138         |
+| 0.010         | 982          |
+
+La alteriacion del parametro mutation_rate si beneficia en la convergencia, ya que a medida que el valor de mutation_rate disminuye, el numero de generaciones disminuye.
+Se determino el valor optimo de mutation_rate en 0.008, ya que es el valor que menos generaciones necesito para llegar a la frase objetivo.
+desde el valor inicial 0.01 hasta 0.008 se puede observar que el numero de generaciones disminuye, pero a partir de 0.008 el numero de generaciones aumenta.
+El numero de generwciones baja debido a que la probabilidad de mutacion es menor, por lo que se mantiene la poblacion original por mas tiempo, y se generan menos mutaciones, lo que permite que la poblacion converga mas rapido.
+
+
 6. Cree un nuevo caso de estudio 4. Altere el tamaño de la población, ¿es beneficioso o no
 aumentar la población?
 7. De todo lo aprendido, cree el caso de estudio definitivo (caso de estudio 5) el cual tiene lo
