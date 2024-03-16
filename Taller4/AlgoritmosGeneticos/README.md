@@ -121,9 +121,62 @@ En el gráfico a continuación se puede visualizar la convergencia del algoritmo
 
 Concluyendo, al experimentar con diferentes valores de mutation_rate, se puede observar cómo afecta la convergencia del algoritmo genético. En algunos casos, un valor más alto puede introducir más diversidad y evitar la convergencia prematura, mientras que en otros casos podría resultar en una exploración excesiva y una convergencia más lenta.
 
+```python
+def case_study_3(_objetive):
+    population = generate_population(100, len(_objetive))
+    # Almacenar los resultados
+    resultados_mutation_rate = pd.DataFrame(columns=['Mutation Rate', 'Generación de convergencia'])
+    # Se define el punto inicial para la variacion del parametro mutation rate
+    i = 0
+    while i < 0.15:
+        mutation = i
+        mutation_rate = mutation
+        n_iterations = 1000
+        ga = GA(population, _objetive, mutation_rate, n_iterations)
+        ga.set_evaluation_type(AptitudeType.BY_DISTANCE)
+        ga.set_best_individual_selection_type(BestIndividualSelectionType.MIN_DISTANCE)
+        ga.set_new_generation_type(NewGenerationType.MIN_DISTANCE)
+        n_generation = ga.run()
+        # Añade los resultados al DataFrame
+        resultados_mutation_rate.loc[len(resultados_mutation_rate)] = {'Mutation Rate': mutation_rate, 'Generación de convergencia': n_generation}
+        i += 0.01
+    # se muestran los resultados
+    print(resultados_mutation_rate)
+    resultados_mutation_rate.to_excel('resultados_mutation_rate.xlsx', index=False)
+    plot_scatter_with_line(resultados_mutation_rate, 'Mutation Rate', 'Generación de convergencia', 'mutation_rate.png')
+ 
+```
 
 ## 6. Cree un nuevo caso de estudio 4. Altere el tamaño de la población, ¿es beneficioso o no aumentar la población?
 
+Para analizar si aumentar el tamaño de la población beneficia al algoritmo, se puede comparar el rendimiento en términos de velocidad de convergencia, calidad de las soluciones encontradas y estabilidad del algoritmo. 
 
+A continucación se puede apreciar un gráfico que muestra la tendencia de la convergencia en función de la variación del parámetro Population
 
+![population.png](images%2Fpopulation.png)
+
+Se puede observar una mejora significativa al aumentar el tamaño de la población, se puede concluir entonces, que es beneficioso. 
+
+```python
+def case_study_4(_objetive):
+    # Almacenar los resultados
+    resultados_population = pd.DataFrame(columns=['Population', 'Generación de convergencia'])
+
+    for popul in range(10, 801, 10): 
+        population = generate_population(popul, len(_objetive))
+        mutation_rate = 0.01
+        n_iterations = 1000
+        ga = GA(population, _objetive, mutation_rate, n_iterations)
+        ga.set_evaluation_type(AptitudeType.BY_DISTANCE)
+        ga.set_best_individual_selection_type(BestIndividualSelectionType.MIN_DISTANCE)
+        ga.set_new_generation_type(NewGenerationType.MIN_DISTANCE)
+        n_generation = ga.run()
+        # Añade los resultados al DataFrame
+        resultados_population.loc[len(resultados_population)] = {'Population': len(population), 'Generación de convergencia': n_generation}
+    
+    print(resultados_population)
+    resultados_population.to_excel('resultados_population.xlsx', index=False)
+    plot_scatter_with_line(resultados_population, 'Population', 'Generación de convergencia', 'population.png', annotate=False)
+
+```
 ## 7. De todo lo aprendido, cree el caso de estudio definitivo (caso de estudio 5) el cual tiene lo mejor de los ítems 4, 5, 6.
