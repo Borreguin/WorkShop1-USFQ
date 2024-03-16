@@ -28,14 +28,12 @@ Cabe indicar que para este ejercicio las poblaciones están compuestas por eleme
 
 Se corrigió la función de evaluación indicada, se procede a manejar las distancias entre caracteres en valor absoluto para su acumulación ya que son diferencias relativas:
 
-``` 
+```python
 def distance(list1:List[int], list2:List[int]):
     acc = 0
-    lista_palabra=[]
     for e1, e2 in zip(list1, list2):
         #Las diferencias entre los valores unicode de los individuos debe ser absoluta.
         acc += abs(e1 - e2)
-        lista_palabra.append(abs(e1 - e2))
     n_size = min(len(list1), len(list2))
     if n_size == 0:
         return None
