@@ -36,6 +36,21 @@ b) el algoritmo nunca puede converger y en lugar de acercarse al objetivo se ale
 ## Resolucion
 1. Ejecute los dos casos de estudio y explique los resultados de ejecución de cada caso de
 estudio.
+
+El primer caso de estudio, establece una tasa 
+de mutación de 0.01 y un número de iteraciones 
+de 1000.
+
+Al incio de la ejecucion del codigo se puede 
+apreciar la generacion de los individuos con 
+cadenas de caracteres randomicas y sus 
+repectivos valores de aptitud. La aptitud va 
+incrementando en cada iteracion. Hasta que 
+llega a la iteracion o generacion 982,donde la 
+cadena de caracteres coincide exactamente con 
+el objetivo.
+
+
 2. ¿Cuál sería una posible explicación para que el caso 2 no finalice como lo hace el caso 1?
 Revisar el archivo util.py función distance.
 3. Realice una correcta implementación para 
