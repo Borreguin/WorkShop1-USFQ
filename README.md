@@ -108,4 +108,15 @@ Aquí vemos la performance en tiempo y número de generations para diferentes ta
 7. De todo lo aprendido, cree el caso de estudio definitivo (caso de estudio 5) el cual tiene lo
 mejor de los ítems 4, 5, 6.
 
+Se crea un caso de estudio 7 donde se toman los mejores hiperparametros de los anteriores puntos
 
+
+mutation_rate = 0.008
+
+
+population_size = 600
+
+
+Se ocupo la nueva clase GAENHANCED que ocupa los metodos de elitismo para determinar las nuevas generaciones
+elitiismo = 0.1
+![](Taller4/AlgoritmosGeneticos/Images/img_7.png)

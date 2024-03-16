@@ -188,6 +188,14 @@ def ej5():
     plt.savefig('Images/img_5.png')
     plt.show()
 
+def study_case_7(_objetive):
+    # Definición de la población inicial
+    population = generate_population(600, len(_objetive))
+    mutation_rate = 0.008
+    n_iterations = 10000
+    ga = EnhancedGA(population, _objetive, mutation_rate, n_iterations)
+    ga.run()
+
 
 if __name__ == "__main__":
     objetive = "GA Workshop! USFQ"
@@ -196,8 +204,7 @@ if __name__ == "__main__":
     #case_study_1(objetive)
     #case_study_2(objetive)
     #case_study_4(objetive)
-
-    ej5()
-
+    #ej5()
+    study_case_7(objetive)
 
 
