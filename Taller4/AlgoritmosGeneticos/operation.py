@@ -1,9 +1,9 @@
 import random
-from Taller4.AlgoritmosGeneticos.constants import *
-from Taller4.AlgoritmosGeneticos.util import *
+from constants import *
+from util import *
 
 
-def parent_selection(_type: ParentSelectionType, population, aptitudes):
+def parent_selection(_type: ParentSelectionType, population, aptitudes, pareja=None):
     if _type == ParentSelectionType.DEFAULT:
         # Selección de padres por ruleta
         cumulative = sum(aptitudes)
@@ -19,11 +19,32 @@ def parent_selection(_type: ParentSelectionType, population, aptitudes):
         return parent1, parent2
 
     if _type == ParentSelectionType.NEW:
-        print("implement here the new parent selection")
-        return None
+        
+        
+        def obtener_individuo_por_posicion(poblacion, aptitudes, pareja):
+            # Combinar las listas en una sola para ordenarlas juntas
+            combinada = list(zip(population, aptitudes))
+
+            # Ordenar basado en el valor de la primera columna de los datos (i[1][0])
+            combinada_ordenada = sorted(combinada, key=lambda i: i[1][0])
+
+            # Descomprimir las listas ordenadas
+            nombres_ordenados, aptitudes_ordenadas = zip(*combinada_ordenada)
+
+            # Obtener el individuo en la posición especificada
+            individuo_en_posicion = nombres_ordenados[pareja]
+            aptitudes_en_posicion = aptitudes_ordenadas[pareja][1]
+            
+            return individuo_en_posicion, aptitudes_en_posicion
+
+        # Obtener el individuo en la posición especificada
+        parent1, aptitudes1 = obtener_individuo_por_posicion(population, aptitudes, 2*pareja)#pareja)#)
+        parent2, aptitudes2 = obtener_individuo_por_posicion(population, aptitudes, 2*pareja+1)#99-pareja)#)            
+        
+        return parent1, parent2, aptitudes1, aptitudes2
 
 
-def crossover(_type: CrossoverType, parent1, parent2):
+def crossover(_type: CrossoverType, parent1, parent2, aptitudes1=None, aptitudes2=None):
     if _type == CrossoverType.DEFAULT:
         # Cruce de dos padres para producir descendencia
         crossover_point = random.randint(1, len(parent1) - 1)
@@ -31,8 +52,13 @@ def crossover(_type: CrossoverType, parent1, parent2):
         child2 = parent2[:crossover_point] + parent1[crossover_point:]
         return child1, child2
     if _type == CrossoverType.NEW:
-        print("implement here the new crossover")
-        return None
+        child1=""
+        for i in range(len(parent1)):
+            if aptitudes1[i] < aptitudes2[i]:
+                child1 = child1 + parent1[i]
+            else:
+                child1 = child1 + parent2[i]
+        return child1
 
 
 def mutate(_type: MutationType, individual, mutation_rate):

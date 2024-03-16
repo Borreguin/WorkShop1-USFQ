@@ -1,7 +1,7 @@
 from random import choice
 
-from Taller4.AlgoritmosGeneticos.operation import *
-from Taller4.AlgoritmosGeneticos.util import word_distance
+from operation import *
+from util import word_distance
 
 
 # Generar población
@@ -68,5 +68,12 @@ def generate_new_population(_type: NewGenerationType, population, aptitudes, mut
         return new_population
 
     if _type == NewGenerationType.NEW:
-        print("implement here the new generation")
-        return None
+        new_population = []
+        for i in range(len(population)//2):
+            parent1, parent2, aptitudes1, aptitudes2 = parent_selection(ParentSelectionType.NEW, population, aptitudes,i)
+            child1 = crossover(CrossoverType.NEW, parent1, parent2, aptitudes1, aptitudes2)
+            child1 = mutate(MutationType.DEFAULT, child1, mutation_rate)
+            new_population.extend([child1])
+        population_adic = generate_population(50, len(child1))
+        new_population.extend(population_adic)
+        return new_population

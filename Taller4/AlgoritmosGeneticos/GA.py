@@ -1,4 +1,5 @@
-from Taller4.AlgoritmosGeneticos.generalSteps import *
+from generalSteps import *
+import pandas as pd
 
 
 class GA:
@@ -34,6 +35,7 @@ class GA:
                 success = True
                 print("Objetivo alcanzado:")
                 print(f"Generación {self.n_generation}: {best_individual} - Aptitud: {best_aptitude}")
+                return self.n_generation
                 break
             print(f"Generación {self.n_generation}: {best_individual} - población: {len(self.population)} - Aptitud: {best_aptitude}")
 
@@ -63,8 +65,72 @@ def case_study_2(_objetive):
     ga.set_new_generation_type(NewGenerationType.MIN_DISTANCE)
     ga.run()
 
+def case_study_2_mejorado(_objetive):
+    population = generate_population(100, len(_objetive))
+    mutation_rate = 0.01
+    n_iterations = 1000
+    ga = GA(population, _objetive, mutation_rate, n_iterations)
+    ga.set_evaluation_type(AptitudeType.BY_DISTANCE)
+    ga.set_best_individual_selection_type(BestIndividualSelectionType.MIN_DISTANCE)
+    ga.set_new_generation_type(NewGenerationType.NEW)
+    ga.run()
+    
+def case_study_3(_objetive):
+    population = generate_population(100, len(_objetive))
+    # Almacenar los resultados
+    resultados_mutation_rate = pd.DataFrame(columns=['Mutation Rate', 'Generación de convergencia'])
 
+    for mutation in range(0, 2, 0.005): 
+        mutation_rate = mutation
+        n_iterations = 1000
+        ga = GA(population, _objetive, mutation_rate, n_iterations)
+        ga.set_evaluation_type(AptitudeType.BY_DISTANCE)
+        ga.set_best_individual_selection_type(BestIndividualSelectionType.MIN_DISTANCE)
+        ga.set_new_generation_type(NewGenerationType.NEW)
+        n_generation = ga.run()
+        # Añade los resultados al DataFrame
+        resultados_mutation_rate.loc[len(resultados_mutation_rate)] = {'Mutation Rate': mutation_rate, 'Generación de convergencia': n_generation}
+    
+    print(resultados_mutation_rate)
+    resultados_mutation_rate.to_excel('resultados_mutation_rate.xlsx', index=False)
+
+
+def case_study_4(_objetive):
+    # Almacenar los resultados
+    resultados_population = pd.DataFrame(columns=['Population', 'Generación de convergencia'])
+
+    for popul in range(10, 1000, 10): 
+        population = generate_population(popul, len(_objetive))
+        mutation_rate = 0.01
+        n_iterations = 1000
+        ga = GA(population, _objetive, mutation_rate, n_iterations)
+        ga.set_evaluation_type(AptitudeType.BY_DISTANCE)
+        ga.set_best_individual_selection_type(BestIndividualSelectionType.MIN_DISTANCE)
+        ga.set_new_generation_type(NewGenerationType.NEW)
+        n_generation = ga.run()
+        # Añade los resultados al DataFrame
+        resultados_population.loc[len(resultados_population)] = {'Population': len(population), 'Generación de convergencia': n_generation}
+    
+    print(resultados_population)
+    resultados_population.to_excel('resultados_population.xlsx', index=False)
+
+def case_study_5(_objetive):
+    population = generate_population(100, len(_objetive))
+    mutation_rate = 0.01
+    n_iterations = 1000
+    ga = GA(population, _objetive, mutation_rate, n_iterations)
+    ga.set_evaluation_type(AptitudeType.BY_DISTANCE)
+    ga.set_best_individual_selection_type(BestIndividualSelectionType.MIN_DISTANCE)
+    ga.set_new_generation_type(NewGenerationType.NEW)
+    ga.run()
+
+    
 if __name__ == "__main__":
     objetive = "GA Workshop! USFQ"
     case_study_1(objetive)
-    # case_study_2(objetive)
+    case_study_2(objetive)
+    #case_study_2_mejorado(objetive)
+    #case_study_3(objetive)
+    #case_study_4(objetive)
+    #case_study_5(objetive)
+    
