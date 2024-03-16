@@ -69,11 +69,10 @@ def generate_new_population(_type: NewGenerationType, population, aptitudes, mut
 
     if _type == NewGenerationType.NEW:
         new_population = []
-        for i in range(len(population)//2):
-            parent1, parent2, aptitudes1, aptitudes2 = parent_selection(ParentSelectionType.NEW, population, aptitudes,i)
-            child1 = crossover(CrossoverType.NEW, parent1, parent2, aptitudes1, aptitudes2)
+        for _ in range(len(population)//2):
+            parent1, parent2 = parent_selection(ParentSelectionType.MIN_DISTANCE, population, aptitudes)
+            child1, child2 = crossover(CrossoverType.NEW, parent1, parent2)
             child1 = mutate(MutationType.DEFAULT, child1, mutation_rate)
-            new_population.extend([child1])
-        population_adic = generate_population(50, len(child1))
-        new_population.extend(population_adic)
+            child2 = mutate(MutationType.DEFAULT, child2, mutation_rate)
+            new_population.extend([child1, child2])
         return new_population

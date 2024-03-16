@@ -52,13 +52,29 @@ def crossover(_type: CrossoverType, parent1, parent2, aptitudes1=None, aptitudes
         child2 = parent2[:crossover_point] + parent1[crossover_point:]
         return child1, child2
     if _type == CrossoverType.NEW:
-        child1=""
+        child1 = []
+        child2 = []
+
         for i in range(len(parent1)):
-            if aptitudes1[i] < aptitudes2[i]:
-                child1 = child1 + parent1[i]
+            if random.randint(0,1) == 1:
+                child1.append(parent1[i])
+                child2.append(parent2[i])
             else:
-                child1 = child1 + parent2[i]
-        return child1
+                child1.append(parent2[i])
+                child2.append(parent1[i])
+        
+        child1 = ''.join(child1) 
+        child2 = ''.join(child2)
+
+        return child1, child2
+
+        # child1=""
+        # for i in range(len(parent1)):
+        #     if aptitudes1[i] < aptitudes2[i]:
+        #         child1 = child1 + parent1[i]
+        #     else:
+        #         child1 = child1 + parent2[i]
+        # return child1`
 
 
 def mutate(_type: MutationType, individual, mutation_rate):

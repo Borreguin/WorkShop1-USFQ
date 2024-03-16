@@ -1,7 +1,6 @@
 from generalSteps import *
 import pandas as pd
 import matplotlib.pyplot as plt
-import decimal
 
 class GA:
     def __init__(self, population, objetive, mutation_rate, n_iterations):
@@ -152,8 +151,8 @@ if __name__ == "__main__":
     objetive = "GA Workshop! USFQ"
     # case_study_1(objetive)
     # case_study_2(objetive)
-    #case_study_2_mejorado(objetive)
+    case_study_2_mejorado(objetive)
     # case_study_3(objetive)
-    case_study_4(objetive)
+    # case_study_4(objetive)
     #case_study_5(objetive)
     
