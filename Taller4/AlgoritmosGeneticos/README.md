@@ -1,5 +1,5 @@
 # WorkShop-USFQ
-## Taller 4 de inteligencia artificial
+## Taller 4 de inteligencia artificial - Grupo 3.
 
 ## 1. Ejecute los dos casos de estudio y explique los resultados de ejecución de cada caso de estudio.
 
@@ -22,7 +22,11 @@ La función de evaluación no se encuentra de una forma consistente que coopere 
 
 ## 3. Realice una correcta implementación para obtener la distancia/diferencia correcta entre dos individuos en el archivo util.py función distance.
 
-Se corrigió la función de evaluación indicada:
+La evaluación para crear nuevas generaciones con este método se realiza en función de minimizar la distancia entre las palabras, al contrario del caso 1 que se debía maximizar las coincidencias.
+
+Cabe indicar que para este ejercicio las poblaciones están compuestas por elementos del mismo número de caracteres del objetivo, por lo que no se necesita aumentar las distancias encontradas entre los individuos de la población y el objetivo utilizando esto. Oara este ejercicio, estas líneas de código no se emplean pero se mantienen.
+
+Se corrigió la función de evaluación indicada, se procede a manejar las distancias entre caracteres en valor absoluto para su acumulación ya que son diferencias relativas:
 
 ``` 
 def distance(list1:List[int], list2:List[int]):
@@ -44,6 +48,8 @@ Con esta función la convergencia se optimizó a 378 generaciones para llegar al
 <div>
     <img src="images/1-2rep.png" width="1000" height="200">
 </div>
+
+A pesar de no contar con una lógica clara que administre la diferencia de "distancias" entre códigos unicode, por lo que se asume que la distancia entre dos palabras es la suma de las diferencias absolutas entre los códigos unicode de los caracteres de las palabras del individuo y el objetivo. Bajo este esquema, con su respetiva parametrización, en comparación al caso 1 se encuentra la solución mucho más rápido: Generación 982 vs. Generación 378.
 
 
 ## 4. ¿Sin alterar el parámetro de mutación mutation_rate, se puede implementar algo para mejorar la convergencia y que esta sea más rápida? Implemente cualquier mejora que permita una rápida convergencia. Pista: ¿Tal vez elegir de manera diferente los padres? ¿Realizar otro tipo de mutación o cruce?
@@ -93,16 +99,20 @@ Además, los hijos tendrán los mejores genes de cada padre que se acerquen al o
 ``` 
 Para lo que se procedió a guardar un registro de las distancias no solo por individuo sino también por gen de cada individuo.
 
-Pero, con esta iniciativa identificamos que aunque rápidamente los individuos casi se ajustan al objetivo (tan solo en 6 generaciones faltan 2 genes para converger al objetivo), el algoritmo se queda en un bucle hasta las 1000 generaciones parametrizadas sin llegar al objetivo, por lo que se descarta esta iniciativa.
+Pero, con esta iniciativa identificamos que aunque rápidamente los individuos casi se ajustan al objetivo (tan solo en 6 generaciones faltan 2 genes para converger al objetivo), el algoritmo se estanca hasta las 1000 generaciones parametrizadas sin llegar al objetivo, por lo que se descarta esta iniciativa. Pero nos perimitió llegar a la conclusión que es indispensable la variabilidad dentro del algoritmo, ya que al especializarse con los aptos en un inicio la convergencia es acelerada pero luego no permite obtener todos los genes requeridos, incluso a largo plazo sin aplicar importantes mutaciones.
 
 <div>
     <img src="images/Rep_50_mejores_genes_ok.png" width="1000" height="200">
 </div>
 
+
+
 ## 5. Cree un nuevo caso de estudio 3. Altere el parámetro de mutación mutation_rate, ¿ha beneficiado en algo la convergencia? Qué valores son los más adecuados para este parámetro. ¿Qué conclusión se puede obtener de este cambio?
 
 
+
 ## 6. Cree un nuevo caso de estudio 4. Altere el tamaño de la población, ¿es beneficioso o no aumentar la población?
+
 
 
 ## 7. De todo lo aprendido, cree el caso de estudio definitivo (caso de estudio 5) el cual tiene lo mejor de los ítems 4, 5, 6.
