@@ -85,5 +85,11 @@ def mutate(_type: MutationType, individual, mutation_rate):
                 individual = individual[:i] + random.choice(all_possible_gens) + individual[i + 1:]
         return individual
     if _type == MutationType.NEW:
-        print("implement here the new mutation")
-        return None
+        '''MUTACION UNIFORME'''
+        individual = list(individual)  # Convertir a lista para mutación
+        for i in range(len(individual)):
+            if random.random() < mutation_rate:  # Verificar probabilidad de mutación
+                # Seleccionar un nuevo gen aleatoriamente que sea diferente al actual
+                new_gen = random.choice([gen for gen in all_possible_gens if gen != individual[i]])
+                individual[i] = new_gen
+        return ''.join(individual)  # Convertir de vuelta a string

@@ -137,22 +137,32 @@ def case_study_4(_objetive):
     plot_scatter_with_line(resultados_population, 'Population', 'Generación de convergencia', 'population.png', annotate=False)
 
 def case_study_5(_objetive):
-    population = generate_population(100, len(_objetive))
-    mutation_rate = 0.01
-    n_iterations = 1000
-    ga = GA(population, _objetive, mutation_rate, n_iterations)
-    ga.set_evaluation_type(AptitudeType.BY_DISTANCE)
-    ga.set_best_individual_selection_type(BestIndividualSelectionType.MIN_DISTANCE)
-    ga.set_new_generation_type(NewGenerationType.NEW)
-    ga.run()
+
+    resultados_population = pd.DataFrame(columns=['Population', 'Generación de convergencia'])
+
+    for popul in range(100, 1000, 10): 
+        population = generate_population(popul, len(_objetive))
+        mutation_rate = 0.045
+        n_iterations = 1000
+        ga = GA(population, _objetive, mutation_rate, n_iterations)
+        ga.set_evaluation_type(AptitudeType.BY_DISTANCE)
+        ga.set_best_individual_selection_type(BestIndividualSelectionType.MIN_DISTANCE)
+        ga.set_new_generation_type(NewGenerationType.MIN_DISTANCE)
+        n_generation = ga.run()
+        # Añade los resultados al DataFrame
+        resultados_population.loc[len(resultados_population)] = {'Population': len(population), 'Generación de convergencia': n_generation}
+    
+    print(resultados_population)
+    resultados_population.to_excel('resultados_population.xlsx', index=False)
+    plot_scatter_with_line(resultados_population, 'Population', 'Generación de convergencia', 'population.png', annotate=False)
 
     
 if __name__ == "__main__":
     objetive = "GA Workshop! USFQ"
     # case_study_1(objetive)
     # case_study_2(objetive)
-    case_study_2_mejorado(objetive)
+    #case_study_2_mejorado(objetive)
     # case_study_3(objetive)
     # case_study_4(objetive)
-    #case_study_5(objetive)
+    case_study_5(objetive)
     
