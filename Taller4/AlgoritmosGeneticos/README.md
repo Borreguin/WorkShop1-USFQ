@@ -56,7 +56,7 @@ Sin alterar el parámetro de mutación mutation_rate, se procedió a buscar alte
 
 * De inicio se intentó mediante la métrica ajustada de distancia encontrar los 50 individuos más aptos, y proceder a reproducirlos en parejas acorde su ranking, los mismos generan un hijo y la población se complementa con 50 individuos nuevos en la población para matenenrla en 100.
 
-``` 
+``` python
     if _type == ParentSelectionType.NEW:
         
         
@@ -85,7 +85,7 @@ Sin alterar el parámetro de mutación mutation_rate, se procedió a buscar alte
 
 Además, los hijos tendrán los mejores genes de cada padre que se acerquen al objetivo:
 
-``` 
+``` python
     if _type == CrossoverType.NEW:
         child1=""
         for i in range(len(parent1)):
