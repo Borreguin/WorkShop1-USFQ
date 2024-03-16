@@ -139,6 +139,7 @@ def case_study_3(_objetive):
 
 def case_study_4(_objetive):
     # Definición de la población inicial
+
     population = generate_population(700, len(_objetive))
     mutation_rate = 0.01
     n_iterations = 10000
