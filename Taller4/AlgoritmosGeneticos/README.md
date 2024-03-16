@@ -180,3 +180,32 @@ def case_study_4(_objetive):
 
 ```
 ## 7. De todo lo aprendido, cree el caso de estudio definitivo (caso de estudio 5) el cual tiene lo mejor de los ítems 4, 5, 6.
+
+Mediante las pruebas realizadas en los puntos anteriores, se llegó a la conclusión de que utilizando un algoritmo de cruze uniforme y mutación uniforme, con un mutation_rate de 0.045 y una población 
+de 680 se alcanza la convergencia mínima en la generación 18,
+
+A continuación se expone el caso de estudio desarrollado y sus reultados:
+
+``` python
+def case_study_5(_objetive):
+    resultados_population = pd.DataFrame(columns=['Population', 'Generación de convergencia'])
+    population = generate_population(680, len(_objetive))
+    mutation_rate = 0.045
+    n_iterations = 1000
+    ga = GA(population, _objetive, mutation_rate, n_iterations)
+    ga.set_evaluation_type(AptitudeType.BY_DISTANCE)
+    ga.set_best_individual_selection_type(BestIndividualSelectionType.MIN_DISTANCE)
+    ga.set_new_generation_type(NewGenerationType.MIN_DISTANCE)
+    n_generation = ga.run()
+    # Añade los resultados al DataFrame
+    resultados_population.loc[len(resultados_population)] = {'Population': len(population), 'Generación de convergencia': n_generation}
+    
+    print(resultados_population)
+    resultados_population.to_excel('resultados_population.xlsx', index=False)
+    plot_scatter_with_line(resultados_population, 'Population', 'Generación de convergencia', 'population.png', annotate=False)
+
+```
+
+
+![img.png](images/img_case5.png)
+
