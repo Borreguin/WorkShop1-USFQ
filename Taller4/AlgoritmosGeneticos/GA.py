@@ -47,14 +47,15 @@ class GA:
             print(f"Objetivo no alcanzado en las iteraciones establecidas {self.n_iterations}")
             return 1001
 
-def plot_scatter_with_line(df, x_column, y_column, filename):
+def plot_scatter_with_line(df, x_column, y_column, filename, annotate = True):
     # Crear el gráfico de dispersión
     plt.scatter(df[x_column], df[y_column], color='red')
     # Unir los puntos con una línea
     plt.plot(df[x_column], df[y_column], color='skyblue')
     # Agregar etiquetas de los valores en cada punto
-    for index, value in enumerate(df[y_column]):
-        plt.text(df[x_column][index], value, str(value), fontsize=8)
+    if annotate:
+        for index, value in enumerate(df[y_column]):
+            plt.text(df[x_column][index], value, str(value), fontsize=8)
     # Títulos y etiquetas de los ejes
     plt.xlabel(x_column)
     plt.ylabel(y_column)
@@ -120,21 +121,21 @@ def case_study_4(_objetive):
     # Almacenar los resultados
     resultados_population = pd.DataFrame(columns=['Population', 'Generación de convergencia'])
 
-    for popul in range(10, 1000, 10): 
+    for popul in range(10, 801, 10): 
         population = generate_population(popul, len(_objetive))
         mutation_rate = 0.01
         n_iterations = 1000
         ga = GA(population, _objetive, mutation_rate, n_iterations)
         ga.set_evaluation_type(AptitudeType.BY_DISTANCE)
         ga.set_best_individual_selection_type(BestIndividualSelectionType.MIN_DISTANCE)
-        ga.set_new_generation_type(NewGenerationType.NEW)
+        ga.set_new_generation_type(NewGenerationType.MIN_DISTANCE)
         n_generation = ga.run()
         # Añade los resultados al DataFrame
         resultados_population.loc[len(resultados_population)] = {'Population': len(population), 'Generación de convergencia': n_generation}
     
     print(resultados_population)
     resultados_population.to_excel('resultados_population.xlsx', index=False)
-    plot_scatter_with_line(resultados_population, 'Population', 'Generación de convergencia', 'population.png')
+    plot_scatter_with_line(resultados_population, 'Population', 'Generación de convergencia', 'population.png', annotate=False)
 
 def case_study_5(_objetive):
     population = generate_population(100, len(_objetive))
@@ -152,7 +153,7 @@ if __name__ == "__main__":
     # case_study_1(objetive)
     # case_study_2(objetive)
     #case_study_2_mejorado(objetive)
-    case_study_3(objetive)
-    #case_study_4(objetive)
+    # case_study_3(objetive)
+    case_study_4(objetive)
     #case_study_5(objetive)
     
