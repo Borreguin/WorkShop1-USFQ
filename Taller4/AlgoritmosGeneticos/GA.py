@@ -67,4 +67,4 @@ def case_study_2(_objetive):
 if __name__ == "__main__":
     objetive = "GA Workshop! USFQ"
     case_study_1(objetive)
-    # case_study_2(objetive)
+    #case_study_2(objetive)
