@@ -1,4 +1,6 @@
 import numpy as np
+import pandas as pd
+from matplotlib import pyplot as plt
 
 from Taller4.AlgoritmosGeneticos.generalSteps import *
 
@@ -43,8 +45,10 @@ class GA:
             self.population = generate_new_population(self.new_generation_type, self.population, aptitudes, self.mutation_rate)
             self.n_generation += 1
 
+
         if not success:
             print(f"Objetivo no alcanzado en las iteraciones establecidas {self.n_iterations}")
+
 
 class EnhancedGA(GA):
     def __init__(self, population, objetive, mutation_rate, n_iterations, elitism_rate=0.1, tournament_size=3):
@@ -136,21 +140,63 @@ def case_study_3(_objetive):
     n_iterations = 10000
     ga = GA(population, _objetive, mutation_rate, n_iterations)
     ga.run()
+    return ga.n_generation
 
 def case_study_4(_objetive):
     # Definición de la población inicial
 
-    population = generate_population(700, len(_objetive))
-    mutation_rate = 0.01
-    n_iterations = 10000
-    ga = EnhancedGA(population, _objetive, mutation_rate, n_iterations)
-    ga.run()
+    import pandas as pd
+    import matplotlib.pyplot as plt
+    import seaborn as sns
+    from time import time
+    results = []
+    for population_size in range(100, 1000, 100):
+        start = time()
+        population = generate_population(population_size, len(objetive))
+        mutation_rate = 0.01
+        n_iterations = 10000
+        ga = EnhancedGA(population, objetive, mutation_rate, n_iterations)
+        ga.run()
+        end = time()
+        results.append({"population_size": population_size, "n_generations": ga.n_generation, "execution_time": end - start})
+    results = pd.DataFrame(results)
+    print(results)
+    sns.lineplot(data=results, x="population_size", y="n_generations")
+    #plt.show()
+    # Guardo la imagen en la carpeta images
+    plt.savefig("images/population_vs_ngenerations.png")
+
+
+def ej5():
+    results = []
+
+    # Itera sobre diferentes valores de mutation_rate
+    for mutation_rate in [0.001, 0.002, 0.003, 0.004, 0.005, 0.006, 0.007, 0.008, 0.009, 0.01]:  # Ajusta el paso según necesites
+        n_generation = case_study_3(objetive, mutation_rate)
+        results.append({'mutation_rate': mutation_rate, 'n_generation': n_generation})
+
+    # Crea un DataFrame con los resultados
+    df_results = pd.DataFrame(results)
+
+    # Grafica los resultados
+    plt.figure(figsize=(10, 6))
+    plt.plot(df_results['mutation_rate'], df_results['n_generation'], marker='o')
+    plt.title('Número de generaciones por tasa de mutación')
+    plt.xlabel('Tasa de mutación')
+    plt.ylabel('Número de generaciones')
+    plt.grid(True)
+    plt.show()
+    plt.savefig('img_5.png')
 
 if __name__ == "__main__":
     objetive = "GA Workshop! USFQ"
     #objetive = "Prueba Segundo CASO de la nueva distancia con una solucion absoluta"
     #
-    case_study_1(objetive)
+    #case_study_1(objetive)
     #case_study_2(objetive)
     #case_study_4(objetive)
-    # case_study_3(objetive)
+
+    ej5()
+
+
+

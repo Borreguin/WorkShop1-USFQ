@@ -358,7 +358,7 @@ def multivariable_analisis(_df,lb1,lb2):
 
     # _df['cluster'] = make_kmeans_clustering(df_norm, 3)
     # plot_clusters_3d_weekday(_df, lb1, lb2, f'KMeans Clustering {alias[lb1]} vs {alias[lb2]}')
-    df_to_use['cluster'] = make_kmeans_clustering(np.array(df_to_use['PCA']).reshape(-1, 1), 3)
+    df_to_use['cluster'] = make_kmeans_clustering(np.array(df_to_use['PCA']).reshape(-1, 1), 2)
     plot_clusters_3d_weekday(df_to_use, lb1, lb2, f'KMeans Clustering {alias[lb1]} vs {alias[lb2]}')
     plot_clusters_3d_hour(df_to_use, lb1, lb2, f'KMeans Clustering {alias[lb1]} vs {alias[lb2]}')
 
@@ -382,4 +382,5 @@ if __name__ == "__main__":
     univariable_experiment(df)
     multivariable_analisis(df,lb_V005_vent01_CO2,lb_V006_vent01_temp_out)
     multivariable_analisis(df, lb_V022_vent02_CO2, lb_V023_vent02_temp_out)
+
 
