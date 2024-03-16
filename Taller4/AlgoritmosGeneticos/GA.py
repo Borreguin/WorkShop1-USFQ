@@ -140,11 +140,27 @@ def case_study_3(_objetive):
 def case_study_4(_objetive):
     # Definición de la población inicial
 
-    population = generate_population(700, len(_objetive))
-    mutation_rate = 0.01
-    n_iterations = 10000
-    ga = EnhancedGA(population, _objetive, mutation_rate, n_iterations)
-    ga.run()
+    import pandas as pd
+    import matplotlib.pyplot as plt
+    import seaborn as sns
+    from time import time
+    results = []
+    for population_size in range(100, 1000, 100):
+        start = time()
+        population = generate_population(population_size, len(objetive))
+        mutation_rate = 0.01
+        n_iterations = 10000
+        ga = EnhancedGA(population, objetive, mutation_rate, n_iterations)
+        ga.run()
+        end = time()
+        results.append({"population_size": population_size, "n_generations": ga.n_generation, "execution_time": end - start})
+    results = pd.DataFrame(results)
+    print(results)
+    sns.lineplot(data=results, x="population_size", y="n_generations")
+    #plt.show()
+    # Guardo la imagen en la carpeta images
+    plt.savefig("images/population_vs_ngenerations.png")
+
 
 if __name__ == "__main__":
     objetive = "GA Workshop! USFQ"
@@ -152,5 +168,7 @@ if __name__ == "__main__":
     #
     #case_study_1(objetive)
     #case_study_2(objetive)
-    #case_study_4(objetive)
-    case_study_3(objetive)
+    case_study_4(objetive)
+    #case_study_3(objetive)
+
+# Ejecuto el caso de estudio 4 variando la population size y alacenando la population y el numero de generacion en una tabla
