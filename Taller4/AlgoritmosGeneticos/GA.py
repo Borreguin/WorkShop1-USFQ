@@ -193,10 +193,10 @@ if __name__ == "__main__":
     #objetive = "Prueba Segundo CASO de la nueva distancia con una solucion absoluta"
     #
     #case_study_1(objetive)
-    #case_study_2(objetive)
+    case_study_2(objetive)
     #case_study_4(objetive)
 
-    ej5()
+    # ej5()
 
 
 
