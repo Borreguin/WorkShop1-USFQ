@@ -9,10 +9,18 @@
   * Christian Hernandez
 
 **Participación en el taller:**
-  * **Felipe Toscano**: 
-  * **José Asitimbay**: 
-  * **Brayan Lechón**: 
-  * **Christian Hernandez**: 
+  * **Felipe Toscano**: Participacion el la 
+    resolucion del código y la redacción del 
+    literal 3
+  * **José Asitimbay**: Participacion el la 
+    resolucion del código y la redacción del 
+    literal 5 
+  * **Brayan Lechón**: Participacion el la 
+    resolucion del código y la redacción del 
+    literal 1,2,3 
+  * **Christian Hernandez**: Participacion el la 
+    resolucion del código y la redacción del 
+    literal 6 y 7 
 
 
 ## ALGORTIMOS GENÉTICOS
