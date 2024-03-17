@@ -1,18 +1,12 @@
 # WorkShop1-USFQ
 
 # Tabla de Contenidos
-- [WorkShop1-USFQ](#workshop1-usfq)
-- [Tabla de Contenidos](#tabla-de-contenidos)
 - [Taller 1](#taller-1)
 - [Taller 2](#taller-2)
   - [Problema 1: Uso de Algoritmos de Búsqueda](#problema-1-uso-de-algoritmos-de-búsqueda)
     - [Study Case 1](#study-case-1)
-      - [Tiempos de ejecucion y numero de nodos](#tiempos-de-ejecucion-y-numero-de-nodos)
     - [Study Case 2](#study-case-2)
-      - [Tiempos de ejecucion y numero de nodos](#tiempos-de-ejecucion-y-numero-de-nodos-1)
     - [Study Case 3](#study-case-3)
-      - [Tiempos de ejecucion y numero de nodos](#tiempos-de-ejecucion-y-numero-de-nodos-2)
-      - [Conclusiones](#conclusiones)
   - [Problema 2: Optimización de Colonias de Hormigas](#problema-2-optimización-de-colonias-de-hormigas)
     - [A. Implementación Planteada](#a-implementación-planteada)
     - [B. ¿Qué ocurre con el segundo caso de estudio?](#b-qué-ocurre-con-el-segundo-caso-de-estudio)
@@ -27,8 +21,6 @@
     - [D Patrones – Análisis multivariable](#d-patrones--análisis-multivariable)
     - [Anomalías – Análisis multivariable](#anomalías--análisis-multivariable)
     - [Conclusiones](#conclusiones-1)
-        - [Cluster del Análisis univariado en data principal](#cluster-del-análisis-univariado-en-data-principal)
-        - [Cluster del Análisis Multivariado en data principal](#cluster-del-análisis-multivariado-en-data-principal)
   - [Problema 2: Investigación Operativa, el problema TSP](#problema-2-investigación-operativa-el-problema-tsp)
     - [A. Analizar el código propuesto](#a-analizar-el-código-propuesto)
     - [B. Analizar el parámetro tee](#b-analizar-el-parámetro-tee)
