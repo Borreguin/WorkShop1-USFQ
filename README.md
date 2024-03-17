@@ -1,12 +1,18 @@
 # WorkShop1-USFQ
 
 # Tabla de Contenidos
+- [WorkShop1-USFQ](#workshop1-usfq)
+- [Tabla de Contenidos](#tabla-de-contenidos)
 - [Taller 1](#taller-1)
 - [Taller 2](#taller-2)
   - [Problema 1: Uso de Algoritmos de Búsqueda](#problema-1-uso-de-algoritmos-de-búsqueda)
     - [Study Case 1](#study-case-1)
+      - [Tiempos de ejecucion y numero de nodos](#tiempos-de-ejecucion-y-numero-de-nodos)
     - [Study Case 2](#study-case-2)
+      - [Tiempos de ejecucion y numero de nodos](#tiempos-de-ejecucion-y-numero-de-nodos-1)
     - [Study Case 3](#study-case-3)
+      - [Tiempos de ejecucion y numero de nodos](#tiempos-de-ejecucion-y-numero-de-nodos-2)
+      - [Conclusiones](#conclusiones)
   - [Problema 2: Optimización de Colonias de Hormigas](#problema-2-optimización-de-colonias-de-hormigas)
     - [A. Implementación Planteada](#a-implementación-planteada)
     - [B. ¿Qué ocurre con el segundo caso de estudio?](#b-qué-ocurre-con-el-segundo-caso-de-estudio)
@@ -21,13 +27,19 @@
     - [D Patrones – Análisis multivariable](#d-patrones--análisis-multivariable)
     - [Anomalías – Análisis multivariable](#anomalías--análisis-multivariable)
     - [Conclusiones](#conclusiones-1)
+        - [Cluster del Análisis univariado en data principal](#cluster-del-análisis-univariado-en-data-principal)
+        - [Cluster del Análisis Multivariado en data principal](#cluster-del-análisis-multivariado-en-data-principal)
   - [Problema 2: Investigación Operativa, el problema TSP](#problema-2-investigación-operativa-el-problema-tsp)
     - [A. Analizar el código propuesto](#a-analizar-el-código-propuesto)
     - [B. Analizar el parámetro tee](#b-analizar-el-parámetro-tee)
     - [C. Aplicar heurística de límites a la función objetivo](#c-aplicar-heurística-de-límites-a-la-función-objetivo)
     - [D. Aplicar heurística de vecinos cercanos](#d-aplicar-heurística-de-vecinos-cercanos)
     - [E. Conclusiones](#e-conclusiones)
-    - [F. Opcional](#f-opcional) 
+    - [F. Opcional](#f-opcional)
+- [Taller 4](#taller-4)
+  - [A. Encontrar patrones uni-variable](#a-encontrar-patrones-uni-variable)
+  - [B. Conclusiones](#b-conclusiones)
+  - [Revisión Bibliográfica](#revisión-bibliográfica)
 
 
 
@@ -614,3 +626,44 @@ year = 365
 total_days = factorial_large/(total_per_second*total_seconds*total_minutes*total_hours*year)
 print(f"{total_days:_}")
 ```
+
+
+# Taller 4 
+[Back to Top](#tabla-de-contenidos)
+
+## A. Encontrar patrones uni-variable
+
+Se realizan simulaciones para observar la capacidad de los Hidden Markov Models -HMM- de encontrar correctamente la cantidad de estados ocultos dados diferentes. Se utiliza la librería `hmmlearn` para Python. Se siguen las recomendaciones de [1] para las simulaciones, se tienen 4 estados no observables pre-definidos, cada estado es una variable aleatoria normal $N(\mu_i,\sigma)$, nótese que todos los estados tienen la misma varianza, facilitando el análisis. Las probabilidades iniciales y las probabilidades de transición son las mismas que las propuestas por [1]. A continuación se muestran los resultados de tres médotodos de selección de modelo: i) Log-Likelihood value -LL-, ii) AIC, iii) BIC.
+
+<p align="center">
+  <img src="./Taller4/HiddenMarkovModel/results/hmm_simul_24n_1x.png" alt="Alt text 1" width="400"/>
+  <img src="./Taller4/HiddenMarkovModel/results/hmm_simul_100n_1x.png" alt="Alt text 2" width="400"/> 
+</p>
+<p align="center">
+  <img src="./Taller4/HiddenMarkovModel/results/hmm_simul_300n_1x.png" alt="Alt text 1" width="400"/>
+  <img src="./Taller4/HiddenMarkovModel/results/hmm_simul_1000n_1x.png" alt="Alt text 2" width="400"/> 
+</p>
+
+Se puede observar que únicamente para 1000 muestras BIC selecciona correctamente la cantidad de estados ocultos. LL tiende a seleccionar la mayor cantidad posible de estados por lo que buscar su máximo valor no es recomendable. AIC tiene un menor castigo al overfitting por lo que tiende a seleccionar más estados de los que realmente tiene el proceso generador de datos subyacente. Se encuentra que con menos de 1000 observaciones y 1 variable independiente, ningún método de selección permitiría descrubrir la cantidad correcta de estados ocultos. Estos resultados cambiarán dependiendo de la diferencia de medias entre estados y sus respectivos desvíos estándares.
+
+Se realizan las mismas simulaciones para observar la cantidad de clusteres seleccionados por K-Means mediante Elbow Method basado en la inercia del clúster, como se puede ver en los gráficos a continuación.
+
+<p align="center">
+  <img src="./Taller4/HiddenMarkovModel/results/kmeans_simul_24n_1x.png" alt="Alt text 1" width="400"/>
+  <img src="./Taller4/HiddenMarkovModel/results/kmeans_simul_100n_1x.png" alt="Alt text 2" width="400"/> 
+</p>
+<p align="center">
+  <img src="./Taller4/HiddenMarkovModel/results/kmeans_simul_300n_1x.png" alt="Alt text 1" width="400"/>
+  <img src="./Taller4/HiddenMarkovModel/results/kmeans_simul_1000n_1x.png" alt="Alt text 2" width="400"/> 
+</p>
+
+Elbow Method tiene un componente subjetivo, ya que se busca seleccionar el menor valor sin hacer overfitting, o sea, el punto donde se encuentre un "codo". Se puede observar que para este caso K-Means sugiere cuatro clústeres desde un n muestral de 100, únicamente en el caso de 24 observaciones Elbow Method sugiere 3 clústeres. Dada la naturaleza subjetiva de este método, en la mayoría de casos se puede argumentar por valores entre 3 a 5.
+
+## B. Conclusiones
+
+* Siguiendo las simulaciones propuestas por [1], encontramos que para tamaños muestrales bajos los métodos de selección de total de estados ocultos AIC y BIC tienen un margen de error de alrededor de 2 estados de 4, con un margen más grande mientras menor es la muestra. Se encuentra que en general BIC es el mejor método para seleccionar cantidad de estados ocultos, encontrando la cantidad exacta de estados en muestras grandes. Al comparar estos resultados con K-Means se encuentra que si bien K-Means tiene un componente subjetivo al usar Elbow Method, con tamaños muestrales mayores a 100 observaciones este puede detectar el número de estados correctamente.
+* Para escenarios con pocos estados ocultos o clústeres, y tamaños muestrales de al menos mil observaciones, K-Means y HMM presentan resultados similares, para tamaños muestrales pequeños, K-Means parace presentar mejores resultados. Se sugiere ampliar estas simulaciones para tener conclusiones más robustas y amplias.
+* Estas conclusiones se encuentran limitadas a cuatro estados ocultos, podrían cambiar radicalmente al incluir numerosos estados con solapamiento. Dichas simulaciones no se han podido realizar por la dificultad de definir ex-ante matrices de transición grandes.
+
+## Revisión Bibliográfica
+[1] Lebedev, S. (2016). hmmlearn/hmmlearn: Hidden Markov Models in Python, with scikit-learn like API. Model Selection. https://hmmlearn.readthedocs.io/en/latest/auto_examples/plot_gaussian_model_selection.html#
