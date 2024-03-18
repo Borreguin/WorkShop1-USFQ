@@ -631,6 +631,16 @@ print(f"{total_days:_}")
 # Taller 4 
 [Back to Top](#tabla-de-contenidos)
 
+- **Integrantes del grupo con descripción de sus tareas**:
+  * Santiago Viteri: 
+    * Elaboración códigos y documentación.
+  * Ricardo Loor: 
+    * Elaboración códigos y documentación. 
+  * Diego Villacreses: 
+    * Elaboración códigos y documentación.
+  * Kuntur Muenala:
+    * Elaboración códigos y documentación.
+
 ## A. Encontrar patrones uni-variable
 
 ### Simulaciones
