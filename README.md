@@ -39,6 +39,7 @@
 - [Taller 4](#taller-4)
   - [A. Encontrar patrones uni-variable](#a-encontrar-patrones-uni-variable)
     - [Simulaciones](#simulaciones)
+    - [Datos Reales](#datos-reales)
   - [B. Conclusiones](#b-conclusiones)
   - [Revisión Bibliográfica](#revisión-bibliográfica)
 
@@ -661,6 +662,50 @@ Se realizan las mismas simulaciones para observar la cantidad de clusteres selec
 </p>
 
 Elbow Method tiene un componente subjetivo, ya que se busca seleccionar el menor valor sin hacer overfitting, o sea, el punto donde se encuentre un "codo". Se puede observar que para este caso K-Means sugiere cuatro clústeres desde un n muestral de 100, únicamente en el caso de 24 observaciones Elbow Method sugiere 3 clústeres. Dada la naturaleza subjetiva de este método, en la mayoría de casos se puede argumentar por valores entre 3 a 5.
+
+Asumiendo que se conoce la cantidad correcta de estados ocultos, se desea conocer la capacidad de clasificación correcta de K-Means vs HMM. Dado que estamos simulando los estados ocultos, tenemos las etiquetas reales y por consiguiente podemos medir el _accuracy_ de nuestros modelos: $
+\text{Accuracy} = \frac{\sum_{i=1}^{N} \text{Correct Predictions}_i}{\sum_{i=1}^{N} \text{Total Predictions}_i}
+$.
+
+Donde $N$ es el total de estados ocultos, $\text{Correct Predictions}_i$ es el total de valores correctamente predichos para la clase $i$, y $\text{Total Predictions}_i$ es el total de predicciones para el estado $i$. Se tienen los siguientes resultados:
+
+|   n muestral |   Accuracy - HMM |   Accuracy - K-Means |
+|-------------:|-----------:|-----------:|
+|           24 |   0.666 |   0.958 |
+|          100 |   0.73     |    0.96      |
+|          300 |   0.76     |    0.96     |
+|         1000 |   0.957    |    0.96    |
+
+Se puede ver que K-Means es superior a HMM para este tipo de datos para muestras menores a mil datos. Para mil datos, se puede considerar que los dos modelos son igualmente buenos.
+
+A continuación se grafican los datos simulados con sus etiquetas reales y predichas por cada modelo para que se pueda visualizar el tipo de información que se simuló. 
+
+<p align="center">
+  <img src="./Taller4/HiddenMarkovModel/results/hmm_simul_24n_1x_simul.png" alt="Alt text 1" width="300"/>
+  <img src="./Taller4/HiddenMarkovModel/results/hmm_simul_24n_1x_predicted.png" alt="Alt text 2" width="300"/> 
+  <img src="./Taller4/HiddenMarkovModel/results/kmeans_simul_24n_1x_predicted_kmeans.png" alt="Alt text 2" width="300"/> 
+</p>
+<p align="center">
+  <img src="./Taller4/HiddenMarkovModel/results/hmm_simul_100n_1x_simul.png" alt="Alt text 1" width="300"/>
+  <img src="./Taller4/HiddenMarkovModel/results/hmm_simul_100n_1x_predicted.png" alt="Alt text 2" width="300"/> 
+  <img src="./Taller4/HiddenMarkovModel/results/kmeans_simul_100n_1x_predicted_kmeans.png" alt="Alt text 2" width="300"/> 
+</p>
+<p align="center">
+  <img src="./Taller4/HiddenMarkovModel/results/hmm_simul_300n_1x_simul.png" alt="Alt text 1" width="300"/>
+  <img src="./Taller4/HiddenMarkovModel/results/hmm_simul_300n_1x_predicted.png" alt="Alt text 2" width="300"/> 
+  <img src="./Taller4/HiddenMarkovModel/results/kmeans_simul_300n_1x_predicted_kmeans.png" alt="Alt text 2" width="300"/> 
+</p>
+<p align="center">
+  <img src="./Taller4/HiddenMarkovModel/results/hmm_simul_1000n_1x_simul.png" alt="Alt text 1" width="300"/>
+  <img src="./Taller4/HiddenMarkovModel/results/hmm_simul_1000n_1x_predicted.png" alt="Alt text 2" width="300"/> 
+  <img src="./Taller4/HiddenMarkovModel/results/kmeans_simul_1000n_1x_predicted_kmeans.png" alt="Alt text 2" width="300"/> 
+</p>
+
+Se puede observar que K-Means es considerablemente superior a HMM cuando la información simulada presenta menos de 1000 muestras.
+
+### Datos Reales
+
+[Insertar Texto]
 
 ## B. Conclusiones
 
