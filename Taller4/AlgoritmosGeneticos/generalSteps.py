@@ -31,6 +31,12 @@ def evaluate_aptitude(evaluation_type, individual, objetive):
         print("implement here the new evaluation")
         return 0
 
+def tournament_selection(population, aptitudes, tournament_size):
+    tournament_indices = random.sample(range(len(population)), tournament_size)
+    tournament_aptitudes = [aptitudes[i] for i in tournament_indices]
+    best_index = tournament_indices[tournament_aptitudes.index(max(tournament_aptitudes))]
+    return population[best_index], aptitudes[best_index]
+
 # Selección del mejor individuo
 def select_best_individual(_type: BestIndividualSelectionType, population, aptitudes):
     if _type == BestIndividualSelectionType.DEFAULT:
@@ -42,8 +48,10 @@ def select_best_individual(_type: BestIndividualSelectionType, population, aptit
         return population[aptitudes.index(best_aptitude)], best_aptitude
 
     if _type == BestIndividualSelectionType.NEW:
-        print("implement here the new best individual selection")
-        return None, None
+        if len(population) < 2:
+            return None, None
+        else:
+            return tournament_selection(population, aptitudes, tournament_size=3)
 
 def generate_new_population(_type: NewGenerationType, population, aptitudes, mutation_rate):
     if _type == NewGenerationType.DEFAULT:
