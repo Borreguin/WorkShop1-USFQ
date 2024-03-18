@@ -1,8 +1,6 @@
 # WorkShop1-USFQ
 
 # Tabla de Contenidos
-- [WorkShop1-USFQ](#workshop1-usfq)
-- [Tabla de Contenidos](#tabla-de-contenidos)
 - [Taller 1](#taller-1)
 - [Taller 2](#taller-2)
   - [Problema 1: Uso de Algoritmos de Búsqueda](#problema-1-uso-de-algoritmos-de-búsqueda)
@@ -663,9 +661,7 @@ Se realizan las mismas simulaciones para observar la cantidad de clusteres selec
 
 Elbow Method tiene un componente subjetivo, ya que se busca seleccionar el menor valor sin hacer overfitting, o sea, el punto donde se encuentre un "codo". Se puede observar que para este caso K-Means sugiere cuatro clústeres desde un n muestral de 100, únicamente en el caso de 24 observaciones Elbow Method sugiere 3 clústeres. Dada la naturaleza subjetiva de este método, en la mayoría de casos se puede argumentar por valores entre 3 a 5.
 
-Asumiendo que se conoce la cantidad correcta de estados ocultos, se desea conocer la capacidad de clasificación correcta de K-Means vs HMM. Dado que estamos simulando los estados ocultos, tenemos las etiquetas reales y por consiguiente podemos medir el _accuracy_ de nuestros modelos: $
-\text{Accuracy} = \frac{\sum_{i=1}^{N} \text{Correct Predictions}_i}{\sum_{i=1}^{N} \text{Total Predictions}_i}
-$.
+Asumiendo que se conoce la cantidad correcta de estados ocultos, se desea conocer la capacidad de clasificación correcta de K-Means vs HMM. Dado que estamos simulando los estados ocultos, tenemos las etiquetas reales y por consiguiente podemos medir el _accuracy_ de nuestros modelos: $\text{Accuracy} = \frac{\sum_{i=1}^{N} \text{Correct Predictions}_i}{\sum_{i=1}^{N} \text{Total Predictions}_i}$.
 
 Donde $N$ es el total de estados ocultos, $\text{Correct Predictions}_i$ es el total de valores correctamente predichos para la clase $i$, y $\text{Total Predictions}_i$ es el total de predicciones para el estado $i$. Se tienen los siguientes resultados:
 
