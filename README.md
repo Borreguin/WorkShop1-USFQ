@@ -38,6 +38,8 @@
     - [F. Opcional](#f-opcional)
 - [Taller 4](#taller-4)
   - [A. Encontrar patrones uni-variable](#a-encontrar-patrones-uni-variable)
+    - [Simulaciones](#simulaciones)
+    - [Datos Reales](#datos-reales)
   - [B. Conclusiones](#b-conclusiones)
   - [Revisión Bibliográfica](#revisión-bibliográfica)
 
@@ -633,6 +635,8 @@ print(f"{total_days:_}")
 
 ## A. Encontrar patrones uni-variable
 
+### Simulaciones
+
 Se realizan simulaciones para observar la capacidad de los Hidden Markov Models -HMM- de encontrar correctamente la cantidad de estados ocultos dados diferentes. Se utiliza la librería `hmmlearn` para Python. Se siguen las recomendaciones de [1] para las simulaciones, se tienen 4 estados no observables pre-definidos, cada estado es una variable aleatoria normal $N(\mu_i,\sigma)$, nótese que todos los estados tienen la misma varianza, facilitando el análisis. Las probabilidades iniciales y las probabilidades de transición son las mismas que las propuestas por [1]. A continuación se muestran los resultados de tres médotodos de selección de modelo: i) Log-Likelihood value -LL-, ii) AIC, iii) BIC.
 
 <p align="center">
@@ -659,11 +663,55 @@ Se realizan las mismas simulaciones para observar la cantidad de clusteres selec
 
 Elbow Method tiene un componente subjetivo, ya que se busca seleccionar el menor valor sin hacer overfitting, o sea, el punto donde se encuentre un "codo". Se puede observar que para este caso K-Means sugiere cuatro clústeres desde un n muestral de 100, únicamente en el caso de 24 observaciones Elbow Method sugiere 3 clústeres. Dada la naturaleza subjetiva de este método, en la mayoría de casos se puede argumentar por valores entre 3 a 5.
 
+Asumiendo que se conoce la cantidad correcta de estados ocultos, se desea conocer la capacidad de clasificación correcta de K-Means vs HMM. Dado que estamos simulando los estados ocultos, tenemos las etiquetas reales y por consiguiente podemos medir el _accuracy_ de nuestros modelos: $
+\text{Accuracy} = \frac{\sum_{i=1}^{N} \text{Correct Predictions}_i}{\sum_{i=1}^{N} \text{Total Predictions}_i}
+$.
+
+Donde $N$ es el total de estados ocultos, $\text{Correct Predictions}_i$ es el total de valores correctamente predichos para la clase $i$, y $\text{Total Predictions}_i$ es el total de predicciones para el estado $i$. Se tienen los siguientes resultados:
+
+|   n muestral |   Accuracy - HMM |   Accuracy - K-Means |
+|-------------:|-----------:|-----------:|
+|           24 |   0.666 |   0.958 |
+|          100 |   0.73     |    0.96      |
+|          300 |   0.76     |    0.96     |
+|         1000 |   0.957    |    0.96    |
+
+Se puede ver que K-Means es superior a HMM para este tipo de datos para muestras menores a mil datos. Para mil datos, se puede considerar que los dos modelos son igualmente buenos.
+
+A continuación se grafican los datos simulados con sus etiquetas reales y predichas por cada modelo para que se pueda visualizar el tipo de información que se simuló. 
+
+<p align="center">
+  <img src="./Taller4/HiddenMarkovModel/results/hmm_simul_24n_1x_simul.png" alt="Alt text 1" width="300"/>
+  <img src="./Taller4/HiddenMarkovModel/results/hmm_simul_24n_1x_predicted.png" alt="Alt text 2" width="300"/> 
+  <img src="./Taller4/HiddenMarkovModel/results/kmeans_simul_24n_1x_predicted_kmeans.png" alt="Alt text 2" width="300"/> 
+</p>
+<p align="center">
+  <img src="./Taller4/HiddenMarkovModel/results/hmm_simul_100n_1x_simul.png" alt="Alt text 1" width="300"/>
+  <img src="./Taller4/HiddenMarkovModel/results/hmm_simul_100n_1x_predicted.png" alt="Alt text 2" width="300"/> 
+  <img src="./Taller4/HiddenMarkovModel/results/kmeans_simul_100n_1x_predicted_kmeans.png" alt="Alt text 2" width="300"/> 
+</p>
+<p align="center">
+  <img src="./Taller4/HiddenMarkovModel/results/hmm_simul_300n_1x_simul.png" alt="Alt text 1" width="300"/>
+  <img src="./Taller4/HiddenMarkovModel/results/hmm_simul_300n_1x_predicted.png" alt="Alt text 2" width="300"/> 
+  <img src="./Taller4/HiddenMarkovModel/results/kmeans_simul_300n_1x_predicted_kmeans.png" alt="Alt text 2" width="300"/> 
+</p>
+<p align="center">
+  <img src="./Taller4/HiddenMarkovModel/results/hmm_simul_1000n_1x_simul.png" alt="Alt text 1" width="300"/>
+  <img src="./Taller4/HiddenMarkovModel/results/hmm_simul_1000n_1x_predicted.png" alt="Alt text 2" width="300"/> 
+  <img src="./Taller4/HiddenMarkovModel/results/kmeans_simul_1000n_1x_predicted_kmeans.png" alt="Alt text 2" width="300"/> 
+</p>
+
+Se puede observar que K-Means es considerablemente superior a HMM cuando la información simulada presenta menos de 1000 muestras.
+
+### Datos Reales
+
+[Insertar Texto]
+
 ## B. Conclusiones
 
-* Siguiendo las simulaciones propuestas por [1], encontramos que para tamaños muestrales bajos los métodos de selección de total de estados ocultos AIC y BIC tienen un margen de error de alrededor de 2 estados de 4, con un margen más grande mientras menor es la muestra. Se encuentra que en general BIC es el mejor método para seleccionar cantidad de estados ocultos, encontrando la cantidad exacta de estados en muestras grandes. Al comparar estos resultados con K-Means se encuentra que si bien K-Means tiene un componente subjetivo al usar Elbow Method, con tamaños muestrales mayores a 100 observaciones este puede detectar el número de estados correctamente.
-* Para escenarios con pocos estados ocultos o clústeres, y tamaños muestrales de al menos mil observaciones, K-Means y HMM presentan resultados similares, para tamaños muestrales pequeños, K-Means parace presentar mejores resultados. Se sugiere ampliar estas simulaciones para tener conclusiones más robustas y amplias.
-* Estas conclusiones se encuentran limitadas a cuatro estados ocultos, podrían cambiar radicalmente al incluir numerosos estados con solapamiento. Dichas simulaciones no se han podido realizar por la dificultad de definir ex-ante matrices de transición grandes.
+* Siguiendo las simulaciones propuestas por [1], encontramos que para tamaños muestrales bajos los métodos de selección de total de estados ocultos mediante AIC y BIC tienen un margen de error de alrededor de 1 estados de 4, con un margen más grande mientras menor es la muestra. Se encuentra que en general BIC es el mejor método para seleccionar cantidad de estados ocultos, el cual detecta la cantidad exacta de estados en muestras grandes. Al comparar estos resultados con K-Means se observa que si bien K-Means tiene un componente subjetivo al usar Elbow Method, con tamaños muestrales mayores a 100 observaciones este puede detectar el número de estados correctamente.
+* Para escenarios con pocos estados ocultos o clústeres, y tamaños muestrales de al menos mil observaciones, K-Means y HMM sugieren una cantidad de clústeres similares y su Accuracy al clasificar la información es muy alto para ambos modelos (96%). Para tamaños muestrales pequeños, K-Means parace presentar mejores resultados con respecto a deteccción del número de estados ocultos, si se selecciona corrrectamente la cantidad de estados ocultos, K-Means es considerablemente superior a HMM con respecto a la clasificación (Accuracy) de los datos individuales en sus respectivos estados ocultos reales, diferencia que se puede observar en la respectiva Tabla en la sección anterior. Se sugiere ampliar estas simulaciones para tener conclusiones más robustas y amplias.
+* Estas conclusiones se encuentran limitadas a cuatro estados ocultos, podrían cambiar radicalmente al incluir numerosos estados, o estados con solapamiento y relaciones más complejas entre si. Dichas simulaciones no se han podido realizar por la dificultad de definir matrices de transición grandes.
 
 ## Revisión Bibliográfica
 [1] Lebedev, S. (2016). hmmlearn/hmmlearn: Hidden Markov Models in Python, with scikit-learn like API. Model Selection. https://hmmlearn.readthedocs.io/en/latest/auto_examples/plot_gaussian_model_selection.html#

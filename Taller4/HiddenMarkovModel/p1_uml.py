@@ -92,6 +92,49 @@ def simul_kmeans_selection(n_sample = 24, plot_name = "test", title = ""):
     plt.savefig("./Taller4/HiddenMarkovModel/results/" + plot_name + ".png")
     plt.close()
 
+    kmeans = KMeans(n_clusters=4, random_state=42)
+    kmeans.fit(X)
+    y_predicted = kmeans.predict(X)
+
+    df = pd.DataFrame(X)
+    df = df.rename(columns={0:"x"})
+    df["y"] = y
+    df["y_predicted"] = y_predicted
+    df["t"] = [i for i in range(df.shape[0])]
+    
+    category_means = df.groupby('y')['x'].mean().reset_index()
+    category_means['Rank'] = category_means['x'].rank(method='dense').astype(int) - 1
+    category_mapping = dict(zip(category_means['y'], category_means['Rank']))
+    df['y'] = df['y'].map(category_mapping)
+
+    category_means = df.groupby('y_predicted')['x'].mean().reset_index()
+    category_means['Rank'] = category_means['x'].rank(method='dense').astype(int) - 1
+    category_mapping = dict(zip(category_means['y_predicted'], category_means['Rank']))
+    df['y_predicted'] = df['y_predicted'].map(category_mapping)
+
+    plt.figure()
+    for i in range(4):
+        plt.scatter(df.loc[(df["y"]==i),"t"].to_list(),df.loc[(df["y"]==i),"x"].to_list(), label = "s=" + str(i))
+    plt.xlabel("Periodo Tiempo")
+    plt.ylabel("y-value")
+    plt.legend()
+    plt.title("Estados Reales: "+ title)
+    plt.savefig("./Taller4/HiddenMarkovModel/results/" + plot_name + "_simul_kmeans.png")
+    plt.close()
+
+    plt.figure()
+    for i in range(4):
+        plt.scatter(df.loc[(df["y_predicted"]==i),"t"].to_list(),df.loc[(df["y_predicted"]==i),"x"].to_list(), label = "s="+ str(i))
+    plt.xlabel("Periodo Tiempo")
+    plt.ylabel("y-value")
+    plt.legend()
+    plt.title("Estados Predichos, K-Means:" + title)
+    plt.savefig("./Taller4/HiddenMarkovModel/results/" + plot_name + "_predicted_kmeans.png")
+    plt.close()
+
+    return np.mean(df["y_predicted"]==df["y"])
+
+
 def simul_hmm(n_sample = 24, plot_name = "test", title = ""):
     model = hmm.GaussianHMM(n_components=4, init_params="")
     model.n_features = 2
@@ -102,7 +145,6 @@ def simul_hmm(n_sample = 24, plot_name = "test", title = ""):
                                 [0.25, 0.25, 0.25, 0.25]])
     model.means_ = np.array([[-2.5], [0], [2.5], [5.]])
     model.covars_ = np.sqrt([[0.25], [0.25], [0.25], [0.25]])
-
 
     X, y = model.sample(n_sample, random_state=1)
 
@@ -140,6 +182,53 @@ def simul_hmm(n_sample = 24, plot_name = "test", title = ""):
     plt.savefig("./Taller4/HiddenMarkovModel/results/" + plot_name + ".png")
     plt.close()
 
+    model = hmm.GaussianHMM(4, n_iter=200, tol=1e-4, random_state=1)
+    model.fit(X)
+    y_predicted = model.predict(X)
+
+    df = pd.DataFrame(X)
+    df = df.rename(columns={0:"x"})
+    df["y"] = y
+    df["y_predicted"] = y_predicted
+    df["t"] = [i for i in range(df.shape[0])]
+    
+    category_means = df.groupby('y')['x'].mean().reset_index()
+    category_means['Rank'] = category_means['x'].rank(method='dense').astype(int) - 1
+    category_mapping = dict(zip(category_means['y'], category_means['Rank']))
+    df['y'] = df['y'].map(category_mapping)
+
+    category_means = df.groupby('y_predicted')['x'].mean().reset_index()
+    category_means['Rank'] = category_means['x'].rank(method='dense').astype(int) - 1
+    category_mapping = dict(zip(category_means['y_predicted'], category_means['Rank']))
+    df['y_predicted'] = df['y_predicted'].map(category_mapping)
+
+    plt.figure()
+    for i in range(4):
+        plt.scatter(df.loc[(df["y"]==i),"t"].to_list(),df.loc[(df["y"]==i),"x"].to_list(), label = "s=" + str(i))
+    plt.xlabel("Periodo Tiempo")
+    plt.ylabel("y-value")
+    plt.legend()
+    plt.title("Estados Reales: "+ title)
+    plt.savefig("./Taller4/HiddenMarkovModel/results/" + plot_name + "_simul.png")
+    plt.close()
+
+
+
+    plt.figure()
+    for i in range(4):
+        plt.scatter(df.loc[(df["y_predicted"]==i),"t"].to_list(),df.loc[(df["y_predicted"]==i),"x"].to_list(), label = "s="+ str(i))
+    plt.xlabel("Periodo Tiempo")
+    plt.ylabel("y-value")
+    plt.legend()
+    plt.title("Estados Predichos, HMM:" + title)
+    plt.savefig("./Taller4/HiddenMarkovModel/results/" + plot_name + "_predicted.png")
+    plt.close()
+
+    return np.mean(df["y_predicted"]==df["y"])
+
+#-------------------------------------------------------------------------------------------------#
+# Real Data
+
 
 if __name__ == "__main__":
     df = prepare_data()
@@ -149,12 +238,20 @@ if __name__ == "__main__":
 
     #--------------------------------------------------------#
     # Simulations
-    simul_hmm(n_sample = 24, plot_name = "hmm_simul_24n_1x", title = "24 muestras, 1 feature")
-    simul_hmm(n_sample = 100, plot_name = "hmm_simul_100n_1x", title = "100 muestras, 1 feature")
-    simul_hmm(n_sample = 300, plot_name = "hmm_simul_300n_1x", title = "300 muestras, 1 feature")
-    simul_hmm(n_sample = 1000, plot_name = "hmm_simul_1000n_1x", title = "1000 muestras, 1 feature")
+    h1 = simul_hmm(n_sample = 24, plot_name = "hmm_simul_24n_1x", title = "24 muestras, 1 feature")
+    h2 = simul_hmm(n_sample = 100, plot_name = "hmm_simul_100n_1x", title = "100 muestras, 1 feature")
+    h3 = simul_hmm(n_sample = 300, plot_name = "hmm_simul_300n_1x", title = "300 muestras, 1 feature")
+    h4 = simul_hmm(n_sample = 1000, plot_name = "hmm_simul_1000n_1x", title = "1000 muestras, 1 feature")
+    accuracies = [h1,h2,h3,h4]
+    df_res = pd.DataFrame({"n muestral":[24,100,300,1000],"accuracy":accuracies})
+    df_res.to_markdown("./Taller4/HiddenMarkovModel/results/simul1_results.md")
 
-    simul_kmeans_selection(n_sample = 24, plot_name = "kmeans_simul_24n_1x", title = "24 muestras, 1 feature")
-    simul_kmeans_selection(n_sample = 100, plot_name = "kmeans_simul_100n_1x", title = "100 muestras, 1 feature")
-    simul_kmeans_selection(n_sample = 300, plot_name = "kmeans_simul_300n_1x", title = "300 muestras, 1 feature")
-    simul_kmeans_selection(n_sample = 1000, plot_name = "kmeans_simul_1000n_1x", title = "1000 muestras, 1 feature")
+    h1 = simul_kmeans_selection(n_sample = 24, plot_name = "kmeans_simul_24n_1x", title = "24 muestras, 1 feature")
+    h2 = simul_kmeans_selection(n_sample = 100, plot_name = "kmeans_simul_100n_1x", title = "100 muestras, 1 feature")
+    h3 = simul_kmeans_selection(n_sample = 300, plot_name = "kmeans_simul_300n_1x", title = "300 muestras, 1 feature")
+    h4 = simul_kmeans_selection(n_sample = 1000, plot_name = "kmeans_simul_1000n_1x", title = "1000 muestras, 1 feature")
+    accuracies = [h1,h2,h3,h4]
+    df_res = pd.DataFrame({"n muestral":[24,100,300,1000],"accuracy":accuracies})
+    df_res.to_markdown("./Taller4/HiddenMarkovModel/results/simul2_results.md")
+    #--------------------------------------------------------#
+    # Real Data
