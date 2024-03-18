@@ -625,6 +625,8 @@ print(f"{total_days:_}")
 
 ## A. Encontrar patrones uni-variable
 
+### Simulaciones
+
 Se realizan simulaciones para observar la capacidad de los Hidden Markov Models -HMM- de encontrar correctamente la cantidad de estados ocultos dados diferentes. Se utiliza la librería `hmmlearn` para Python. Se siguen las recomendaciones de [1] para las simulaciones, se tienen 4 estados no observables pre-definidos, cada estado es una variable aleatoria normal $N(\mu_i,\sigma)$, nótese que todos los estados tienen la misma varianza, facilitando el análisis. Las probabilidades iniciales y las probabilidades de transición son las mismas que las propuestas por [1]. A continuación se muestran los resultados de tres médotodos de selección de modelo: i) Log-Likelihood value -LL-, ii) AIC, iii) BIC.
 
 <p align="center">
@@ -650,6 +652,10 @@ Se realizan las mismas simulaciones para observar la cantidad de clusteres selec
 </p>
 
 Elbow Method tiene un componente subjetivo, ya que se busca seleccionar el menor valor sin hacer overfitting, o sea, el punto donde se encuentre un "codo". Se puede observar que para este caso K-Means sugiere cuatro clústeres desde un n muestral de 100, únicamente en el caso de 24 observaciones Elbow Method sugiere 3 clústeres. Dada la naturaleza subjetiva de este método, en la mayoría de casos se puede argumentar por valores entre 3 a 5.
+
+### Datos Reales
+
+[Insertar Texto]
 
 ## B. Conclusiones
 
