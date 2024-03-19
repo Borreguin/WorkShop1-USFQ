@@ -1,8 +1,6 @@
 # WorkShop1-USFQ
 
 # Tabla de Contenidos
-- [WorkShop1-USFQ](#workshop1-usfq)
-- [Tabla de Contenidos](#tabla-de-contenidos)
 - [Taller 1](#taller-1)
 - [Taller 2](#taller-2)
   - [Problema 1: Uso de Algoritmos de Búsqueda](#problema-1-uso-de-algoritmos-de-búsqueda)
