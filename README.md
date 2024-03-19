@@ -633,6 +633,16 @@ print(f"{total_days:_}")
 # Taller 4 
 [Back to Top](#tabla-de-contenidos)
 
+- **Integrantes del grupo con descripción de sus tareas**:
+  * Santiago Viteri: 
+    * Elaboración códigos y documentación.
+  * Ricardo Loor: 
+    * Elaboración códigos y documentación. 
+  * Diego Villacreses: 
+    * Elaboración códigos y documentación.
+  * Kuntur Muenala:
+    * Elaboración códigos y documentación.
+
 ## A. Encontrar patrones uni-variable
 
 ### Simulaciones
@@ -663,9 +673,7 @@ Se realizan las mismas simulaciones para observar la cantidad de clusteres selec
 
 Elbow Method tiene un componente subjetivo, ya que se busca seleccionar el menor valor sin hacer overfitting, o sea, el punto donde se encuentre un "codo". Se puede observar que para este caso K-Means sugiere cuatro clústeres desde un n muestral de 100, únicamente en el caso de 24 observaciones Elbow Method sugiere 3 clústeres. Dada la naturaleza subjetiva de este método, en la mayoría de casos se puede argumentar por valores entre 3 a 5.
 
-Asumiendo que se conoce la cantidad correcta de estados ocultos, se desea conocer la capacidad de clasificación correcta de K-Means vs HMM. Dado que estamos simulando los estados ocultos, tenemos las etiquetas reales y por consiguiente podemos medir el _accuracy_ de nuestros modelos: $
-\text{Accuracy} = \frac{\sum_{i=1}^{N} \text{Correct Predictions}_i}{\sum_{i=1}^{N} \text{Total Predictions}_i}
-$.
+Asumiendo que se conoce la cantidad correcta de estados ocultos, se desea conocer la capacidad de clasificación correcta de K-Means vs HMM. Dado que estamos simulando los estados ocultos, tenemos las etiquetas reales y por consiguiente podemos medir el _accuracy_ de nuestros modelos: $Accuracy = \frac{\sum_{i=1}^{N} Correct Predictions_i}{\sum_{i=1}^{N} Total Predictions_i}$.
 
 Donde $N$ es el total de estados ocultos, $\text{Correct Predictions}_i$ es el total de valores correctamente predichos para la clase $i$, y $\text{Total Predictions}_i$ es el total de predicciones para el estado $i$. Se tienen los siguientes resultados:
 
@@ -705,13 +713,74 @@ Se puede observar que K-Means es considerablemente superior a HMM cuando la info
 
 ### Datos Reales
 
-[Insertar Texto]
+De las 4 variables de la base de datos se seleccionó `V005_vent01_CO2` y `V022_vent02_CO2` para segmentar patrones ocultos con el modelo HMM (Hidden Markov Models), para esto encontraremos el mejor número de estados óptimos que más se ajusten a los datos, para esto estableceremos un rango de búsqueda de mínimo de estados hasta un máximo de estados, donde el mejor ajuste de nuestro modelo será medido de la siguiente forma:
+
+$$ - \dfrac{\log(L_i) - \log(L_{best})}{\log(L_{best})} > 0.01 $$
+
+El rango definido para nuestra búsqueda será $n_{min} = 40$ y $n_{max} = 50$. Este rango fue elegido para poder visualizar segmentaciones grandes para nuestros datos. Los análisis de estos resultados se muestra en la tabla siguiente.
+
+|   SCORE |  V005_vent01_CO2  |  V022_vent02_CO2 |
+|-------------:|-----------:|-----------:|
+| Best log lokelihooh |   -112763.75     |    -106935.09      |
+| Best component      |    47    |    40     |
+
+Los resultados de nuestra búsqueda para los mejores estados son de $47$ estados para la variable `V005_vent01_CO2`. Estos resultados se los muestra escogiendo nuestro ajuste con la selección `SCORE`. Sin embargo, por la sección anterior es bueno comparar esta selección con `BIC` que presento mejores resultados en la simulación.
+
+|   BIC |  V005_vent01_CO2  |  V022_vent02_CO2 |
+|-------------:|-----------:|-----------:|
+| Best log lokelihooh |   246168.84     |    230646.31      |
+| Best component      |    14    |    12     |
+
+Por lo que, ahora encontramos nuestro mejor ajuste de modelo para la selección `BIC` para un rango de $\left[ 4 , 50 \right] $, con la selección `BIC` tenemos $14$ para `V005_vent01_CO2`. los resultados se los presenta en la siguiente grafica.
+
+<p align="center">
+  <img src="./Taller4/HiddenMarkovModel/results/01_2012_Score.png" alt="Alt text 1" width="400"/>
+  <img src="./Taller4/HiddenMarkovModel/results/01_2012_BIC.png" alt="Alt text 2" width="400"/> 
+</p>
+<p align="center">
+  <img src="./Taller4/HiddenMarkovModel/results/01_2013_Score.png" alt="Alt text 1" width="400"/>
+  <img src="./Taller4/HiddenMarkovModel/results/01_2013_BIC.png" alt="Alt text 2" width="400"/> 
+</p>
+<p align="center">
+  <img src="./Taller4/HiddenMarkovModel/results/01_2014_Score.png" alt="Alt text 1" width="400"/>
+  <img src="./Taller4/HiddenMarkovModel/results/01_2014_BIC.png" alt="Alt text 2" width="400"/> 
+</p>
+<p align="center">
+  <img src="./Taller4/HiddenMarkovModel/results/01_2015_Score.png" alt="Alt text 1" width="400"/>
+  <img src="./Taller4/HiddenMarkovModel/results/01_2015_BIC.png" alt="Alt text 2" width="400"/> 
+</p>
+
+Como existen muchos estados, es preferible ver los datos por años, comparando los parámetros de selección de `BIC` y `SCORE`.
+
+Ahora se realiza la misma exploración para la variable `V022_vent02_CO2`, con $40$ estados para `SCORE` y $12$ estados para `BIC`, las gráficas son las siguientes.
+
+<p align="center">
+  <img src="./Taller4/HiddenMarkovModel/results/02_2012_Score.png" alt="Alt text 1" width="400"/>
+  <img src="./Taller4/HiddenMarkovModel/results/02_2012_BIC.png" alt="Alt text 2" width="400"/> 
+</p>
+<p align="center">
+  <img src="./Taller4/HiddenMarkovModel/results/02_2013_Score.png" alt="Alt text 1" width="400"/>
+  <img src="./Taller4/HiddenMarkovModel/results/02_2013_BIC.png" alt="Alt text 2" width="400"/> 
+</p>
+<p align="center">
+  <img src="./Taller4/HiddenMarkovModel/results/02_2014_Score.png" alt="Alt text 1" width="400"/>
+  <img src="./Taller4/HiddenMarkovModel/results/02_2014_BIC.png" alt="Alt text 2" width="400"/> 
+</p>
+<p align="center">
+  <img src="./Taller4/HiddenMarkovModel/results/02_2015_Score.png" alt="Alt text 1" width="400"/>
+  <img src="./Taller4/HiddenMarkovModel/results/02_2015_BIC.png" alt="Alt text 2" width="400"/> 
+</p>
+
+Los resultados son muy diferentes esto puede deberse a que nuestros datos son muy diferentes a los datos de la simulación por lo que en nuestro caso nuestros datos se ajustan más para mayores estados de ajustes con `SCORE` en comparación con `BIC`.
 
 ## B. Conclusiones
 
 * Siguiendo las simulaciones propuestas por [1], encontramos que para tamaños muestrales bajos los métodos de selección de total de estados ocultos mediante AIC y BIC tienen un margen de error de alrededor de 1 estados de 4, con un margen más grande mientras menor es la muestra. Se encuentra que en general BIC es el mejor método para seleccionar cantidad de estados ocultos, el cual detecta la cantidad exacta de estados en muestras grandes. Al comparar estos resultados con K-Means se observa que si bien K-Means tiene un componente subjetivo al usar Elbow Method, con tamaños muestrales mayores a 100 observaciones este puede detectar el número de estados correctamente.
 * Para escenarios con pocos estados ocultos o clústeres, y tamaños muestrales de al menos mil observaciones, K-Means y HMM sugieren una cantidad de clústeres similares y su Accuracy al clasificar la información es muy alto para ambos modelos (96%). Para tamaños muestrales pequeños, K-Means parace presentar mejores resultados con respecto a deteccción del número de estados ocultos, si se selecciona corrrectamente la cantidad de estados ocultos, K-Means es considerablemente superior a HMM con respecto a la clasificación (Accuracy) de los datos individuales en sus respectivos estados ocultos reales, diferencia que se puede observar en la respectiva Tabla en la sección anterior. Se sugiere ampliar estas simulaciones para tener conclusiones más robustas y amplias.
 * Estas conclusiones se encuentran limitadas a cuatro estados ocultos, podrían cambiar radicalmente al incluir numerosos estados, o estados con solapamiento y relaciones más complejas entre si. Dichas simulaciones no se han podido realizar por la dificultad de definir matrices de transición grandes.
+* Un patrón que podemos visibilizar es que en algunos estados tiene mayores valores de CO2 en comparación con otros estados, pero estos estados en su mayoría están en los últimos meses del año, esto puede indicar un ligero aumento de CO2 en los dos ventiladores con el paso del tiempo.
+* Cuando comparamos el parámetro `SCORE` con `BIC` podemos ver que uno considera los estados que el otro, sin embargo, los valores de CO2 se mantienen en la mayoría de estados, es decir que `SCORE` considera más estados dentro de los estados que considera `BIC` para la mayoría de casos. 
+* A diferencia con la segmentación del taller 3 que se realizó con Kmeans, esta segmentación no está clasificando por horas ni tiempo, si no más por valores emitidos de CO2 en los ventiladores una clasificación de estados que no se visibilizo con Kmaens.
 
 ## Revisión Bibliográfica
 [1] Lebedev, S. (2016). hmmlearn/hmmlearn: Hidden Markov Models in Python, with scikit-learn like API. Model Selection. https://hmmlearn.readthedocs.io/en/latest/auto_examples/plot_gaussian_model_selection.html#
