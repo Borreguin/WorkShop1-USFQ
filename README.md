@@ -1,6 +1,8 @@
 # WorkShop1-USFQ
 
 # Tabla de Contenidos
+- [WorkShop1-USFQ](#workshop1-usfq)
+- [Tabla de Contenidos](#tabla-de-contenidos)
 - [Taller 1](#taller-1)
 - [Taller 2](#taller-2)
   - [Problema 1: Uso de Algoritmos de Búsqueda](#problema-1-uso-de-algoritmos-de-búsqueda)
@@ -776,9 +778,9 @@ Los resultados son muy diferentes esto puede deberse a que nuestros datos son mu
 * Siguiendo las simulaciones propuestas por [1], encontramos que para tamaños muestrales bajos los métodos de selección de total de estados ocultos mediante AIC y BIC tienen un margen de error de alrededor de 1 estados de 4, con un margen más grande mientras menor es la muestra. Se encuentra que en general BIC es el mejor método para seleccionar cantidad de estados ocultos, el cual detecta la cantidad exacta de estados en muestras grandes. Al comparar estos resultados con K-Means se observa que si bien K-Means tiene un componente subjetivo al usar Elbow Method, con tamaños muestrales mayores a 100 observaciones este puede detectar el número de estados correctamente.
 * Para escenarios con pocos estados ocultos o clústeres, y tamaños muestrales de al menos mil observaciones, K-Means y HMM sugieren una cantidad de clústeres similares y su Accuracy al clasificar la información es muy alto para ambos modelos (96%). Para tamaños muestrales pequeños, K-Means parace presentar mejores resultados con respecto a deteccción del número de estados ocultos, si se selecciona corrrectamente la cantidad de estados ocultos, K-Means es considerablemente superior a HMM con respecto a la clasificación (Accuracy) de los datos individuales en sus respectivos estados ocultos reales, diferencia que se puede observar en la respectiva Tabla en la sección anterior. Se sugiere ampliar estas simulaciones para tener conclusiones más robustas y amplias.
 * Estas conclusiones se encuentran limitadas a cuatro estados ocultos, podrían cambiar radicalmente al incluir numerosos estados, o estados con solapamiento y relaciones más complejas entre si. Dichas simulaciones no se han podido realizar por la dificultad de definir matrices de transición grandes.
-* Un patrón que podemos visibilizar es que en algunos estados tiene mayores valores de CO2 en comparación con otros estados, pero estos estados en su mayoría están en los últimos meses del año, esto puede indicar un ligero aumento de CO2 en los dos ventiladores con el paso del tiempo.
-* Cuando comparamos el parámetro `SCORE` con `BIC` podemos ver que uno considera los estados que el otro, sin embargo, los valores de CO2 se mantienen en la mayoría de estados, es decir que `SCORE` considera más estados dentro de los estados que considera `BIC` para la mayoría de casos. 
-* A diferencia con la segmentación del taller 3 que se realizó con Kmeans, esta segmentación no está clasificando por horas ni tiempo, si no más por valores emitidos de CO2 en los ventiladores una clasificación de estados que no se visibilizo con Kmaens.
+* Con respecto a los datos reales sugeridos para este Taller, un patrón que podemos visibilizar es que en algunos estados tiene mayores valores de CO2 en comparación con otros estados, pero estos estados en su mayoría están en los últimos meses del año, esto puede indicar un ligero aumento de CO2 en los dos ventiladores con el paso del tiempo.
+* Cuando comparamos el parámetro `SCORE` con `BIC` podemos ver que uno considera más estados que el otro, sin embargo, los valores de CO2 se mantienen en la mayoría de estados, es decir que `SCORE` considera más estados dentro de los estados que considera `BIC` para la mayoría de casos. 
+* A diferencia con la segmentación del taller 3 que se realizó con Kmeans, esta segmentación no está clasificando por horas ni tiempo, si no más por valores emitidos de CO2 en los ventiladores una clasificación de estados que no se visibilizo con K-Means.
 
 ## Revisión Bibliográfica
 [1] Lebedev, S. (2016). hmmlearn/hmmlearn: Hidden Markov Models in Python, with scikit-learn like API. Model Selection. https://hmmlearn.readthedocs.io/en/latest/auto_examples/plot_gaussian_model_selection.html#
