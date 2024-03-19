@@ -2,6 +2,7 @@
 ## Taller 1 de inteligencia artificial
 ## Taller 2 de inteligencia artificial
 ## Taller 3 de inteligencia artificial
+## Taller 4 de inteligencia artificial
 
 - **Nombre del grupo**: 2
 - **Integrantes del grupo**:
